@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agente Saavedra - Central de Inteligência e Automação Sankhya Om</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================================================
+       Design Tokens & Variáveis CSS (Tema Dark Glassmorphism)
+       ========================================================================== */
+    :root {
+      --bg-page: #06090e;
+      --bg-surface: #0c1017;
+      --bg-card: rgba(18, 24, 38, 0.72);
+      --bg-card-hover: rgba(26, 36, 56, 0.88);
+      --bg-code: #0b0f17;
+      --bg-pill: rgba(255, 255, 255, 0.05);
+
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-accent: rgba(99, 102, 241, 0.35);
+      --border-glow: rgba(99, 102, 241, 0.5);
+
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+
+      --accent-primary: #6366f1;
+      --accent-primary-gradient: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%);
+      --accent-cyan: #06b6d4;
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      --accent-purple: #8b5cf6;
+
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-pill: 9999px;
+
+      --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
+      --shadow-lg: 0 12px 36px rgba(0, 0, 0, 0.5);
+      --shadow-glow: 0 0 30px rgba(99, 102, 241, 0.2);
+
+      --transition-fast: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      --transition-smooth: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Reset & Estilos Base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 15% 10%, rgba(99, 102, 241, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 85% 30%, rgba(6, 182, 212, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 50% 85%, rgba(16, 185, 129, 0.06) 0%, transparent 50%);
+      background-attachment: fixed;
+    }
+
+    /* Container Principal */
+    .app-layout {
+      display: flex;
+      max-width: 1440px;
+      margin: 0 auto;
+      min-height: 100vh;
+    }
+
+    /* Sidebar / Navegação Lateral */
+    .sidebar {
+      width: 300px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 32px 20px;
+      background: rgba(12, 16, 23, 0.75);
+      backdrop-filter: blur(20px);
+      border-right: 1px solid var(--border-subtle);
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: var(--radius-md);
+      background: var(--accent-primary-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: var(--shadow-glow);
+    }
+
+    .brand-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #fff;
+    }
+
+    .brand-subtitle {
+      font-size: 0.75rem;
+      color: var(--accent-cyan);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .nav-item a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: var(--transition-fast);
+      border-left: 2px solid transparent;
+    }
+
+    .nav-item a:hover,
+    .nav-item a.active {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.04);
+      border-left-color: var(--accent-primary);
+    }
+
+    .nav-category {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+      font-weight: 700;
+      margin: 16px 0 6px 12px;
+    }
+
+    /* Conteúdo Principal */
+    .content-area {
+      flex: 1;
+      padding: 48px 56px;
+      max-width: 1140px;
+    }
+
+    /* Hero Banner */
+    .hero {
+      text-align: center;
+      padding: 48px 24px;
+      background: radial-gradient(circle at center, rgba(99, 102, 241, 0.15) 0%, rgba(12, 16, 23, 0) 70%);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      margin-bottom: 48px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-badge-top {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: var(--radius-pill);
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      color: #c7d2fe;
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .hero-title {
+      font-size: 2.8rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #ffffff 30%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-lead {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 820px;
+      margin: 0 auto 32px auto;
+      line-height: 1.7;
+    }
+
+    .badge-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 32px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.8rem;
+      font-weight: 600;
+      border: 1px solid var(--border-subtle);
+      background: rgba(18, 24, 38, 0.9);
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition-fast);
+    }
+
+    .badge:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent-primary);
+    }
+
+    .badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .dot-blue { background: #38bdf8; box-shadow: 0 0 8px #38bdf8; }
+    .dot-green { background: #10b981; box-shadow: 0 0 8px #10b981; }
+    .dot-amber { background: #f59e0b; box-shadow: 0 0 8px #f59e0b; }
+    .dot-purple { background: #a855f7; box-shadow: 0 0 8px #a855f7; }
+
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 24px;
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+
+    .btn-primary {
+      background: var(--accent-primary-gradient);
+      color: #fff;
+      border: none;
+      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 28px rgba(99, 102, 241, 0.6);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-main);
+      border: 1px solid var(--border-subtle);
+      backdrop-filter: blur(10px);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Seções & Tipografia */
+    section {
+      margin-bottom: 64px;
+    }
+
+    .section-header {
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-tag {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .section-title {
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+
+    .section-desc {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      margin-top: 6px;
+    }
+
+    /* Grid de Cards de Recursos */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-top: 24px;
+    }
+
+    .feature-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 28px;
+      transition: var(--transition-smooth);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: transparent;
+      transition: var(--transition-smooth);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      background: var(--bg-card-hover);
+      border-color: var(--border-accent);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .feature-card.primary:hover::before { background: var(--accent-primary); }
+    .feature-card.cyan:hover::before { background: var(--accent-cyan); }
+    .feature-card.emerald:hover::before { background: var(--accent-emerald); }
+    .feature-card.amber:hover::before { background: var(--accent-amber); }
+    .feature-card.purple:hover::before { background: var(--accent-purple); }
+    .feature-card.rose:hover::before { background: var(--accent-rose); }
+
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    .card-text {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 20px;
+      flex-grow: 1;
+    }
+
+    .card-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 16px;
+    }
+
+    .card-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.88rem;
+      color: var(--text-main);
+    }
+
+    .card-list li::before {
+      content: "✔";
+      font-size: 0.75rem;
+      color: var(--accent-emerald);
+      font-weight: 900;
+    }
+
+    /* Diagrama de Arquitetura */
+    .arch-container {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 32px;
+      margin-top: 24px;
+    }
+
+    .arch-flow {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      position: relative;
+    }
+
+    .arch-block {
+      background: rgba(12, 16, 23, 0.8);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .arch-block-icon {
+      font-size: 32px;
+    }
+
+    .arch-block-name {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #fff;
+    }
+
+    .arch-block-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    /* Tabelas Modernas */
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      margin: 20px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th {
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-dim);
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    td {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      font-size: 0.92rem;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    /* Blocos de Código */
+    .code-box {
+      background: var(--bg-code);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin: 20px 0;
+    }
+
+    .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 18px;
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid var(--border-subtle);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+
+    .code-body {
+      padding: 18px 20px;
+      overflow-x: auto;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: #e2e8f0;
+    }
+
+    .copy-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      border-radius: var(--radius-sm);
+      padding: 4px 10px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: var(--transition-fast);
+    }
+
+    .copy-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+    }
+
+    /* Alertas e Callouts */
+    .callout {
+      padding: 20px 24px;
+      border-radius: var(--radius-md);
+      background: rgba(99, 102, 241, 0.08);
+      border-left: 4px solid var(--accent-primary);
+      margin: 24px 0;
+      display: flex;
+      gap: 16px;
+    }
+
+    .callout.warning {
+      background: rgba(245, 158, 11, 0.08);
+      border-left-color: var(--accent-amber);
+    }
+
+    .callout-icon {
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .callout-content h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: #fff;
+    }
+
+    .callout-content p {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+    }
+
+    /* Accordions / Details */
+    details {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      margin-bottom: 16px;
+      overflow: hidden;
+      transition: var(--transition-fast);
+    }
+
+    details[open] {
+      border-color: var(--border-accent);
+    }
+
+    summary {
+      padding: 18px 24px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 1.05rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      list-style: none;
+      color: #fff;
+      user-select: none;
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    summary::after {
+      content: "▼";
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      transition: transform 0.2s ease;
+    }
+
+    details[open] summary::after {
+      transform: rotate(180deg);
+      color: var(--accent-primary);
+    }
+
+    .details-content {
+      padding: 0 24px 24px 24px;
+      border-top: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+    }
+
+    /* Rodapé */
+    footer {
+      border-top: 1px solid var(--border-subtle);
+      padding: 48px 0 24px 0;
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 0.9rem;
+    }
+
+    footer p {
+      margin-bottom: 8px;
+    }
+
+    /* Responsividade */
+    @media (max-width: 1024px) {
+      .sidebar {
+        display: none;
+      }
+      .content-area {
+        padding: 32px 24px;
+      }
+      .arch-flow {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero-title {
+        font-size: 2rem;
+      }
+      .arch-flow {
+        grid-template-columns: 1fr;
+      }
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-layout">
+    <!-- Sidebar Navegação -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-icon">🚀</div>
+        <div>
+          <div class="brand-title">AGENTE SAAVEDRA</div>
+          <div class="brand-subtitle">Sankhya Om Platform</div>
+        </div>
+      </div>
+
+      <nav>
+        <div class="nav-category">Navegação Rápida</div>
+        <ul class="nav-list">
+          <li class="nav-item"><a href="#visao-geral" class="active"><span>🔍</span> Visão Geral</a></li>
+          <li class="nav-item"><a href="#arquitetura"><span>🏛️</span> Arquitetura</a></li>
+          <li class="nav-item"><a href="#modulos"><span>📦</span> Módulos Principais</a></li>
+          <li class="nav-item"><a href="#conectores"><span>🔌</span> Gateway Sankhya</a></li>
+          <li class="nav-item"><a href="#boletos-safra"><span>🏦</span> Homologação Safra</a></li>
+          <li class="nav-item"><a href="#dashboards-bi"><span>📊</span> Otimização de BI</a></li>
+          <li class="nav-item"><a href="#diretorios"><span>📂</span> Estrutura de Arquivos</a></li>
+          <li class="nav-item"><a href="#configuracao"><span>⚙️</span> Instalação & Setup</a></li>
+          <li class="nav-item"><a href="#execucao"><span>▶️</span> Como Executar</a></li>
+          <li class="nav-item"><a href="#seguranca"><span>🛡️</span> Governança & Segurança</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Conteúdo Principal -->
+    <main class="content-area">
+      
+      <!-- Hero Banner -->
+      <section class="hero" id="topo">
+        <div class="hero-badge-top">
+          <span>⚡</span> Ambiente Corporativo Saavedra Representações Ltda
+        </div>
+        
+        <h1 class="hero-title">Agente Saavedra & Central Sankhya</h1>
+        
+        <p class="hero-lead">
+          Plataforma unificada para automação de processos críticos, conectividade via API Gateway com o ERP Sankhya Om, engenharia de boletos bancários (Banco Safra), inteligência de negócios (BI) e suporte hospitalar com Inteligência Artificial.
+        </p>
+
+        <div class="badge-bar">
+          <div class="badge"><span class="badge-dot dot-blue"></span> ERP Sankhya Om 4.25+</div>
+          <div class="badge"><span class="badge-dot dot-green"></span> Python 3.10+ / Node.js 18+</div>
+          <div class="badge"><span class="badge-dot dot-amber"></span> Banco Safra CNAB 400</div>
+          <div class="badge"><span class="badge-dot dot-purple"></span> Google Gemini AI + Local KB</div>
+          <div class="badge"><span class="badge-dot dot-green"></span> JasperReports (.jrxml)</div>
+          <div class="badge"><span class="badge-dot dot-blue"></span> Dark Glassmorphism SPA</div>
+        </div>
+
+        <div class="hero-actions">
+          <a href="#execucao" class="btn btn-primary"><span>🚀</span> Iniciar Aplicação</a>
+          <a href="#arquitetura" class="btn btn-secondary"><span>📐</span> Ver Arquitetura</a>
+        </div>
+      </section>
+
+      <!-- 1. Visão Geral -->
+      <section id="visao-geral">
+        <div class="section-header">
+          <div class="section-tag">Pilares</div>
+        </div>
+        <h2 class="section-title">🔍 1. Visão Geral da Solução</h2>
+        <p class="section-desc">
+          Projetada especialmente para atender à complexidade operacional da <b>Saavedra Representações</b> no segmento médico-hospitalar (OPME), faturamento cirúrgico consignado e licitações hospitalares de grande porte.
+        </p>
+
+        <div class="feature-grid">
+          <div class="feature-card primary">
+            <div class="card-icon">🔌</div>
+            <h3 class="card-title">API Gateway Sankhya</h3>
+            <p class="card-text">Conectores desacoplados em Python e Node.js com OAuth 2.0 Client Credentials automático e renovação de tokens transparente.</p>
+            <ul class="card-list">
+              <li>Zero dependências externas pesadas</li>
+              <li>CRUD e Serviços MGE nativos</li>
+              <li>Sandbox e Produção com toggle fácil</li>
+            </ul>
+          </div>
+
+          <div class="feature-card cyan">
+            <div class="card-icon">🤖</div>
+            <h3 class="card-title">Agente Web com IA</h3>
+            <p class="card-text">Interface SPA moderna com assistente dual-engine: inteligência em nuvem (Google Gemini) combinada com busca vetorial local.</p>
+            <ul class="card-list">
+              <li>Design Dark Glassmorphism</li>
+              <li>Terminal SQL Sankhya com auditoria</li>
+              <li>Leitor e navegador de manuais ERP</li>
+            </ul>
+          </div>
+
+          <div class="feature-card amber">
+            <div class="card-icon">🏦</div>
+            <h3 class="card-title">Homologação Safra</h3>
+            <p class="card-text">Reconstrução geométrica do boleto do Banco Safra (422-7) em JasperReports com linha digitável contínua e correção de sacador.</p>
+            <ul class="card-list">
+              <li>Linha digitável sem quebras</li>
+              <li>Sacador/Avalista visível e alinhado</li>
+              <li>Compatível com padrão FEBRABAN</li>
+            </ul>
+          </div>
+
+          <div class="feature-card emerald">
+            <div class="card-icon">📊</div>
+            <h3 class="card-title">Otimizações de BI</h3>
+            <p class="card-text">Refatoração de painéis analíticos do Sankhya Om (Dash 1502 e Dash 2302) e eliminação de erros de subqueries em SQL Server.</p>
+            <ul class="card-list">
+              <li>Identificação de Modalidade de Licitação</li>
+              <li>Correção de saldos negativos em aditivos</li>
+              <li>Otimização de consultas de consignados</li>
+            </ul>
+          </div>
+
+          <div class="feature-card purple">
+            <div class="card-icon">📚</div>
+            <h3 class="card-title">Base de Conhecimento</h3>
+            <p class="card-text">Acervo técnico com mais de 4.950 manuais técnicos do ERP Sankhya Om somados aos playbooks cirúrgicos e fiscais da Saavedra.</p>
+            <ul class="card-list">
+              <li>Regras de TOPs e faturamento OPME</li>
+              <li>Campos customizados mapeados (AD_)</li>
+              <li>Reforma Tributária (IBS / CBS)</li>
+            </ul>
+          </div>
+
+          <div class="feature-card rose">
+            <div class="card-icon">⚡</div>
+            <h3 class="card-title">Scripts Operacionais</h3>
+            <p class="card-text">Ferramentas utilitárias em Python para geração e formatação de relatórios de faturamento executivo em Word (.docx) e Excel.</p>
+            <ul class="card-list">
+              <li>Conversor automático de vendas</li>
+              <li>Auditoria de notas e remessas bancárias</li>
+              <li>Renderizadores de imagem para conferência</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. Arquitetura -->
+      <section id="arquitetura">
+        <div class="section-header">
+          <div class="section-tag">Engenharia</div>
+        </div>
+        <h2 class="section-title">🏛️ 2. Arquitetura do Sistema</h2>
+        <p class="section-desc">Fluxo integrado de dados entre a interface do usuário, o backend e os serviços corporativos do Sankhya Om.</p>
+
+        <div class="arch-container">
+          <div class="arch-flow">
+            <div class="arch-block">
+              <div class="arch-block-icon">🖥️</div>
+              <div class="arch-block-name">Frontend SPA</div>
+              <div class="arch-block-desc">Interface Web Glassmorphism, Chat com IA, Terminal SQL e Gráficos.</div>
+            </div>
+
+            <div class="arch-block">
+              <div class="arch-block-icon">⚙️</div>
+              <div class="arch-block-name">Backend Server</div>
+              <div class="arch-block-desc">Servidor HTTP em Python (<code>agent_server.py</code>) e rotas de orquestração.</div>
+            </div>
+
+            <div class="arch-block">
+              <div class="arch-block-icon">🔌</div>
+              <div class="arch-block-name">Conectores Gateway</div>
+              <div class="arch-block-desc">OAuth 2.0 Client Credentials e chamadas MGE (Python / Node.js).</div>
+            </div>
+
+            <div class="arch-block">
+              <div class="arch-block-icon">🏢</div>
+              <div class="arch-block-name">ERP Sankhya Om</div>
+              <div class="arch-block-desc">Gateway de Serviços MGE, Banco SQL Server / Oracle e Regras de Negócio.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. Módulos & Conectores -->
+      <section id="conectores">
+        <div class="section-header">
+          <div class="section-tag">Integração</div>
+        </div>
+        <h2 class="section-title">🔌 3. Gateway & Conectores Sankhya</h2>
+        <p class="section-desc">Exemplo prático de consulta utilizando a biblioteca desacoplada em Python:</p>
+
+        <div class="code-box">
+          <div class="code-header">
+            <span>Python (sankhya_client.py)</span>
+            <button class="copy-btn" onclick="navigator.clipboard.writeText(`from sankhya_client import SankhyaClient\n\nclient = SankhyaClient()\nclient.authenticate()\n\nparceiros = client.load_records(\n    entity_name='Parceiro',\n    fields=['CODPARC', 'NOMEPARC', 'CGC_CPF'],\n    criteria='this.CODPARC > 0'\n)\nprint(f'Total de registros: {len(parceiros)}')`)">Copiar</button>
+          </div>
+          <pre class="code-body"><code><span style="color:#f43f5e">from</span> sankhya_client <span style="color:#f43f5e">import</span> SankhyaClient
+
+<span style="color:#64748b"># Inicialização automática com variáveis do .env</span>
+client = SankhyaClient()
+client.authenticate()
+
+<span style="color:#64748b"># Consulta de parceiros com paginação nativa</span>
+parceiros = client.load_records(
+    entity_name=<span style="color:#38bdf8">"Parceiro"</span>,
+    fields=[<span style="color:#38bdf8">"CODPARC"</span>, <span style="color:#38bdf8">"NOMEPARC"</span>, <span style="color:#38bdf8">"CGC_CPF"</span>],
+    criteria=<span style="color:#38bdf8">"this.CODPARC > 0"</span>
+)
+print(<span style="color:#38bdf8">f"Total de registros carregados: {len(parceiros)}"</span>)</code></pre>
+        </div>
+      </section>
+
+      <!-- 4. Homologação Safra -->
+      <section id="boletos-safra">
+        <div class="section-header">
+          <div class="section-tag">Engenharia Financeira</div>
+        </div>
+        <h2 class="section-title">🏦 4. Homologação de Boletos (Banco Safra)</h2>
+        <p class="section-desc">Detalhes da reestruturação dos arquivos JasperReports (.jrxml) para a carteira de cobrança Safra (422-7):</p>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Arquivo Modelo</th>
+                <th>Finalidade Operacional</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Bol_Safra_HOMOLOGADO.jrxml</code></td>
+                <td>Layout oficial final com dados do Sacador/Avalista posicionados e validados.</td>
+                <td><span style="color:var(--accent-emerald); font-weight:700;">● Homologado</span></td>
+              </tr>
+              <tr>
+                <td><code>Bol_Safra_LINHA_UNICA.jrxml</code></td>
+                <td>Versão moderna com linha digitável contínua e cabeçalho otimizado.</td>
+                <td><span style="color:var(--accent-cyan); font-weight:700;">● Alternativo</span></td>
+              </tr>
+              <tr>
+                <td><code>Bol_Safra_DEFINITIVO.jrxml</code></td>
+                <td>Layout integrado com todas as tags dinâmicas do módulo TSIIRE Sankhya.</td>
+                <td><span style="color:var(--accent-emerald); font-weight:700;">● Homologado</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 5. Otimizações de BI -->
+      <section id="dashboards-bi">
+        <div class="section-header">
+          <div class="section-tag">Business Intelligence</div>
+        </div>
+        <h2 class="section-title">📊 5. Otimizações de BI e Dashboards</h2>
+        <p class="section-desc">Correções estruturais aplicadas nos painéis do ERP Sankhya Om:</p>
+
+        <details open>
+          <summary>Dashboard 2302 - Licitações e Contratos Públicos</summary>
+          <div class="details-content">
+            <p style="margin: 12px 0;">
+              Inclusão da coluna <b>MODALIDADE</b> para diferenciação visual instantânea entre Pregões Eletrônicos e Termos Aditivos de Contrato via consultas às tabelas <code>LGH_LICCAB</code> e <code>LGH_LICMOD</code>.
+            </p>
+            <p>
+              <b>Correção do Gadget 57:</b> Reestruturação das somas e programações para anular duplicidades e eliminar o bug de saldos negativos em múltiplos aditivos contratuais (caso HCPA).
+            </p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Dashboard 1502 - Estoque de Terceiros em Nosso Poder</summary>
+          <div class="details-content">
+            <p style="margin: 12px 0;">
+              Refatoração de metadados em <code>dashboardMetadata_otimizado.xml</code> para minimizar joins analíticos pesados e acelerar a exibição de inventário em consignação hospitalar.
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <!-- 6. Estrutura de Diretórios -->
+      <section id="diretorios">
+        <div class="section-header">
+          <div class="section-tag">Organização</div>
+        </div>
+        <h2 class="section-title">📂 6. Estrutura de Diretórios</h2>
+
+        <div class="code-box">
+          <div class="code-header">
+            <span>Árvore do Projeto</span>
+            <button class="copy-btn" onclick="navigator.clipboard.writeText('Agente Saavedra Directory Tree')">Copiar</button>
+          </div>
+          <pre class="code-body"><code>├── .agents/                               # Regras de inteligência do assistente
+├── .env.example                           # Template de variáveis de ambiente
+├── README.md                              # Documentação oficial formatada
+├── README.html                            # Esta página interativa com CSS3
+├── package.json                           # Configurações Node.js
+│
+├── sankhya_client.py                      # Conector Python para Sankhya Gateway
+├── sankhyaClient.js                       # Conector Node.js para Sankhya Gateway
+├── test_connection.py                     # Validador de conexão (Python)
+├── testConnection.js                      # Validador de conexão (Node.js)
+│
+├── agent_server.py                        # Servidor HTTP do Agente Web
+├── gerenciador_conhecimento.py            # Motor de busca na base técnica
+│
+├── web/                                   # Frontend SPA Dark Glassmorphism
+│   ├── index.html                         # Estrutura da interface
+│   ├── styles.css                         # Folha de estilos moderna
+│   └── app.js                             # Lógica de chat e SQL
+│
+├── modelos_safra/                         # Layouts JasperReports do Banco Safra
+│   ├── Bol_Safra_HOMOLOGADO.jrxml         # Boleto homologado em produção
+│   └── safra_logo.b64                     # Logotipo Safra codificado
+│
+├── Dashboards/                            # Metadados e documentação técnica de BI
+│   ├── metadata_1502_.../                 # Dashboard 1502 Consignados
+│   └── metadata_2302_.../                 # Dashboard 2302 Licitações
+│
+└── base_conhecimento/                     # 4.950+ Manuais e Playbooks Saavedra</code></pre>
+        </div>
+      </section>
+
+      <!-- 7. Instalação e Configuração -->
+      <section id="configuracao">
+        <div class="section-header">
+          <div class="section-tag">Setup</div>
+        </div>
+        <h2 class="section-title">⚙️ 7. Instalação e Configuração</h2>
+
+        <div class="callout warning">
+          <div class="callout-icon">⚠️</div>
+          <div class="callout-content">
+            <h4>Segurança de Credenciais</h4>
+            <p>Nunca envie o arquivo <code>.env</code> para o controle de versão. Todas as chaves do Sankhya e Gemini devem ser mantidas locais e restritas.</p>
+          </div>
+        </div>
+
+        <div class="code-box">
+          <div class="code-header">
+            <span>Passo 1: Criar o arquivo .env</span>
+            <button class="copy-btn" onclick="navigator.clipboard.writeText('cp .env.example .env')">Copiar</button>
+          </div>
+          <pre class="code-body"><code>cp .env.example .env</code></pre>
+        </div>
+
+        <div class="code-box">
+          <div class="code-header">
+            <span>Passo 2: Preencher com credenciais do Sankhya</span>
+          </div>
+          <pre class="code-body"><code><span style="color:#64748b"># API Gateway Sankhya Om</span>
+SANKHYA_CLIENT_ID=<span style="color:#38bdf8">seu_client_id_aqui</span>
+SANKHYA_CLIENT_SECRET=<span style="color:#38bdf8">seu_client_secret_aqui</span>
+SANKHYA_X_TOKEN=<span style="color:#38bdf8">seu_x_token_aqui</span>
+SANKHYA_ENV=<span style="color:#10b981">sandbox</span> <span style="color:#64748b"># ou production</span></code></pre>
+        </div>
+      </section>
+
+      <!-- 8. Execução -->
+      <section id="execucao">
+        <div class="section-header">
+          <div class="section-tag">Comandos</div>
+        </div>
+        <h2 class="section-title">▶️ 8. Como Executar</h2>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Objetivo</th>
+                <th>Comando PowerShell / Bash</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>Testar Conexão Python</b></td>
+                <td><code>python test_connection.py</code></td>
+              </tr>
+              <tr>
+                <td><b>Testar Conexão Node.js</b></td>
+                <td><code>node testConnection.js</code> ou <code>npm test</code></td>
+              </tr>
+              <tr>
+                <td><b>Iniciar Agente Web (Porta 3000)</b></td>
+                <td><code>python agent_server.py 3000</code> ou <code>npm run start:web</code></td>
+              </tr>
+              <tr>
+                <td><b>Consultar Base de Conhecimento</b></td>
+                <td><code>python gerenciador_conhecimento.py "regras faturamento unimed"</code></td>
+              </tr>
+              <tr>
+                <td><b>Gerar Prévia de Boleto</b></td>
+                <td><code>python render_preview_homologado.py</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 9. Governança e Segurança -->
+      <section id="seguranca">
+        <div class="section-header">
+          <div class="section-tag">Governança</div>
+        </div>
+        <h2 class="section-title">🛡️ 9. Segurança e Boas Práticas</h2>
+        <div class="callout">
+          <div class="callout-icon">🔒</div>
+          <div class="callout-content">
+            <h4>Diretrizes Obrigatórias</h4>
+            <p>1. Sempre validar alterações em layouts <code>.jrxml</code> e queries de BI na base <b>Sandbox</b> antes do deploy em Produção.<br>
+            2. Manter histórico de intervenções documentado em <code>base_conhecimento/ambiente_saavedra/HISTORICO_MELHORIAS_E_CONSERTOS.md</code>.<br>
+            3. Executar consultas no Terminal SQL estritamente com filtros indexados.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Rodapé -->
+      <footer>
+        <p><b>Saavedra Representações Ltda</b> • Gestão, Inteligência e Tecnologia Hospitalar</p>
+        <p>Ambiente integrado ao ERP Sankhya Om • Todos os direitos reservados • 2026</p>
+      </footer>
+
+    </main>
+  </div>
+
+  <script>
+    // Realce de navegação ativa no scroll
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('.nav-item a');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop - 120;
+        if (window.pageYOffset >= sectionTop) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${current}`) {
+          link.classList.add('active');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
