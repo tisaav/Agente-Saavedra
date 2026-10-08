@@ -1,0 +1,272 @@
+<gadget >
+  <prompt-parameters>
+    <parameter  id="PERIODO" description="Periodo" metadata="datePeriod" required="true" keep-last="true" keep-date="true" label="PERIODO : Período" order="0"/>
+    <parameter  id="NUMCONTRATO" description="Numero do Contrato" metadata="entity:Contrato@NUMCONTRATO" required="false" keep-last="false" keep-date="false" show-inactives="false" label="NUMCONTRATO : Entidade/Tabela" order="1"/>
+    <parameter  id="CODPARC" description="Parceiro" metadata="entity:Parceiro@CODPARC" required="false" keep-last="true" keep-date="false" show-inactives="false" label="CODPARC : Entidade/Tabela" order="2"/>
+    <parameter  id="CODPROD" description="Codigo do produto" metadata="entity:Produto@CODPROD" required="false" keep-last="false" keep-date="false" show-inactives="false" label="CODPROD : Entidade/Tabela" order="3"/>
+    <parameter  id="SITUACAO" description="Considerar contratos?" metadata="singleList:Text" listType="text" required="true" keep-last="true" keep-date="false" show-inactives="false" label="SITUACAO : singleList:Text" order="4">
+      <item value="N" label="Não Vencidos"/>
+      <item value="V" label="Vencidos"/>
+      <item value="T" label="Todos"/>
+    </parameter>
+  </prompt-parameters>
+  <level id="08T" description="Principal">
+    <container orientacao="V" tamanhoRelativo="100">
+      <container orientacao="V" tamanhoRelativo="50">
+        <grid id="grd_0B7" useNewGrid="S">
+          <title>
+            <![CDATA[DASH - ACOMPANHAMENTO CONTRATOS DE LICITACAO]]>
+          </title>
+          <expression type="sql" data-source="MGEDS">
+            <![CDATA[SELECT LGH_LICITECON.NUMCONTRATO CONTRATO,
+	TCSCON.LGH_PROCESSO AS NR_PROCESSO,
+	TCSCON.AD_PREGAO AS PREGAO,
+	LGH_LICMOD.DESCRICAO AS MODALIDADE,
+	LGH_LICCONT.NUMEROCONTRATOCLIENTE AS CONT_CLIENTE,
+	TCSCON.CODPARC AS PARCEIRO,
+	TGFPAR.RAZAOSOCIAL,
+	TGFPAR.NOMEPARC AS NOME_FANTASIA,
+	TGFPRO.REFFORN AS CATALAGO,
+	LGH_LICITECON.CODPROD AS COD_PRODUTO,	
+	TGFPRO.DESCRPROD AS DESCRICAO,
+	LGH_LICCONT.DTCONTRATO DT_CONTRATO,
+	LGH_LICCONT.DTTERMINO AS DT_TERMINO,
+	TGFPRO.MARCA MARCA,
+	ROUND(AVG(LGH_LICITECON.VLRUNIT),2) AS VLR_UNIT,
+	SUM(LGH_LICITECON.QTDEPREVISTA) AS QTD_PREVISTA,
+	SUM(LGH_LICITECON.VLRUNIT*LGH_LICITECON.QTDEPREVISTA) AS VLR_PREVISTO, 
+	-- Busca pedidos programados de todos os contratos do mesmo Pregão
+	(SELECT ISNULL(SUM(TGFITE.QTDNEG),0) 
+	 FROM TGFCAB 
+	 INNER JOIN TGFITE ON TGFITE.NUNOTA = TGFCAB.NUNOTA 
+	 INNER JOIN TCSCON CON ON CON.NUMCONTRATO = TGFCAB.NUMCONTRATO
+	 WHERE TGFCAB.TIPMOV = 'P' AND 
+		 TGFCAB.SERIENOTA IS NULL AND 
+		 TGFCAB.CODTIPOPER IN ('910','911','1183') AND 
+		 CON.AD_PREGAO = TCSCON.AD_PREGAO AND 
+		 TGFITE.CODPROD = LGH_LICITECON.CODPROD AND 
+		 TGFITE.PENDENTE = 'S' AND 
+		 TGFITE.QTDNEG > TGFITE.QTDENTREGUE) AS QTD_PROGRAMADA,
+	-- Busca notas faturadas de todos os contratos do mesmo Pregão
+	(SELECT ISNULL(SUM(TGFITE.QTDNEG),0) 
+	 FROM TGFCAB 
+	 INNER JOIN TGFITE ON TGFITE.NUNOTA = TGFCAB.NUNOTA 
+	 INNER JOIN TCSCON CON ON CON.NUMCONTRATO = TGFCAB.NUMCONTRATO
+	 WHERE TGFCAB.TIPMOV = 'V' AND 
+		 TGFCAB.SERIENOTA = 2 AND 
+		 TGFCAB.CODTIPOPER IN ('1000','1100','1107') AND 
+		 CON.AD_PREGAO = TCSCON.AD_PREGAO AND 
+		 TGFITE.CODPROD = LGH_LICITECON.CODPROD) AS QTD_FATURADA,
+	-- Valor faturado unificado pelo Pregão
+	(AVG(LGH_LICITECON.VLRUNIT) * (SELECT ISNULL(SUM(TGFITE.QTDNEG),0) 
+		FROM TGFCAB 
+		INNER JOIN TGFITE ON TGFITE.NUNOTA = TGFCAB.NUNOTA 
+		INNER JOIN TCSCON CON ON CON.NUMCONTRATO = TGFCAB.NUMCONTRATO
+		WHERE TGFCAB.TIPMOV = 'V' AND 
+			TGFCAB.SERIENOTA = 2 AND 
+			TGFCAB.CODTIPOPER IN ('1000','1100','1107') AND 
+			CON.AD_PREGAO = TCSCON.AD_PREGAO AND
+			TGFITE.CODPROD = LGH_LICITECON.CODPROD)) AS VLR_FATURADO,
+	-- Saldo usando o previsto da linha atual (1.800) menos a baixa unificada do Pregão (1.142) -> Gera os 658 corretos
+	(SUM(LGH_LICITECON.QTDEPREVISTA) - 
+		(SELECT ISNULL(SUM(TGFITE.QTDNEG),0) 
+		 FROM TGFCAB 
+		 INNER JOIN TGFITE ON TGFITE.NUNOTA = TGFCAB.NUNOTA 
+		 INNER JOIN TCSCON CON ON CON.NUMCONTRATO = TGFCAB.NUMCONTRATO
+		 WHERE TGFCAB.TIPMOV = 'V' AND
+			TGFCAB.SERIENOTA = 2 AND
+			TGFCAB.CODTIPOPER IN ('1000','1100','1107') AND
+			CON.AD_PREGAO = TCSCON.AD_PREGAO AND
+			TGFITE.CODPROD = LGH_LICITECON.CODPROD)) AS SLD_PRODUTO,
+	-- Saldo disponível livre real usando o teto da linha atual menos as baixas globais
+	(SUM(LGH_LICITECON.QTDEPREVISTA) - 
+		(SELECT ISNULL(SUM(TGFITE.QTDNEG),0)
+		 FROM TGFCAB 
+		 INNER JOIN TGFITE ON TGFITE.NUNOTA = TGFCAB.NUNOTA 
+		 INNER JOIN TCSCON CON ON CON.NUMCONTRATO = TGFCAB.NUMCONTRATO
+		 WHERE TGFCAB.TIPMOV = 'P' AND
+			TGFCAB.SERIENOTA IS NULL AND
+			TGFCAB.CODTIPOPER IN ('910','911','1183') AND
+			CON.AD_PREGAO = TCSCON.AD_PREGAO AND 
+			TGFITE.CODPROD = LGH_LICITECON.CODPROD AND
+			TGFITE.PENDENTE = 'S' AND
+			TGFITE.QTDNEG > TGFITE.QTDENTREGUE) 
+	 - 
+		(SELECT ISNULL(SUM(TGFITE.QTDNEG),0)
+		 FROM TGFCAB
+		 INNER JOIN TGFITE ON TGFITE.NUNOTA = TGFCAB.NUNOTA
+		 INNER JOIN TCSCON CON ON CON.NUMCONTRATO = TGFCAB.NUMCONTRATO
+		 WHERE TGFCAB.TIPMOV = 'V' AND 
+			TGFCAB.SERIENOTA = 2 AND 
+			TGFCAB.CODTIPOPER IN ('1000','1100','1107') AND 
+			CON.AD_PREGAO = TCSCON.AD_PREGAO AND 
+			TGFITE.CODPROD = LGH_LICITECON.CODPROD)) AS SLD_DISPONIVEL,
+	ROUND((((AVG(LGH_LICITECON.VLRUNIT) * (SELECT ISNULL(SUM(TGFITE.QTDNEG),0)
+		FROM TGFCAB
+		INNER JOIN TGFITE ON TGFITE.NUNOTA = TGFCAB.NUNOTA
+		INNER JOIN TCSCON CON ON CON.NUMCONTRATO = TGFCAB.NUMCONTRATO
+		WHERE TGFCAB.TIPMOV = 'V' AND  
+			TGFCAB.SERIENOTA = 2 AND
+			TGFCAB.CODTIPOPER IN ('1000','1100','1107') AND
+			CON.AD_PREGAO = TCSCON.AD_PREGAO AND  
+			TGFITE.CODPROD = LGH_LICITECON.CODPROD)) / 
+		NULLIF(SUM(LGH_LICITECON.VLRUNIT*LGH_LICITECON.QTDEPREVISTA), 0) )*100 ),0) AS PER_ATENDIDO,
+	(SELECT SUM(TGFEST.ESTOQUE) 
+	FROM TGFEST 
+	WHERE TGFEST.CODPROD = LGH_LICITECON.CODPROD AND
+		TGFEST.CODPARC = 0 AND
+		TGFEST.ESTOQUE > 0 AND
+		TGFEST.DTVAL >= DateAdd("D",0,GETDATE()) ) AS ESTOQUE,
+	(SELECT SUM(TGFEST.RESERVADO)
+	FROM TGFEST
+	WHERE TGFEST.CODPROD = LGH_LICITECON.CODPROD AND
+		TGFEST.CODPARC = 0 AND
+		TGFEST.RESERVADO > 0 AND
+		TGFEST.DTVAL >= DateAdd("D",0, GETDATE()) ) AS RESERVADO,
+	((SELECT SUM(TGFEST.ESTOQUE)
+	  FROM TGFEST
+	  WHERE TGFEST.CODPROD = LGH_LICITECON.CODPROD AND
+			TGFEST.CODPARC = 0 AND
+			TGFEST.ESTOQUE > 0 AND
+			TGFEST.DTVAL >= DateAdd("D",0,GETDATE()) ) 
+			- 
+	 (SELECT SUM(TGFEST.RESERVADO) 
+	  FROM TGFEST 
+	  WHERE TGFEST.CODPROD = LGH_LICITECON.CODPROD AND
+			TGFEST.CODPARC = 0 AND
+			TGFEST.RESERVADO > 0 AND
+			TGFEST.DTVAL >= DateAdd("D",0,GETDATE()) )) AS DISPONIVEL,
+	DATEDIFF(day,GETDATE(),LGH_LICCONT.DTTERMINO) DIAS_AVENCER,
+	TGFTPP.DESCRTIPPARC PERFIL_PARCEIRO,
+	TGFVEN.APELIDO VENDEDOR,
+	CASE
+		WHEN ( DATEDIFF(day,GETDATE(),LGH_LICCONT.DTTERMINO) <= 90) THEN '#FF0000'
+		WHEN ( DATEDIFF(day,GETDATE(),LGH_LICCONT.DTTERMINO) > 90 AND DATEDIFF(day,GETDATE(),LGH_LICCONT.DTTERMINO) <= 180) THEN '#FFFF00'  
+		WHEN ( DATEDIFF(day,GETDATE(), LGH_LICCONT.DTTERMINO) > 180) THEN '#00FF00' ELSE ''
+	END AS BKCOLOR,
+	CASE
+		WHEN ( DATEDIFF(day,GETDATE(),LGH_LICCONT.DTTERMINO) < 90) THEN '#FFFFFF' ELSE '' 
+	END AS FGCOLOR
+FROM LGH_LICITECON
+INNER JOIN LGH_LICCONT ON LGH_LICCONT.NUMCONTRATO = LGH_LICITECON.NUMCONTRATO 
+INNER JOIN TCSCON ON TCSCON.NUMCONTRATO = LGH_LICCONT.NUMCONTRATO 
+INNER JOIN TGFPAR ON TGFPAR.CODPARC = TCSCON.CODPARC 
+INNER JOIN TGFPRO ON TGFPRO.CODPROD = LGH_LICITECON.CODPROD
+LEFT JOIN TGFTPP ON TGFTPP.CODTIPPARC = TGFPAR.CODTIPPARC
+LEFT JOIN TGFVEN ON TGFVEN.CODVEND = TGFPAR.CODVEND 
+LEFT JOIN LGH_LICCAB ON LGH_LICCAB.NULIC = ISNULL(NULLIF(LGH_LICCONT.NULIC, 0), TCSCON.LGH_NULINC)
+LEFT JOIN LGH_LICMOD ON LGH_LICMOD.NUMODALIDADE = LGH_LICCAB.NUMODALIDADE
+WHERE
+	LGH_LICCONT.DTCONTRATO BETWEEN :PERIODO.INI AND :PERIODO.FIN
+	AND (TCSCON.CODPARC = :CODPARC OR :CODPARC IS NULL)
+	
+	-- PONTO DE MELHORIA: Busca pelo Pregão correspondente ao contrato digitado no filtro
+	AND (TCSCON.AD_PREGAO = (SELECT TOP 1 EX.AD_PREGAO FROM TCSCON EX WHERE EX.NUMCONTRATO = :NUMCONTRATO) OR :NUMCONTRATO IS NULL)
+	
+	AND (LGH_LICITECON.CODPROD = :CODPROD OR :CODPROD IS NULL)
+	AND ((:SITUACAO = 'V' AND LGH_LICCONT.DTTERMINO <= DateAdd("D",0,GETDATE())) 
+		OR (:SITUACAO = 'N' AND LGH_LICCONT.DTTERMINO > DateAdd("D",0,GETDATE())) 
+		OR (:SITUACAO = 'T' AND LGH_LICCONT.DTTERMINO IS NOT NULL))
+GROUP BY 
+	LGH_LICITECON.NUMCONTRATO,
+	TCSCON.LGH_PROCESSO,
+	TCSCON.AD_PREGAO,
+	LGH_LICMOD.DESCRICAO,
+	LGH_LICCONT.NUMEROCONTRATOCLIENTE,
+	TCSCON.CODPARC,
+	TGFPAR.NOMEPARC,
+	TGFPRO.REFFORN,
+	LGH_LICITECON.CODPROD,
+	TGFPRO.DESCRPROD,
+	LGH_LICCONT.DTCONTRATO,
+	LGH_LICCONT.DTTERMINO,
+	TGFPRO.MARCA,
+	TGFTPP.DESCRTIPPARC,
+	TGFVEN.APELIDO,
+	TGFPAR.RAZAOSOCIAL
+ORDER BY 
+	LGH_LICITECON.NUMCONTRATO,
+	TCSCON.LGH_PROCESSO,
+	TCSCON.AD_PREGAO,
+	LGH_LICCONT.NUMEROCONTRATOCLIENTE,
+	TCSCON.CODPARC,
+	TGFPAR.NOMEPARC,
+	TGFPRO.REFFORN,
+	LGH_LICITECON.CODPROD,
+	TGFPRO.DESCRPROD,
+	LGH_LICCONT.DTCONTRATO,
+	LGH_LICCONT.DTTERMINO,
+	TGFPRO.MARCA;]]>
+          </expression>
+          <metadata>
+            <field name="CONTRATO" label="CONTRATO" type="I" visible="true" useFooter="false">
+            </field>
+            <field name="NR_PROCESSO" label="NR_PROCESSO" type="S" visible="true" useFooter="false">
+            </field>
+            <field name="PREGAO" label="PREGAO" type="S" visible="true" useFooter="false">
+            </field>
+            <field name="MODALIDADE" label="MODALIDADE" type="S" visible="true" useFooter="false">
+            </field>
+            <field name="CONT_CLIENTE" label="CONT_CLIENTE" type="S" visible="true" useFooter="false">
+            </field>
+            <field name="PARCEIRO" label="PARCEIRO" type="I" visible="true" useFooter="false">
+            </field>
+            <field name="RAZAOSOCIAL" label="RAZAOSOCIAL" type="S" visible="true" useFooter="false">
+            </field>
+            <field name="NOME_FANTASIA" label="NOME_FANTASIA" type="S" visible="true" useFooter="false">
+            </field>
+            <field name="CATALAGO" label="CATALAGO" type="S" visible="true" useFooter="false">
+            </field>
+            <field name="COD_PRODUTO" label="COD_PRODUTO" type="I" visible="true" useFooter="false">
+            </field>
+            <field name="DESCRICAO" label="DESCRICAO" type="S" visible="true" useFooter="false">
+            </field>
+            <field name="DT_CONTRATO" label="DT_CONTRATO" type="D" visible="true" useFooter="false">
+            </field>
+            <field name="DT_TERMINO" label="DT_TERMINO" type="D" visible="true" useFooter="false">
+            </field>
+            <field name="MARCA" label="MARCA" type="S" visible="true" useFooter="false">
+            </field>
+            <field name="VLR_UNIT" label="VLR_UNIT" type="F" visible="true" useFooter="false" mask="R$ #.##0,00">
+            </field>
+            <field name="QTD_PREVISTA" label="QTD_PREVISTA" type="I" visible="true" useFooter="SUM" mask="#.##0">
+            </field>
+            <field name="VLR_PREVISTO" label="VLR_PREVISTO" type="F" visible="true" useFooter="SUM" mask="R$ #.##0">
+            </field>
+            <field name="QTD_PROGRAMADA" label="QTD_PROGRAMADA" type="I" visible="true" useFooter="SUM" mask="#.##0">
+            </field>
+            <field name="QTD_FATURADA" label="QTD_FATURADA" type="I" visible="true" useFooter="SUM" mask="#.##0">
+            </field>
+            <field name="VLR_FATURADO" label="VLR_FATURADO" type="F" visible="true" useFooter="SUM" mask="R$ #.##0">
+            </field>
+            <field name="SLD_PRODUTO" label="SLD_PRODUTO" type="I" visible="true" useFooter="SUM" mask="#.##0">
+            </field>
+            <field name="SLD_DISPONIVEL" label="SLD_DISPONIVEL" type="I" visible="true" useFooter="SUM" mask="#.##0">
+            </field>
+            <field name="PER_ATENDIDO" label="PER_ATENDIDO" type="I" visible="true" useFooter="false" mask="#.##0 %">
+            </field>
+            <field name="ESTOQUE" label="ESTOQUE" type="I" visible="true" useFooter="false">
+            </field>
+            <field name="RESERVADO" label="RESERVADO" type="I" visible="true" useFooter="false">
+            </field>
+            <field name="DISPONIVEL" label="DISPONIVEL" type="I" visible="true" useFooter="false">
+            </field>
+            <field name="DIAS_AVENCER" label="DIAS_AVENCER" type="I" visible="true" useFooter="false">
+            </field>
+            <field name="PERFIL_PARCEIRO" label="PERFIL_PARCEIRO" type="S" visible="true" useFooter="false">
+            </field>
+            <field name="VENDEDOR" label="VENDEDOR" type="S" visible="true" useFooter="false">
+            </field>
+            <field name="BKCOLOR" label="BKCOLOR" type="S" visible="true" useFooter="false">
+            </field>
+            <field name="FGCOLOR" label="FGCOLOR" type="S" visible="true" useFooter="false">
+            </field>
+          </metadata>
+          <on-click-launcher  resource-id="br.com.sankhya.os.cad.contratos">
+            <NUMCONTRATO>$CONTRATO</NUMCONTRATO>
+          </on-click-launcher>
+        </grid>
+      </container>
+    </container>
+  </level>
+</gadget>

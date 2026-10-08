@@ -167,7 +167,9 @@ Otimizações em painéis de gestão à vista e relatórios analíticos:
   - Análise aprofundada de prós e contras arquiteturais em `Dashboards/metadata_1502_-_produtos_de_terceiros_em_nosso_poder/ANALISE_PROS_E_CONTRAS_DASHBOARD_1502.md`.
   - Otimização do XML de metadados (`dashboardMetadata_otimizado.xml`), reduzindo sobrecarga de queries analíticas sobre movimentações de estoque consignado.
 - **Dashboard 2302 - Licitações e Contratos:**
-  - Investigação e correção do **Gadget 57** (`gadget_57_dash2302_CORRIGIDO.xml`), solucionando falhas em contratos com aditivos múltiplos e vinculação a pregões do HCPA.
+  - Estrutura completa organizada em `Dashboards/metadata_2302_-_acompanhamento_contratos_de_licitacao/`.
+  - Inclusão da coluna **MODALIDADE** (identificando visualmente *Aditivo de Contrato*, *Pregão Eletrônico*, etc., com `LEFT JOIN` nas tabelas `LGH_LICCAB` e `LGH_LICMOD`).
+  - Investigação e correção do **Gadget 57** (`dashboardMetadata_corrigido.xml`), eliminando saldos negativos e programações indevidas em termos aditivos múltiplos vinculados ao mesmo pregão (HCPA).
 - **Gadget 1318 - Análise de Compras:**
   - Correção do erro *"subconsulta retornou mais de 1 valor"* em ambientes SQL Server (`gadget_1318_corrigido.xml`), reestruturando joins e agregações de pedidos pendentes.
 
