@@ -895,7 +895,7 @@ $F{LINHADIGITAVEL}.substring(10,11)</variableExpression>
 	<variable name="CONTA9DIG" class="java.lang.String">
 		<variableExpression>Funcoes.pdes(
     $P{REPORT_CONNECTION},
-     "sankhya.lpad(CTA.CODCTABCO,9,'0')",
+     "sankhya.lpad(replace(CTA.CODCTABCO,'-',''),9,'0')",
      "TSICTA CTA, TGFFIN FIN",
      "FIN.CODEMP = " + $F{CODEMP}.toString() + "AND CTA.CODCTABCOINT = FIN.CODCTABCOINT AND FIN.NUFIN = " + $F{NUFIN}.toString()
 )</variableExpression>
@@ -1238,7 +1238,7 @@ $F{LINHADIGITAVEL}.substring(10,11)</variableExpression>
 					<text>Beneficiário:</text>
 				</staticText>
 				<textField isBlankWhenNull="true">
-					<reportElement key="textField-8" x="67" y="527" width="224" height="11" />
+					<reportElement key="textField-8" x="67" y="527" width="355" height="11" />
 					<box leftPadding="2" rightPadding="2" />
 					<textElement>
 						<font size="8" />
@@ -1557,15 +1557,15 @@ $F{LINHADIGITAVEL}.substring(10,11)</variableExpression>
 					</graphicElement>
 				</line>
 				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true">
-					<reportElement key="textField-13" x="190" y="482" width="345" height="18" />
-					<box leftPadding="2" rightPadding="2">
+					<reportElement key="textField-13" x="188" y="482" width="347" height="18" />
+					<box leftPadding="0" rightPadding="0">
 						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000" />
 						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000" />
 						<bottomPen lineWidth="0.0" lineColor="#000000" />
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000" />
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font fontName="Times-Roman" size="10" isBold="true" />
+						<font fontName="Times-Roman" size="9" isBold="true" />
 					</textElement>
 					<textFieldExpression class="java.lang.String">$V{lindig}</textFieldExpression>
 				</textField>

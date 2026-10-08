@@ -244,8 +244,8 @@ Assim que a Mesa de Implantação aprovar os arquivos e emitir o Termo de Homolo
   ```
 
 ### 2. Linha digitável saindo em 2 linhas ou incompleta no boleto impresso
-* **Causa:** Largura do campo `textField` no JasperReports inferior a 500px ou falta de campos no gerador.
-* **Solução:** No JRXML, fixar largura do campo em `345px` a `520px`, altura em `18px`, `isStretchWithOverflow="false"` e fonte `Times-Roman 10pt`.
+* **Causa:** Largura do campo `textField` no JasperReports insuficiente ou fonte muito grande gerando corte/wrap do 5º bloco.
+* **Solução:** No JRXML (`Bol_Safra_HOMOLOGADO.jrxml`), fixar o campo da linha digitável (`textField-13`) com `x=188`, largura `347px` (faceando perfeitamente a margem direita `x=535`), altura `18px`, sem margens internas (`box leftPadding="0" rightPadding="0"`), `isStretchWithOverflow="false"` e fonte `Times-Roman 9pt isBold="true"`. Expandir também o campo de Razão/CNPJ do Beneficiário (`textField-8`) para largura `355px` para evitar corte do sufixo `/0001-11`.
 
 ### 3. Safra rejeitando remessa com erro de "Agência/Conta inválida (00007005843919)"
 * **Causa:** A agência Porto Alegre do Safra é `0700`. Com 5 posições exigidas no manual, deve ser preenchida como `00700` (e NUNCA `00007`).
@@ -260,5 +260,6 @@ Assim que a Mesa de Implantação aprovar os arquivos e emitir o Termo de Homolo
 * **Solução:** Aplicar o modelo `Bol_Safra_HOMOLOGADO.jrxml`, que já contempla:
   1. Local de Pagamento: `Pagável em qualquer Banco do Sistema de Compensação`;
   2. Beneficiário Final no lugar de Sacador/Avalista, mantido em branco;
-  3. Agência/Código: `00700 / 005843919`;
+  3. Agência/Código: `00700 / 005843919` (com variável `replace(CTA.CODCTABCO,'-','')`);
   4. Mensagens exatas: Multa 2%, Juros ao dia em R$ e instrução de Protesto em 5 dias.
+
