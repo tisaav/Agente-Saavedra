@@ -1,0 +1,23 @@
+# Introdução às Notas Fiscais de Ajuste (Débito e Crédito)
+
+> **Módulo:** Fiscal e Contábil | **Subseção:** Notas de Débito e Crédito - Configuração e Emissão  
+> **Fonte Oficial:** [https://ajuda.sankhya.com.br/hc/pt-br/articles/40101017221527-Introdu%C3%A7%C3%A3o-%C3%A0s-Notas-Fiscais-de-Ajuste-D%C3%A9bito-e-Cr%C3%A9dito](https://ajuda.sankhya.com.br/hc/pt-br/articles/40101017221527-Introdu%C3%A7%C3%A3o-%C3%A0s-Notas-Fiscais-de-Ajuste-D%C3%A9bito-e-Cr%C3%A9dito)  
+> **ID:** `40101017221527` | **Última Atualização:** 2026-08-14T12:07:13Z
+
+---
+
+No modelo de faturamento da Reforma Tributária, os ajustes na apuração do IBS e CBS são formalizados por meio de notas fiscais com finalidades específicas, garantindo a neutralidade tributária e a integridade da Apuração Assistida do Comitê Gestor.
+
+- 
+**Notas Fiscais de Débito (Finalidade 6):** documentam qualquer evento que resulte no **aumento** do imposto devido por quem emite a nota (ex.: pagamentos antecipados, correções de omissões). [Acesse a documentação de Notas de Débito](https://ajuda.sankhya.com.br/hc/pt-br/sections/40098636832023-Nota-fiscal-de-d%C3%A9bito).
+
+- 
+**Notas Fiscais de Crédito (Finalidade 5):** documentam situações em que o emitente registra uma **redução** no imposto devido (ex.: devoluções, apropriação de incentivos, redução de valores). [Acesse a documentação de Notas de Crédito](https://ajuda.sankhya.com.br/hc/pt-br/sections/40098670152599-Nota-fiscal-de-cr%C3%A9dito).
+
+
+---
+
+### 🔗 Links e Referências Internas:
+
+- [Acesse a documentação de Notas de Débito](https://ajuda.sankhya.com.br/hc/pt-br/sections/40098636832023-Nota-fiscal-de-d%C3%A9bito)
+- [Acesse a documentação de Notas de Crédito](https://ajuda.sankhya.com.br/hc/pt-br/sections/40098670152599-Nota-fiscal-de-cr%C3%A9dito)

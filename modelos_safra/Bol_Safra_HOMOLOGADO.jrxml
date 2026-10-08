@@ -1,0 +1,1840 @@
+<?xml version='1.0' encoding='utf-8'?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:ns2="http://jasperreports.sourceforge.net/jasperreports/components" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="boleto_template" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20">
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<property name="ireport.zoom" value="2.0" />
+	<property name="ireport.x" value="0" />
+	<property name="ireport.y" value="969" />
+	<property name="ireport.definition" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="com.sankhya.util.*" />
+	<import value="br.com.sankhya.modelcore.util.*" />
+	<import value="java.util.*" />
+	<import value="br.com.sankhya.modelcore.comercial.*" />
+	<import value="br.com.sankhya.jasperfuncs.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+	<parameter name="PDIR_MODELO" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression>"./"</defaultValueExpression>
+	</parameter>
+	<parameter name="PNUFIN" class="java.math.BigDecimal" isForPrompting="false" />
+	<parameter name="PCODUSULOGADO" class="java.math.BigDecimal" isForPrompting="false">
+		<defaultValueExpression>new BigDecimal(0)</defaultValueExpression>
+	</parameter>
+	<parameter name="PTIPAGRUPAMENTO" class="java.math.BigDecimal" isForPrompting="false" />
+	<parameter name="PVER_RENEGOCIADAS" class="java.lang.Boolean" isForPrompting="false" />
+	<parameter name="PQTD_TIT_VENC" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression>"valor padrão"</defaultValueExpression>
+	</parameter>
+	<parameter name="PTOT_TIT_VENC" class="java.lang.String" isForPrompting="false" />
+	<parameter name="PDATS_TIT_VENC01" class="java.lang.String" isForPrompting="false" />
+	<parameter name="PDATS_TIT_VENC02" class="java.lang.String" isForPrompting="false" />
+	<parameter name="JDBC_CONNECTION" class="java.sql.Connection" isForPrompting="false">
+		<defaultValueExpression />
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression>"C:\\Sankhya\\EDI\\Boletos Bancos\\JAVA\\Itaú\\"</defaultValueExpression>
+	</parameter>
+	<field name="NUFIN" class="java.math.BigDecimal" />
+	<field name="NUNOTA" class="java.math.BigDecimal" />
+	<field name="DTNEG" class="java.sql.Timestamp" />
+	<field name="NUMNOTA" class="java.math.BigDecimal" />
+	<field name="SERIENOTA" class="java.lang.String" />
+	<field name="CODPARC" class="java.math.BigDecimal" />
+	<field name="NOSSONUM" class="java.lang.String" />
+	<field name="NUMDUPL" class="java.math.BigDecimal" />
+	<field name="CODEMP" class="java.math.BigDecimal" />
+	<field name="VLRDESDOB" class="java.math.BigDecimal" />
+	<field name="TIPJURO" class="java.lang.String" />
+	<field name="VLRJURO" class="java.math.BigDecimal" />
+	<field name="CODVEND" class="java.math.BigDecimal" />
+	<field name="VLRMULTA" class="java.math.BigDecimal" />
+	<field name="CODBCO" class="java.math.BigDecimal" />
+	<field name="CODPROJ" class="java.math.BigDecimal" />
+	<field name="CODCENCUS" class="java.math.BigDecimal" />
+	<field name="DESDOBRAMENTO" class="java.lang.String" />
+	<field name="CODBARRA" class="java.lang.String" />
+	<field name="LINHADIGITAVEL" class="java.lang.String" />
+	<field name="CODCTABCOINT" class="java.math.BigDecimal" />
+	<field name="VLRDESC" class="java.math.BigDecimal" />
+	<field name="CODNAT" class="java.math.BigDecimal" />
+	<field name="DTVENC" class="java.sql.Timestamp" />
+	<field name="VLRNOTA" class="java.math.BigDecimal" />
+	<field name="APELIDO" class="java.lang.String" />
+	<field name="LOCALTRAB" class="java.lang.String" />
+	<field name="CODSUFRAMA" class="java.lang.String" />
+	<field name="CODCIDRECEB" class="java.math.BigDecimal" />
+	<field name="CODENDRECEB" class="java.math.BigDecimal" />
+	<field name="NUMRECEB" class="java.lang.String" />
+	<field name="COMPLRECEB" class="java.lang.String" />
+	<field name="CODBAIRECEB" class="java.math.BigDecimal" />
+	<field name="CEPRECEB" class="java.lang.String" />
+	<field name="CODCIDENTREGA" class="java.math.BigDecimal" />
+	<field name="CODENDENTREGA" class="java.math.BigDecimal" />
+	<field name="NUMENTREGA" class="java.lang.String" />
+	<field name="COMPLENTREGA" class="java.lang.String" />
+	<field name="CODBAIENTREGA" class="java.math.BigDecimal" />
+	<field name="CEPENTREGA" class="java.lang.String" />
+	<field name="CREA" class="java.lang.String" />
+	<field name="DTCREA" class="java.sql.Timestamp" />
+	<field name="UFCREA" class="java.lang.String" />
+	<field name="RAZEMP" class="java.lang.String" />
+	<field name="CGCEMP" class="java.lang.String" />
+	<field name="EMAILEMP" class="java.lang.String" />
+	<field name="INSESTCEMP" class="java.lang.String" />
+	<field name="INSCMUNEMP" class="java.lang.String" />
+	<field name="TELEMP" class="java.lang.String" />
+	<field name="FAXEMP" class="java.lang.String" />
+	<field name="CODENDEMP" class="java.math.BigDecimal" />
+	<field name="CIDEMP" class="java.math.BigDecimal" />
+	<field name="BAIEMP" class="java.math.BigDecimal" />
+	<field name="CEPEMP" class="java.lang.String" />
+	<field name="CPFRESPEMP" class="java.lang.String" />
+	<field name="COMPLEMP" class="java.lang.String" />
+	<field name="NUMENDEMP" class="java.lang.String" />
+	<field name="FNOMEPARCVEN" class="java.lang.String" />
+	<field name="FEMAILVEN" class="java.lang.String" />
+	<field name="FTIPPESSOAVEN" class="java.lang.String" />
+	<field name="FCGCCPFVEN" class="java.lang.String" />
+	<field name="FTELEFONEVEN" class="java.lang.String" />
+	<field name="DESCRNAT" class="java.lang.String" />
+	<field name="DESCRCENCUS" class="java.lang.String" />
+	<field name="DESCRTIPTIT" class="java.lang.String" />
+	<field name="NOMEBCO" class="java.lang.String" />
+	<field name="ABREVIATURA" class="java.lang.String" />
+	<field name="IDENTIFICACAO" class="java.lang.String" />
+	<field name="DESCRTIPPARC" class="java.lang.String" />
+	<field name="NOMEPARC" class="java.lang.String" />
+	<field name="RAZAOSOCIAL" class="java.lang.String" />
+	<field name="EMAIL" class="java.lang.String" />
+	<field name="CGC_CPF" class="java.lang.String" />
+	<field name="IDENTINSCESTAD" class="java.lang.String" />
+	<field name="INSCMUN" class="java.lang.String" />
+	<field name="TELEFONE" class="java.lang.String" />
+	<field name="FAX" class="java.lang.String" />
+	<field name="CODEND" class="java.math.BigDecimal" />
+	<field name="NUMEND" class="java.lang.String" />
+	<field name="COMPLEMENTO" class="java.lang.String" />
+	<field name="CODCID" class="java.math.BigDecimal" />
+	<field name="CODBAI" class="java.math.BigDecimal" />
+	<field name="CEP" class="java.lang.String" />
+	<field name="TIPPESSOA" class="java.lang.String" />
+	<field name="CODTIPPARC" class="java.math.BigDecimal" />
+	<field name="CODBCOPAR" class="java.math.BigDecimal" />
+	<field name="CODREG" class="java.math.BigDecimal" />
+	<field name="CODCTAPAR" class="java.math.BigDecimal" />
+	<field name="DESCFINPAR" class="java.math.BigDecimal" />
+	<field name="TAXBOL" class="java.lang.String" />
+	<field name="PERCMULTA" class="java.math.BigDecimal" />
+	<field name="TAXAPERMAN" class="java.math.BigDecimal" />
+	<field name="MASCNATUREZA" class="java.lang.String" />
+	<field name="MASCCENCUS" class="java.lang.String" />
+	<field name="MASCPROJETO" class="java.lang.String" />
+	<field name="DESCROPER" class="java.lang.String" />
+	<field name="RECDESP" class="java.math.BigDecimal" />
+	<field name="HISTORICO" class="java.lang.String" />
+	<field name="DHMOV" class="java.sql.Timestamp" />
+	<field name="NURENEG" class="java.math.BigDecimal" />
+	<field name="CODTIPOPER" class="java.math.BigDecimal" />
+	<field name="DESDOBDUPL" class="java.lang.String" />
+	<field name="BAIPAR" class="java.lang.String" />
+	<field name="UFPAR" class="java.lang.String" />
+	<field name="CIDPAR" class="java.lang.String" />
+	<field name="CAIXAPOSTAL" class="java.lang.String" />
+	<field name="RAMAL" class="java.math.BigDecimal" />
+	<field name="DTNASC" class="java.sql.Timestamp" />
+	<field name="DTULTCONTATO" class="java.sql.Timestamp" />
+	<field name="DTULTNEGOC" class="java.sql.Timestamp" />
+	<field name="CODTIPTIT" class="java.math.BigDecimal" />
+	<field name="CARTA" class="java.math.BigDecimal" />
+	<field name="DHBAIXA" class="java.sql.Timestamp" />
+	<field name="ORDEMCARGA" class="java.math.BigDecimal" />
+	<field name="PROVISAO" class="java.lang.String" />
+	<field name="NUMREMESSA" class="java.math.BigDecimal" />
+	<field name="DIGSAFRA" class="java.lang.String" />
+	<field name="NOMECONTATOCTT" class="java.lang.String" />
+	<field name="APELIDOCTT" class="java.lang.String" />
+	<field name="CODCONTATO" class="java.math.BigDecimal" />
+	<field name="TOT_TIT_VENC" class="java.lang.String" />
+	<field name="QTD_TIT_VENC" class="java.lang.String" />
+	<field name="DATS_TIT_VENC01" class="java.lang.String" />
+	<field name="DATS_TIT_VENC02" class="java.lang.String" />
+	<field name="CARGAHOR" class="java.math.BigDecimal">
+		<property name="NOME_CAMPO" value="CARGAHOR" />
+		<property name="NOME_TABELA" value="TGFCAB" />
+	</field>
+	<field name="DESPCLI" class="java.lang.String">
+		<property name="NOME_CAMPO" value="DESPCLI" />
+		<property name="NOME_TABELA" value="TGFCAB" />
+	</field>
+	<field name="DTFIMTREI" class="java.sql.Timestamp">
+		<property name="NOME_CAMPO" value="DTFIMTREI" />
+		<property name="NOME_TABELA" value="TGFCAB" />
+	</field>
+	<field name="DTINCTREI" class="java.sql.Timestamp">
+		<property name="NOME_CAMPO" value="DTINCTREI" />
+		<property name="NOME_TABELA" value="TGFCAB" />
+	</field>
+	<field name="LOCTREI" class="java.lang.String">
+		<property name="NOME_CAMPO" value="LOCTREI" />
+		<property name="NOME_TABELA" value="TGFCAB" />
+	</field>
+	<field name="NUMALUNOS" class="java.math.BigDecimal">
+		<property name="NOME_CAMPO" value="NUMALUNOS" />
+		<property name="NOME_TABELA" value="TGFCAB" />
+	</field>
+	<field name="NUPEDVENDA" class="java.math.BigDecimal">
+		<property name="NOME_CAMPO" value="NUPEDVENDA" />
+		<property name="NOME_TABELA" value="TGFCAB" />
+	</field>
+	<field name="PARPEDVENDA" class="java.math.BigDecimal">
+		<property name="NOME_CAMPO" value="PARPEDVENDA" />
+		<property name="NOME_TABELA" value="TGFCAB" />
+	</field>
+	<field name="TIPOTREI" class="java.lang.String">
+		<property name="NOME_CAMPO" value="TIPOTREI" />
+		<property name="NOME_TABELA" value="TGFCAB" />
+	</field>
+	<field name="TIPOTREI2" class="java.lang.String">
+		<property name="NOME_CAMPO" value="TIPOTREI2" />
+		<property name="NOME_TABELA" value="TGFCAB" />
+	</field>
+	<field name="TIPOTREI3" class="java.lang.String">
+		<property name="NOME_CAMPO" value="TIPOTREI3" />
+		<property name="NOME_TABELA" value="TGFCAB" />
+	</field>
+	<variable name="totnot" class="java.lang.String">
+		<variableExpression>new java.text.DecimalFormat("#,##0.00;(#,##0.00)").format($F{VLRNOTA}.doubleValue())</variableExpression>
+	</variable>
+	<variable name="datsis" class="java.lang.String">
+		<variableExpression>new java.text.SimpleDateFormat("dd/MM/yyyy").format(new Date())</variableExpression>
+	</variable>
+	<variable name="datsisx" class="java.lang.String">
+		<variableExpression>new java.text.SimpleDateFormat("dd 'de' MMMMMMMMMM 'de' yyyy").format(new Date())</variableExpression>
+	</variable>
+	<variable name="horasis" class="java.lang.String">
+		<variableExpression>new java.text.SimpleDateFormat("HH:mm:ss").format(new Date())</variableExpression>
+	</variable>
+	<variable name="dataneg" class="java.lang.String">
+		<variableExpression>new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{DTNEG})</variableExpression>
+	</variable>
+	<variable name="nunota" class="java.lang.String">
+		<variableExpression>StringUtils.padl($F{NUNOTA},9)</variableExpression>
+	</variable>
+	<variable name="numnot" class="java.lang.String">
+		<variableExpression>StringUtils.padl($F{NUMNOTA},6)</variableExpression>
+	</variable>
+	<variable name="sernot" class="java.lang.String">
+		<variableExpression>StringUtils.padr($F{SERIENOTA},2)</variableExpression>
+	</variable>
+	<variable name="sernot3" class="java.lang.String">
+		<variableExpression>StringUtils.padr($F{SERIENOTA},3)</variableExpression>
+	</variable>
+	<variable name="cartei" class="java.lang.String">
+		<variableExpression>StringUtils.padl(BoletoHelper.buscaDadosConta($P{REPORT_CONNECTION},$F{CODBCO},$F{CODCTABCOINT},"CARTEIRA") ,5)</variableExpression>
+	</variable>
+	<variable name="digito" class="java.lang.String">
+		<variableExpression>BoletoHelper.getDigito($F{NUMDUPL})</variableExpression>
+	</variable>
+	<variable name="codbarnro" class="java.lang.String">
+		<variableExpression>$F{CODBARRA}==null?"00":$F{CODBARRA}</variableExpression>
+	</variable>
+	<variable name="nosnum" class="java.lang.String">
+		<variableExpression>$F{NOSSONUM}</variableExpression>
+	</variable>
+	<variable name="numdup" class="java.lang.String">
+		<variableExpression>StringUtils.padl($F{NUMDUPL},6)</variableExpression>
+	</variable>
+	<variable name="lindig" class="java.lang.String">
+		<variableExpression>$F{LINHADIGITAVEL}</variableExpression>
+	</variable>
+	<variable name="AGENCIA" class="java.lang.String">
+		<variableExpression>Funcoes.pdes(
+    $P{REPORT_CONNECTION},
+     "sankhya.lpad(CTA.CODAGE,5,'0')",
+     "TSICTA CTA, TGFFIN FIN",
+     "FIN.CODEMP = " + $F{CODEMP}.toString() + "AND CTA.CODCTABCOINT = FIN.CODCTABCOINT AND FIN.NUFIN = " + $F{NUFIN}.toString()
+)</variableExpression>
+	</variable>
+	<variable name="numctam" class="java.lang.String">
+		<variableExpression>StringUtils.padr(BoletoHelper.buscaDadosConta($P{REPORT_CONNECTION},$F{CODBCO},$F{CODCTABCOINT},"CODCTABCO") ,9)</variableExpression>
+	</variable>
+	<variable name="vlrboleta" class="java.math.BigDecimal">
+		<variableExpression>BoletoHelper.getValorBoleto($F{TIPJURO},$F{TAXBOL},$F{VLRDESDOB},$F{VLRJURO})</variableExpression>
+	</variable>
+	<variable name="extenso" class="java.lang.String">
+		<variableExpression>StringUtils.padr(Extenso.getExtenso($V{vlrboleta}),250,'#')</variableExpression>
+	</variable>
+	<variable name="extensoL1" class="java.lang.String">
+		<variableExpression>new String($V{extenso}.substring(0,65))</variableExpression>
+	</variable>
+	<variable name="extensoL2" class="java.lang.String">
+		<variableExpression>new String($V{extenso}.substring(66,70))</variableExpression>
+	</variable>
+	<variable name="multa01" class="java.lang.String">
+		<variableExpression>BoletoHelper.getMulta($F{VLRDESDOB},$F{PERCMULTA})</variableExpression>
+	</variable>
+	<variable name="jurdia01" class="java.lang.String">
+		<variableExpression>BoletoHelper.getJuroDia($F{VLRDESDOB},$F{TAXAPERMAN})</variableExpression>
+	</variable>
+	<variable name="jurtot01" class="java.lang.String">
+		<variableExpression>new java.text.DecimalFormat("#,##0.00;(#,##0.00)").format($F{VLRJURO}.doubleValue())</variableExpression>
+	</variable>
+	<variable name="perdct01" class="java.lang.String">
+		<variableExpression>BoletoHelper.getPercDesconto($F{VLRDESDOB},$F{VLRDESC})</variableExpression>
+	</variable>
+	<variable name="veninc01" class="java.lang.String">
+		<variableExpression>BoletoHelper.getVendaMaisJuroIncluso($F{TIPJURO},$F{VLRDESDOB},$F{VLRJURO})</variableExpression>
+	</variable>
+	<variable name="venext01" class="java.lang.String">
+		<variableExpression>BoletoHelper.getVendaMaisJuroExtraNota($F{TIPJURO},$F{VLRDESDOB},$F{VLRJURO})</variableExpression>
+	</variable>
+	<variable name="jurinc01" class="java.lang.String">
+		<variableExpression>BoletoHelper.getJuroIncluso($F{TIPJURO},$F{VLRJURO})</variableExpression>
+	</variable>
+	<variable name="jurext01" class="java.lang.String">
+		<variableExpression>BoletoHelper.getJuroExtraNota($F{TIPJURO},$F{VLRJURO})</variableExpression>
+	</variable>
+	<variable name="venjur01" class="java.lang.String">
+		<variableExpression>BoletoHelper.getVendaMaisJuro($F{VLRDESDOB},$F{VLRJURO})</variableExpression>
+	</variable>
+	<variable name="vlrdct01" class="java.lang.String">
+		<variableExpression>new java.text.DecimalFormat("#,##0.00;(#,##0.00)").format($F{VLRDESC}.doubleValue())</variableExpression>
+	</variable>
+	<variable name="vlrven01" class="java.lang.String">
+		<variableExpression>new java.text.DecimalFormat("#,##0.00;(#,##0.00)").format($F{VLRDESDOB}.doubleValue())</variableExpression>
+	</variable>
+	<variable name="datvct01" class="java.lang.String">
+		<variableExpression>new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{DTVENC})</variableExpression>
+	</variable>
+	<variable name="dat2vct01" class="java.lang.String">
+		<variableExpression>new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{DTVENC})</variableExpression>
+	</variable>
+	<variable name="mesvctx01" class="java.lang.String">
+		<variableExpression>new java.text.SimpleDateFormat("MMMMMMMMMM").format($F{DTVENC})</variableExpression>
+	</variable>
+	<variable name="notdes01" class="java.lang.String">
+		<variableExpression>StringUtils.padl($F{NUNOTA},6)+"\\"+$F{DESDOBRAMENTO}</variableExpression>
+	</variable>
+	<variable name="desdob01" class="java.lang.String">
+		<variableExpression>$F{DESDOBRAMENTO}</variableExpression>
+	</variable>
+	<variable name="vlrdfi01" class="java.lang.String">
+		<variableExpression>BoletoHelper.getDescontoFinParceiro($F{VLRDESDOB},$F{DESCFINPAR})</variableExpression>
+	</variable>
+	<variable name="ecodnat01" class="java.lang.String">
+		<variableExpression>new String(MGEUtils.applyMask(BuilderHierarqUtil.buildMascara($F{MASCNATUREZA}),$F{CODNAT}))</variableExpression>
+	</variable>
+	<variable name="desnat01" class="java.lang.String">
+		<variableExpression>StringUtils.padr($F{DESCRNAT},40)</variableExpression>
+	</variable>
+	<variable name="cenres01" class="java.lang.String">
+		<variableExpression>new String(MGEUtils.applyMask(BuilderHierarqUtil.buildMascara($F{MASCCENCUS}),$F{CODCENCUS}))</variableExpression>
+	</variable>
+	<variable name="descre01" class="java.lang.String">
+		<variableExpression>StringUtils.padr($F{DESCRCENCUS},50)</variableExpression>
+	</variable>
+	<variable name="destip01" class="java.lang.String">
+		<variableExpression>StringUtils.padr($F{DESCRTIPTIT},15)</variableExpression>
+	</variable>
+	<variable name="descta01" class="java.lang.String">
+		<variableExpression>StringUtils.padl(BoletoHelper.buscaDadosConta($P{REPORT_CONNECTION},$F{CODBCO},$F{CODCTABCOINT},"DESCRICAO") ,10)</variableExpression>
+	</variable>
+	<variable name="bcofin01" class="java.lang.String">
+		<variableExpression>StringUtils.padr($F{CODBCO},3)</variableExpression>
+	</variable>
+	<variable name="empfin01" class="java.lang.String">
+		<variableExpression>String.valueOf($F{CODEMP}.doubleValue())</variableExpression>
+	</variable>
+	<variable name="nombco01" class="java.lang.String">
+		<variableExpression>StringUtils.padr($F{NOMEBCO}==null?"":$F{NOMEBCO},40)</variableExpression>
+	</variable>
+	<variable name="abrbco" class="java.lang.String">
+		<variableExpression>StringUtils.padr($F{ABREVIATURA}==null?"":$F{ABREVIATURA},15)</variableExpression>
+	</variable>
+	<variable name="codprj01" class="java.lang.String">
+		<variableExpression>new String(MGEUtils.applyMask(BuilderHierarqUtil.buildMascara($F{MASCPROJETO}), $F{CODPROJ}))</variableExpression>
+	</variable>
+	<variable name="descprj01" class="java.lang.String">
+		<variableExpression>$F{IDENTIFICACAO}.equals("")?"":StringUtils.padr($F{IDENTIFICACAO},40)</variableExpression>
+	</variable>
+	<variable name="codven" class="java.lang.String">
+		<variableExpression>StringUtils.padl($F{CODVEND},3)</variableExpression>
+	</variable>
+	<variable name="apelid" class="java.lang.String">
+		<variableExpression>$F{CODVEND}.intValue()==0?StringUtils.padr("",15):StringUtils.padr($F{APELIDO},15)</variableExpression>
+	</variable>
+	<variable name="nomven" class="java.lang.String">
+		<variableExpression>StringUtils.padr($F{FNOMEPARCVEN},36)</variableExpression>
+	</variable>
+	<variable name="emailven" class="java.lang.String">
+		<variableExpression>StringUtils.padr($F{FEMAILVEN},40)</variableExpression>
+	</variable>
+	<variable name="cgccpfven" class="java.lang.String">
+		<variableExpression>StringUtils.formataCgcCpf($F{FTIPPESSOAVEN},$F{FCGCCPFVEN})</variableExpression>
+	</variable>
+	<variable name="telven" class="java.lang.String">
+		<variableExpression>StringUtils.formataTelefone($F{FTELEFONEVEN})</variableExpression>
+	</variable>
+	<variable name="endemp" class="java.lang.String">
+		<variableExpression>BoletoHelper.formataEndereco($P{REPORT_CONNECTION},$F{CODENDEMP},$F{NUMENDEMP},$F{COMPLEMP})</variableExpression>
+	</variable>
+	<variable name="codemp3" class="java.lang.String">
+		<variableExpression>StringUtils.padl($F{CODEMP},3)</variableExpression>
+	</variable>
+	<variable name="razsoc" class="java.lang.String">
+		<variableExpression>StringUtils.padr($F{RAZEMP},50)</variableExpression>
+	</variable>
+	<variable name="razsoc4" class="java.lang.String">
+		<variableExpression>StringUtils.padr($F{RAZEMP},40)</variableExpression>
+	</variable>
+	<variable name="razsoc2" class="java.lang.String">
+		<variableExpression>StringUtils.padr($F{RAZEMP},30).substring(0,30)</variableExpression>
+	</variable>
+	<variable name="emaile" class="java.lang.String">
+		<variableExpression>StringUtils.padr($F{EMAILEMP},36)</variableExpression>
+	</variable>
+	<variable name="cgcemp" class="java.lang.String">
+		<variableExpression>StringUtils.formataCgcCpf($F{CGCEMP})</variableExpression>
+	</variable>
+	<variable name="insemp" class="java.lang.String">
+		<variableExpression>StringUtils.padr($F{INSESTCEMP},16)</variableExpression>
+	</variable>
+	<variable name="imuemp" class="java.lang.String">
+		<variableExpression>StringUtils.padr($F{INSCMUNEMP},16)</variableExpression>
+	</variable>
+	<variable name="foneemp" class="java.lang.String">
+		<variableExpression>StringUtils.formataTelefone($F{TELEMP})</variableExpression>
+	</variable>
+	<variable name="faxemp" class="java.lang.String">
+		<variableExpression>StringUtils.formataTelefone($F{FAXEMP})</variableExpression>
+	</variable>
+	<variable name="cepemp" class="java.lang.String">
+		<variableExpression>StringUtils.formataCep($F{CEPEMP})</variableExpression>
+	</variable>
+	<variable name="cpfresp" class="java.lang.String">
+		<variableExpression>StringUtils.toCPF($F{CPFRESPEMP})</variableExpression>
+	</variable>
+	<variable name="cidemp" class="java.lang.String">
+		<variableExpression>BoletoHelper.formataCidade($P{REPORT_CONNECTION},$F{CIDEMP})</variableExpression>
+	</variable>
+	<variable name="estemp" class="java.lang.String">
+		<variableExpression>BoletoHelper.formataEstado($P{REPORT_CONNECTION},$F{CIDEMP})</variableExpression>
+	</variable>
+	<variable name="baiemp" class="java.lang.String">
+		<variableExpression>BoletoHelper.formataBairro($P{REPORT_CONNECTION},$F{BAIEMP})</variableExpression>
+	</variable>
+	<variable name="codcli" class="java.lang.String">
+		<variableExpression>BoletoHelper.formataCodParc($F{CODPARC})</variableExpression>
+	</variable>
+	<variable name="nomcli" class="java.lang.String">
+		<variableExpression>StringUtils.padr($F{NOMEPARC},36)</variableExpression>
+	</variable>
+	<variable name="razcli" class="java.lang.String">
+		<variableExpression>StringUtils.padr($F{RAZAOSOCIAL}==null?"":$F{RAZAOSOCIAL},36)</variableExpression>
+	</variable>
+	<variable name="razcli4" class="java.lang.String">
+		<variableExpression>StringUtils.padr($F{RAZAOSOCIAL}==null?"":$F{RAZAOSOCIAL},40)</variableExpression>
+	</variable>
+	<variable name="emailc" class="java.lang.String">
+		<variableExpression>StringUtils.padr($F{EMAIL}==null?"":$F{EMAIL},40)</variableExpression>
+	</variable>
+	<variable name="loctra" class="java.lang.String">
+		<variableExpression>StringUtils.padr($F{LOCALTRAB}==null?"":$F{LOCALTRAB},40)</variableExpression>
+	</variable>
+	<variable name="cgccpf" class="java.lang.String">
+		<variableExpression>StringUtils.formataCgcCpf($F{TIPPESSOA},$F{CGC_CPF})</variableExpression>
+	</variable>
+	<variable name="ident" class="java.lang.String">
+		<variableExpression>BoletoHelper.getInscEstadual($F{TIPPESSOA},$F{IDENTINSCESTAD})</variableExpression>
+	</variable>
+	<variable name="insjur" class="java.lang.String">
+		<variableExpression>BoletoHelper.getInscEstadual($F{TIPPESSOA},$F{IDENTINSCESTAD})</variableExpression>
+	</variable>
+	<variable name="insest" class="java.lang.String">
+		<variableExpression>StringUtils.padr($F{IDENTINSCESTAD}==null?"":$F{IDENTINSCESTAD},16)</variableExpression>
+	</variable>
+	<variable name="imucli" class="java.lang.String">
+		<variableExpression>StringUtils.padr($F{INSCMUN}==null?"":$F{INSCMUN},16)</variableExpression>
+	</variable>
+	<variable name="telcli" class="java.lang.String">
+		<variableExpression>StringUtils.formataTelefone($F{TELEFONE})</variableExpression>
+	</variable>
+	<variable name="numfax" class="java.lang.String">
+		<variableExpression>StringUtils.formataTelefone($F{FAX})</variableExpression>
+	</variable>
+	<variable name="codsuf" class="java.lang.String">
+		<variableExpression>StringUtils.padr($F{CODSUFRAMA}==null?"":$F{CODSUFRAMA},11)</variableExpression>
+	</variable>
+	<variable name="endcli" class="java.lang.String">
+		<variableExpression>BoletoHelper.formataEndereco($P{REPORT_CONNECTION},$F{CODEND},$F{NUMEND},$F{COMPLEMENTO})</variableExpression>
+	</variable>
+	<variable name="cidcli" class="java.lang.String">
+		<variableExpression>BoletoHelper.formataCidade($P{REPORT_CONNECTION},$F{CODCID})</variableExpression>
+	</variable>
+	<variable name="estcli" class="java.lang.String">
+		<variableExpression>BoletoHelper.formataEstado($P{REPORT_CONNECTION},$F{CODCID})</variableExpression>
+	</variable>
+	<variable name="cepcli" class="java.lang.String">
+		<variableExpression>StringUtils.formataCep($F{CEP})</variableExpression>
+	</variable>
+	<variable name="endrec" class="java.lang.String">
+		<variableExpression>$F{CODCIDENTREGA}.intValue()==0?$V{endcli}:BoletoHelper.formataEndereco($P{REPORT_CONNECTION},$F{CODENDRECEB},$F{NUMRECEB},$F{COMPLRECEB})</variableExpression>
+	</variable>
+	<variable name="cidrec" class="java.lang.String">
+		<variableExpression>$F{CODCIDRECEB}.intValue()==0?$V{cidcli}:BoletoHelper.formataCidade($P{REPORT_CONNECTION},$F{CODCIDRECEB})</variableExpression>
+	</variable>
+	<variable name="estrec" class="java.lang.String">
+		<variableExpression>$F{CODCIDRECEB}.intValue()==0?$V{estcli}:BoletoHelper.formataEstado($P{REPORT_CONNECTION},$F{CODCIDRECEB})</variableExpression>
+	</variable>
+	<variable name="ceprec" class="java.lang.String">
+		<variableExpression>$F{CODCIDRECEB}.intValue()==0?$V{cepcli}:StringUtils.formataCep($F{CEPRECEB})</variableExpression>
+	</variable>
+	<variable name="endent" class="java.lang.String">
+		<variableExpression>$F{CODCIDENTREGA}.intValue()==0?$V{endcli}:BoletoHelper.formataEndereco($P{REPORT_CONNECTION},$F{CODENDENTREGA},$F{NUMENTREGA},$F{COMPLENTREGA})</variableExpression>
+	</variable>
+	<variable name="cident" class="java.lang.String">
+		<variableExpression>$F{CODCIDENTREGA}.intValue()==0?$V{cidcli}:BoletoHelper.formataCidade($P{REPORT_CONNECTION},$F{CODCIDENTREGA})</variableExpression>
+	</variable>
+	<variable name="estent" class="java.lang.String">
+		<variableExpression>$F{CODCIDENTREGA}.intValue()==0?$V{estcli}:BoletoHelper.formataEstado($P{REPORT_CONNECTION},$F{CODCIDENTREGA})</variableExpression>
+	</variable>
+	<variable name="cepent" class="java.lang.String">
+		<variableExpression>$F{CODCIDENTREGA}.intValue()==0?$V{cepcli}:new String($F{CEPENTREGA}!=null?StringUtils.formataCep($F{CEPENTREGA}):"")</variableExpression>
+	</variable>
+	<variable name="baicli" class="java.lang.String">
+		<variableExpression>BoletoHelper.formataBairro($P{REPORT_CONNECTION},$F{CODBAI})</variableExpression>
+	</variable>
+	<variable name="bairec" class="java.lang.String">
+		<variableExpression>$F{CODCIDRECEB}.intValue()==0?$V{baicli}:BoletoHelper.formataBairro($P{REPORT_CONNECTION},$F{CODBAIRECEB})</variableExpression>
+	</variable>
+	<variable name="baient" class="java.lang.String">
+		<variableExpression>$F{CODCIDENTREGA}.intValue()==0?$V{baicli}:BoletoHelper.formataBairro($P{REPORT_CONNECTION},$F{CODBAIENTREGA})</variableExpression>
+	</variable>
+	<variable name="locent" class="java.lang.String">
+		<variableExpression>$F{CODCIDENTREGA}.intValue()==0?$V{endcli}+" "+$V{cidcli}+" "+$V{estcli}:$V{endent}+" "+$V{cident}+" "+$V{estent}</variableExpression>
+	</variable>
+	<variable name="perfil" class="java.lang.String">
+		<variableExpression>StringUtils.padr($F{CODTIPPARC}.intValue()==0?"":$F{DESCRTIPPARC},60)</variableExpression>
+	</variable>
+	<variable name="nombcopar" class="java.lang.String">
+		<variableExpression>BoletoHelper.formataBanco($P{REPORT_CONNECTION},$F{CODBCOPAR})</variableExpression>
+	</variable>
+	<variable name="codreg" class="java.lang.String">
+		<variableExpression>StringUtils.padr($F{CODREG}==null?"":String.valueOf($F{CODREG}.intValue()),9)</variableExpression>
+	</variable>
+	<variable name="regcli" class="java.lang.String">
+		<variableExpression>BoletoHelper.formataRegiao($P{REPORT_CONNECTION},$F{CODREG})</variableExpression>
+	</variable>
+	<variable name="ctaemp" class="java.lang.String">
+		<variableExpression>StringUtils.padr($F{CODCTAPAR}==null?"":BoletoHelper.buscaDadosConta($P{REPORT_CONNECTION},new BigDecimal(0),$F{CODCTAPAR},"CODCTABCO"),14)</variableExpression>
+	</variable>
+	<variable name="perdfi" class="java.lang.String">
+		<variableExpression>new java.text.DecimalFormat("#,##0.00;(#,##0.00)").format($F{DESCFINPAR}.doubleValue())</variableExpression>
+	</variable>
+	<variable name="crea" class="java.lang.String">
+		<variableExpression>StringUtils.padr($F{CREA},12)</variableExpression>
+	</variable>
+	<variable name="dtcrea" class="java.lang.String">
+		<variableExpression>new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{DTCREA})</variableExpression>
+	</variable>
+	<variable name="ufcrea" class="java.lang.String">
+		<variableExpression>StringUtils.padr($F{UFCREA},2)</variableExpression>
+	</variable>
+	<variable name="nomusu" class="java.lang.String">
+		<variableExpression>StringUtils.padr(BoletoHelper.buscaUsuario($P{REPORT_CONNECTION},$P{PCODUSULOGADO}.intValue()),40)</variableExpression>
+	</variable>
+	<variable name="Vars.EExtenso" class="java.lang.String" resetType="Group" resetGroup="AGRUPAMENTO_BOLETA">
+		<variableExpression>StringUtils.padr(Extenso.getExtenso($V{Vars.TotDupl}),250,'#')</variableExpression>
+	</variable>
+	<variable name="Vars.TotDuplLiq" class="java.math.BigDecimal" resetType="Group" resetGroup="AGRUPAMENTO_BOLETA">
+		<variableExpression>BoletoHelper.getTotDuplLiquido($P{REPORT_CONNECTION},$F{NUFIN})</variableExpression>
+	</variable>
+	<variable name="Vars.ExtensoL1" class="java.lang.String" resetType="Group" resetGroup="AGRUPAMENTO_BOLETA">
+		<variableExpression>new String($V{Vars.EExtenso}.substring(0,65))</variableExpression>
+	</variable>
+	<variable name="Vars.ExtensoL2" class="java.lang.String" resetType="Group" resetGroup="AGRUPAMENTO_BOLETA">
+		<variableExpression>new String($V{Vars.EExtenso}.substring(66,70))</variableExpression>
+	</variable>
+	<variable name="Vars.TotJurl" class="java.math.BigDecimal" resetType="Group" resetGroup="AGRUPAMENTO_BOLETA">
+		<variableExpression>BoletoHelper.getTotComJurl($P{REPORT_CONNECTION},$F{NUFIN})</variableExpression>
+	</variable>
+	<variable name="Vars.ExtJuro" class="java.math.BigDecimal" resetType="Group" resetGroup="AGRUPAMENTO_BOLETA">
+		<variableExpression>BoletoHelper.getTotComJurl($P{REPORT_CONNECTION},$F{NUFIN})</variableExpression>
+	</variable>
+	<variable name="Vars.TotJuros" class="java.math.BigDecimal" resetType="Group" resetGroup="AGRUPAMENTO_BOLETA">
+		<variableExpression>BoletoHelper.getTotJuros($P{REPORT_CONNECTION},$F{NUFIN})</variableExpression>
+	</variable>
+	<variable name="Vars.TotDesc" class="java.math.BigDecimal" resetType="Group" resetGroup="AGRUPAMENTO_BOLETA">
+		<variableExpression>BoletoHelper.getTotDescontos($P{REPORT_CONNECTION},$F{NUFIN})</variableExpression>
+	</variable>
+	<variable name="Vars.TotDupl" class="java.math.BigDecimal" resetType="Group" resetGroup="AGRUPAMENTO_BOLETA" calculation="Sum">
+		<variableExpression>BoletoHelper.getTotDupl($P{REPORT_CONNECTION},$F{NUFIN})</variableExpression>
+	</variable>
+	<variable name="Vars.vnot" class="java.lang.String">
+		<variableExpression>$F{NUMNOTA}.toString()</variableExpression>
+	</variable>
+	<variable name="Vars.vrd" class="java.lang.String">
+		<variableExpression>($F{RECDESP}.intValue()==1?"Receita":($F{RECDESP}.intValue()==-1?"Despesa":"0"))</variableExpression>
+	</variable>
+	<variable name="Vars.vtit" class="java.lang.String">
+		<variableExpression>$F{DESCRTIPTIT}</variableExpression>
+	</variable>
+	<variable name="Vars.vnat" class="java.lang.String">
+		<variableExpression>$F{DESCRNAT}</variableExpression>
+	</variable>
+	<variable name="Vars.vser" class="java.lang.String">
+		<variableExpression>$F{SERIENOTA}</variableExpression>
+	</variable>
+	<variable name="Vars.vdes" class="java.lang.String">
+		<variableExpression>$F{DESDOBRAMENTO}</variableExpression>
+	</variable>
+	<variable name="Vars.vhis" class="java.lang.String">
+		<variableExpression>$F{HISTORICO}</variableExpression>
+	</variable>
+	<variable name="Vars.vdia" class="java.lang.String">
+		<variableExpression>new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{DHMOV})</variableExpression>
+	</variable>
+	<variable name="Vars.vdat" class="java.lang.String">
+		<variableExpression>new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{DTVENC})</variableExpression>
+	</variable>
+	<variable name="Vars.vven" class="java.lang.String">
+		<variableExpression>new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{DTNEG})</variableExpression>
+	</variable>
+	<variable name="Vars.vpar" class="java.lang.String">
+		<variableExpression>$F{CODPARC}.toString()</variableExpression>
+	</variable>
+	<variable name="Vars.vnom" class="java.lang.String">
+		<variableExpression>$F{NOMEPARC}</variableExpression>
+	</variable>
+	<variable name="Vars.vraz" class="java.lang.String">
+		<variableExpression>$F{RAZAOSOCIAL}</variableExpression>
+	</variable>
+	<variable name="Vars.vemp" class="java.lang.String">
+		<variableExpression>$F{CODEMP}.toString()</variableExpression>
+	</variable>
+	<variable name="Vars.vvlr" class="java.lang.String">
+		<variableExpression>new java.text.DecimalFormat("#,##0.00;(#,##0.00)").format($F{VLRDESDOB}.doubleValue())</variableExpression>
+	</variable>
+	<variable name="Vars.vnos" class="java.lang.String">
+		<variableExpression>$F{NOSSONUM}</variableExpression>
+	</variable>
+	<variable name="Vars.vliq" class="java.lang.String">
+		<variableExpression>new java.text.DecimalFormat("#,##0.00;(#,##0.00)").format((BoletoHelper.getTotDuplLiquido($P{REPORT_CONNECTION},$F{NUFIN})).doubleValue())</variableExpression>
+	</variable>
+	<variable name="Vars.vjur" class="java.lang.String">
+		<variableExpression>new java.text.DecimalFormat("#,##0.00;(#,##0.00)").format((BoletoHelper.getTotJuros($P{REPORT_CONNECTION},$F{NUFIN})).doubleValue())</variableExpression>
+	</variable>
+	<variable name="Vars.vdsc" class="java.lang.String">
+		<variableExpression>new java.text.DecimalFormat("#,##0.00;(#,##0.00)").format((BoletoHelper.getTotDescontos($P{REPORT_CONNECTION},$F{NUFIN})).doubleValue())</variableExpression>
+	</variable>
+	<variable name="Vars.vban" class="java.lang.String">
+		<variableExpression>$F{CODBCO}.toString()</variableExpression>
+	</variable>
+	<variable name="Vars.Extenso55a" class="java.lang.String">
+		<variableExpression>new String($V{Vars.EExtenso}.substring(0,55))</variableExpression>
+	</variable>
+	<variable name="Vars.Extenso55b" class="java.lang.String">
+		<variableExpression>new String($V{Vars.EExtenso}.substring(56,70))</variableExpression>
+	</variable>
+	<variable name="Vars.CGCEmpresa" class="java.lang.String" resetType="Group" resetGroup="AGRUPAMENTO_BOLETA">
+		<variableExpression>StringUtils.formataCgcCpf($F{CGCEMP})</variableExpression>
+	</variable>
+	<variable name="Vars.CGCCPFParceiro" class="java.lang.String" resetType="Group" resetGroup="AGRUPAMENTO_BOLETA">
+		<variableExpression>StringUtils.formataCgcCpf($F{TIPPESSOA},$F{CGC_CPF})</variableExpression>
+	</variable>
+	<variable name="Vars.CODBARRA" class="java.lang.String" resetType="Group" resetGroup="AGRUPAMENTO_BOLETA">
+		<variableExpression>$F{NOSSONUM}</variableExpression>
+	</variable>
+	<variable name="Campos.Numero_unico_financeiro" class="java.lang.String">
+		<variableExpression>$F{NUFIN}.toString()</variableExpression>
+	</variable>
+	<variable name="Campos.Cod_TOP" class="java.lang.String">
+		<variableExpression>$F{CODTIPOPER}.toString()</variableExpression>
+	</variable>
+	<variable name="Campos.Descricao_TOP" class="java.lang.String">
+		<variableExpression>$F{DESCROPER}</variableExpression>
+	</variable>
+	<variable name="Campos.Numero_Duplicata" class="java.lang.String">
+		<variableExpression>$F{NUMDUPL}.toString()</variableExpression>
+	</variable>
+	<variable name="Campos.Desdobramento_Da_Duplicata" class="java.lang.String">
+		<variableExpression>$F{DESDOBDUPL}.toString()</variableExpression>
+	</variable>
+	<variable name="Campos.Numero_Nota" class="java.lang.String">
+		<variableExpression>$F{NUMNOTA}.toString()</variableExpression>
+	</variable>
+	<variable name="Campos.Serie_Nota" class="java.lang.String">
+		<variableExpression>$F{SERIENOTA}</variableExpression>
+	</variable>
+	<variable name="Campos.Desdobramento_Da_Nota" class="java.lang.String">
+		<variableExpression>$F{DESDOBRAMENTO}</variableExpression>
+	</variable>
+	<variable name="Campos.Data_Vencimento" class="java.lang.String">
+		<variableExpression>new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{DTVENC})</variableExpression>
+	</variable>
+	<variable name="Campos.Data_Negociacao" class="java.lang.String">
+		<variableExpression>new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{DTNEG})</variableExpression>
+	</variable>
+	<variable name="Campos.Valor_Desdobramento" class="java.lang.String">
+		<variableExpression>new java.text.DecimalFormat("#,##0.00;(#,##0.00)").format($F{VLRDESDOB}.doubleValue())</variableExpression>
+	</variable>
+	<variable name="Campos.Valor_Juros" class="java.lang.String">
+		<variableExpression>new java.text.DecimalFormat("#,##0.00;(#,##0.00)").format($F{VLRJURO}.doubleValue())</variableExpression>
+	</variable>
+	<variable name="Campos.Valor_Desc" class="java.lang.String">
+		<variableExpression>new java.text.DecimalFormat("#,##0.00;(#,##0.00)").format($F{VLRDESC}.doubleValue())</variableExpression>
+	</variable>
+	<variable name="Campos.Nosso_Numero" class="java.lang.String">
+		<variableExpression>$F{NOSSONUM}.toString()</variableExpression>
+	</variable>
+	<variable name="Campos.Cod_Banco" class="java.lang.String">
+		<variableExpression>$F{CODBCO}.toString()</variableExpression>
+	</variable>
+	<variable name="Campos.Nome_Banco" class="java.lang.String">
+		<variableExpression>$F{NOMEBCO}</variableExpression>
+	</variable>
+	<variable name="Campos.Abrev_Nome_Banco" class="java.lang.String">
+		<variableExpression>$F{ABREVIATURA}</variableExpression>
+	</variable>
+	<variable name="Campos.Cod_Vendedor" class="java.lang.String">
+		<variableExpression>$F{CODVEND}.toString()</variableExpression>
+	</variable>
+	<variable name="Campos.Apelido_Vendedor" class="java.lang.String">
+		<variableExpression>$F{APELIDO}</variableExpression>
+	</variable>
+	<variable name="Campos.Data_Movimento" class="java.lang.String">
+		<variableExpression>new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{DHMOV})</variableExpression>
+	</variable>
+	<variable name="Campos.Cod_Empresa" class="java.lang.String">
+		<variableExpression>$F{CODEMP}.toString()</variableExpression>
+	</variable>
+	<variable name="Campos.Razao_Social_Da_Empresa" class="java.lang.String">
+		<variableExpression>$F{RAZEMP}</variableExpression>
+	</variable>
+	<variable name="Campos.CGC_Da_Empresa" class="java.lang.String">
+		<variableExpression>$F{CGCEMP}</variableExpression>
+	</variable>
+	<variable name="Campos.Inscricao_Estadual_Da_Empresa" class="java.lang.String">
+		<variableExpression>$F{INSESTCEMP}</variableExpression>
+	</variable>
+	<variable name="Campos.Telefone_Da_Empresa" class="java.lang.String">
+		<variableExpression>$F{TELEMP}</variableExpression>
+	</variable>
+	<variable name="Campos.Fax_Da_Empresa" class="java.lang.String">
+		<variableExpression>$F{FAXEMP}</variableExpression>
+	</variable>
+	<variable name="Campos.Cod_Do_Parceiro" class="java.lang.String">
+		<variableExpression>$F{CODPARC}.toString()</variableExpression>
+	</variable>
+	<variable name="Campos.Nome_Do_Parceiro" class="java.lang.String">
+		<variableExpression>$F{NOMEPARC}</variableExpression>
+	</variable>
+	<variable name="Campos.Razao_Social_Do_Parceiro" class="java.lang.String">
+		<variableExpression>$F{RAZAOSOCIAL}</variableExpression>
+	</variable>
+	<variable name="Campos.Numero_Do_Parceiro" class="java.lang.String">
+		<variableExpression>$F{NUMEND}</variableExpression>
+	</variable>
+	<variable name="Campos.Complemento_Do_Parceiro" class="java.lang.String">
+		<variableExpression>$F{COMPLEMENTO}</variableExpression>
+	</variable>
+	<variable name="Campos.Bairro_Do_Parceiro" class="java.lang.String">
+		<variableExpression>$F{BAIPAR}</variableExpression>
+	</variable>
+	<variable name="Campos.UF_Do_Parceiro" class="java.lang.String">
+		<variableExpression>$F{UFPAR}</variableExpression>
+	</variable>
+	<variable name="Campos.Cidade_Do_Parceiro" class="java.lang.String">
+		<variableExpression>$F{CIDPAR}</variableExpression>
+	</variable>
+	<variable name="Campos.Cep_Do_Parceiro" class="java.lang.String">
+		<variableExpression>$F{CEP}</variableExpression>
+	</variable>
+	<variable name="Campos.Caixa_Postal_Do_Parceiro" class="java.lang.String">
+		<variableExpression>$F{CAIXAPOSTAL}</variableExpression>
+	</variable>
+	<variable name="Campos.Telefone_Do_Parceiro" class="java.lang.String">
+		<variableExpression>$F{TELEFONE}</variableExpression>
+	</variable>
+	<variable name="Campos.Ramal_Do_Parceiro" class="java.lang.String">
+		<variableExpression>$F{RAMAL}.toString()</variableExpression>
+	</variable>
+	<variable name="Campos.Fax_Do_Parceiro" class="java.lang.String">
+		<variableExpression>$F{FAX}</variableExpression>
+	</variable>
+	<variable name="Campos.E_mail_Do_Parceiro" class="java.lang.String">
+		<variableExpression>$F{EMAIL}</variableExpression>
+	</variable>
+	<variable name="Campos.Data_De_Nascimento_Do_Parceiro" class="java.lang.String">
+		<variableExpression>new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{DTNASC})</variableExpression>
+	</variable>
+	<variable name="Campos.Data_Do_Ultimo_Contato" class="java.lang.String">
+		<variableExpression>new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{DTULTCONTATO})</variableExpression>
+	</variable>
+	<variable name="Campos.Data_Da_Ultima_Negociacao" class="java.lang.String">
+		<variableExpression>new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{DTULTNEGOC})</variableExpression>
+	</variable>
+	<variable name="Campos.Ident_InscEst_Parc" class="java.lang.String">
+		<variableExpression>$F{IDENTINSCESTAD}</variableExpression>
+	</variable>
+	<variable name="Campos.CGC_ou_CPF_Do_Parceiro" class="java.lang.String">
+		<variableExpression>$F{CGC_CPF}</variableExpression>
+	</variable>
+	<variable name="Campos.Tipo_Pessoa" class="java.lang.String">
+		<variableExpression>$F{TIPPESSOA}</variableExpression>
+	</variable>
+	<variable name="Campos.Historico" class="java.lang.String">
+		<variableExpression>$F{HISTORICO}</variableExpression>
+	</variable>
+	<variable name="Campos.Tipo_Titulo" class="java.lang.String">
+		<variableExpression>$F{CODTIPTIT}.toString()</variableExpression>
+	</variable>
+	<variable name="Campos.Numero_unico_nota" class="java.lang.String">
+		<variableExpression>$F{NUNOTA}.toString()</variableExpression>
+	</variable>
+	<variable name="Campos.Cod_Natureza" class="java.lang.String">
+		<variableExpression>$F{CODNAT}.toString()</variableExpression>
+	</variable>
+	<variable name="Campos.Carta" class="java.lang.String">
+		<variableExpression>$F{CARTA}.toString()</variableExpression>
+	</variable>
+	<variable name="Campos.Cod_Conta" class="java.lang.String">
+		<variableExpression>BoletoHelper.buscaDadosConta($P{REPORT_CONNECTION},$F{CODBCO},$F{CODCTABCOINT},"CODCTABCO")</variableExpression>
+	</variable>
+	<variable name="Campos.Descricao_Conta" class="java.lang.String">
+		<variableExpression>BoletoHelper.buscaDadosConta($P{REPORT_CONNECTION},$F{CODBCO},$F{CODCTABCOINT},"DESCRICAO")</variableExpression>
+	</variable>
+	<variable name="Campos.Data_da_baixa" class="java.lang.String">
+		<variableExpression>new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{DHBAIXA})</variableExpression>
+	</variable>
+	<variable name="Campos.Ordem_Carga" class="java.lang.String">
+		<variableExpression>$F{ORDEMCARGA}.toString()</variableExpression>
+	</variable>
+	<variable name="Campos.Numero_Renegociacao" class="java.lang.String">
+		<variableExpression>$F{NURENEG}.toString()</variableExpression>
+	</variable>
+	<variable name="Campos.Provisao" class="java.lang.String">
+		<variableExpression>$F{PROVISAO}</variableExpression>
+	</variable>
+	<variable name="Campos.Descricao_Tipo_Titulo" class="java.lang.String">
+		<variableExpression>$F{DESCRTIPTIT}</variableExpression>
+	</variable>
+	<variable name="Campos.Perc_Desconto_Financeiro" class="java.lang.String">
+		<variableExpression>$F{DESCFINPAR}.toString()</variableExpression>
+	</variable>
+	<variable name="Campos.Cod_Contato" class="java.lang.String">
+		<variableExpression>$F{CODCONTATO}.toString()</variableExpression>
+	</variable>
+	<variable name="Campos.Nome_Contato" class="java.lang.String">
+		<variableExpression>$F{NOMECONTATOCTT}</variableExpression>
+	</variable>
+	<variable name="Campos.Apelido_Contato" class="java.lang.String">
+		<variableExpression>$F{APELIDOCTT}</variableExpression>
+	</variable>
+	<variable name="qtd_tit_venc" class="java.lang.String">
+		<variableExpression>StringUtils.padl(BoletoHelper.buscaDadosConta($P{REPORT_CONNECTION},$F{CODBCO},$F{CODCTABCOINT},"CARTEIRA") ,2)</variableExpression>
+	</variable>
+	<variable name="CODAGE" class="java.lang.String">
+		<variableExpression>$F{LINHADIGITAVEL}.substring(4,5) +
+$F{LINHADIGITAVEL}.substring(6,9) + "-" +
+$F{LINHADIGITAVEL}.substring(10,11)</variableExpression>
+	</variable>
+	<variable name="TAXADIAATRASOPAR" class="java.lang.String">
+		<variableExpression>Funcoes.pdes(
+    $P{REPORT_CONNECTION},
+     "ISNULL(PAR.PERCJURO,0)",
+     "TGFPAR PAR , TGFFIN FIN",
+     "PAR.CODPARC = FIN.CODPARC AND FIN.NUFIN = " + $F{NUFIN}.toString()
+).toString()</variableExpression>
+		<initialValueExpression>"0"</initialValueExpression>
+	</variable>
+	<variable name="PERCMULTAPAR" class="java.lang.String">
+		<variableExpression>Funcoes.pdes(
+    $P{REPORT_CONNECTION},
+     "ISNULL(PAR.PERCMULTA,0)",
+     "TGFPAR PAR , TGFFIN FIN",
+     "PAR.CODPARC = FIN.CODPARC AND FIN.NUFIN = " + $F{NUFIN}.toString()
+).toString()</variableExpression>
+		<initialValueExpression />
+	</variable>
+	<variable name="TAXADIAATRASO" class="java.lang.String">
+		<variableExpression>Funcoes.pdes(
+    $P{REPORT_CONNECTION},
+     "PAR.NUMDEC",
+     "TSIPAR PAR",
+     "PAR.CHAVE = " + "'TAXADIAATRASO'"
+).toString()</variableExpression>
+	</variable>
+	<variable name="NOTAS_FISCAIS" class="java.lang.String">
+		<variableExpression>Funcoes.pdes(
+    $P{REPORT_CONNECTION},
+     "FIN.NUMNOTA",
+     "TGFFIN FIN",
+     "FIN.NUMDUPL = " + $F{NUMDUPL}.toString()
+).toString()</variableExpression>
+	</variable>
+	<variable name="VLR_DESDOB_NOTAS" class="java.lang.String">
+		<variableExpression>Funcoes.pdes(
+    $P{REPORT_CONNECTION},
+     "SUM(FIN.VLRDESDOB)",
+     "TGFFIN FIN",
+     "FIN.NUMDUPL = ISNULL(" + $F{NUMDUPL}.toString() + "," + $F{NUFIN}.toString() + ")"
+).toString()</variableExpression>
+	</variable>
+	<variable name="RETORNA_RENEG_OU_NOTA" class="java.lang.String">
+		<variableExpression>Funcoes.pdes(
+    $P{REPORT_CONNECTION},
+     "RENEG_NOTA",
+     "BH_VGF_TGFFIN_RENEGOC_NOTA",
+     "NUFIN = " + $F{NUFIN}.toString()
+).toString()</variableExpression>
+	</variable>
+	<variable name="PERCMULTA" class="java.lang.String">
+		<variableExpression>Funcoes.pdes(     $P{REPORT_CONNECTION},      "PAR.NUMDEC",      "TSIPAR PAR",      "PAR.CHAVE = " + "'PERCMULTA'" ).toString()</variableExpression>
+	</variable>
+	<variable name="CONTA9DIG" class="java.lang.String">
+		<variableExpression>Funcoes.pdes(
+    $P{REPORT_CONNECTION},
+     "sankhya.lpad(CTA.CODCTABCO,9,'0')",
+     "TSICTA CTA, TGFFIN FIN",
+     "FIN.CODEMP = " + $F{CODEMP}.toString() + "AND CTA.CODCTABCOINT = FIN.CODCTABCOINT AND FIN.NUFIN = " + $F{NUFIN}.toString()
+)</variableExpression>
+	</variable>
+	<group name="AGRUPAMENTO_BOLETA">
+		<groupExpression>(1 == $P{PTIPAGRUPAMENTO}.intValue()) ?
+   (Object)$F{NUFIN}:
+     (2 == $P{PTIPAGRUPAMENTO}.intValue()) ?
+        (Object)($F{CODPARC}.toString() + ":" + $F{DTVENC}.getTime()):
+     (3 == $P{PTIPAGRUPAMENTO}.intValue()) ?
+         (Object)($F{CODPARC}.toString() + ":" + $F{DTVENC}.getTime() + ":" + $F{NUMDUPL}.toString()):
+     (4 == $P{PTIPAGRUPAMENTO}.intValue()) ?
+         (Object)$F{NOSSONUM}:
+     (5 == $P{PTIPAGRUPAMENTO}.intValue()) ?
+         (Object)($F{CODPARC}.toString()):
+         (Object) $F{NUFIN}</groupExpression>
+		<groupHeader>
+			<band splitType="Stretch" />
+		</groupHeader>
+		<groupFooter>
+			<band height="790" splitType="Stretch">
+				<rectangle>
+					<reportElement x="0" y="128" width="535" height="328" />
+					<graphicElement>
+						<pen lineWidth="0.5" />
+					</graphicElement>
+				</rectangle>
+				<rectangle>
+					<reportElement x="0" y="98" width="535" height="30" />
+					<graphicElement>
+						<pen lineWidth="0.5" />
+					</graphicElement>
+				</rectangle>
+				<rectangle>
+					<reportElement key="rectangle-2" x="425" y="28" width="110" height="24" />
+					<graphicElement>
+						<pen lineWidth="0.5" />
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement key="staticText-2" mode="Opaque" x="426" y="29" width="109" height="13" backcolor="#CCCCCC" />
+					<textElement verticalAlignment="Middle">
+						<font size="7" />
+					</textElement>
+					<text> Vencimento:</text>
+				</staticText>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+					<reportElement key="textField-1" mode="Opaque" x="426" y="41" width="109" height="12" backcolor="#CCCCCC" />
+					<box leftPadding="2" rightPadding="2">
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000" />
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000" />
+						<bottomPen lineWidth="0.0" lineColor="#000000" />
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000" />
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="7" />
+					</textElement>
+					<textFieldExpression class="java.lang.String">$V{dat2vct01}</textFieldExpression>
+				</textField>
+				<rectangle>
+					<reportElement key="rectangle-3" x="425" y="52" width="110" height="24" />
+					<graphicElement>
+						<pen lineWidth="0.5" />
+					</graphicElement>
+				</rectangle>
+				<rectangle>
+					<reportElement key="rectangle-4" x="0" y="28" width="425" height="70" />
+					<graphicElement>
+						<pen lineWidth="0.5" />
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement key="staticText-3" x="0" y="29" width="56" height="11" />
+					<box leftPadding="2" rightPadding="2" />
+					<textElement verticalAlignment="Middle">
+						<font size="7" isBold="true" />
+					</textElement>
+					<text>Beneficiário:</text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement key="textField-2" x="56" y="29" width="227" height="11" />
+					<box leftPadding="2" rightPadding="2" />
+					<textElement verticalAlignment="Middle">
+						<font size="7" />
+					</textElement>
+					<textFieldExpression class="java.lang.String">$V{razsoc}.trim() + " - " + $V{cgcemp}</textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement key="staticText-4" x="426" y="53" width="109" height="11" />
+					<box leftPadding="2" rightPadding="2" />
+					<textElement verticalAlignment="Middle">
+						<font fontName="SansSerif" size="7" pdfFontName="Helvetica" />
+					</textElement>
+					<text> Agência/Código Beneficiário</text>
+				</staticText>
+				<rectangle>
+					<reportElement key="rectangle-5" x="0" y="52" width="114" height="24" />
+					<graphicElement>
+						<pen lineWidth="0.5" />
+					</graphicElement>
+				</rectangle>
+				<rectangle>
+					<reportElement key="rectangle-6" x="114" y="52" width="108" height="24" />
+					<graphicElement>
+						<pen lineWidth="0.5" />
+					</graphicElement>
+				</rectangle>
+				<rectangle>
+					<reportElement key="rectangle-7" x="342" y="52" width="83" height="24" backcolor="#CCCCCC" />
+					<graphicElement>
+						<pen lineWidth="0.5" />
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement key="staticText-5" mode="Opaque" x="1" y="77" width="113" height="11" backcolor="#CCCCCC" />
+					<box>
+						<rightPen lineWidth="0.5" />
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font size="7" isBold="true" />
+					</textElement>
+					<text> Data do Documento</text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-6" mode="Opaque" x="115" y="77" width="107" height="11" backcolor="#CCCCCC" />
+					<box>
+						<rightPen lineWidth="0.5" />
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font size="7" isBold="true" />
+					</textElement>
+					<text>Número do Documento</text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-7" x="168" y="53" width="54" height="11" />
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7" isBold="true" />
+					</textElement>
+					<text>Espécie</text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-8" x="307" y="78" width="35" height="10" />
+					<box>
+						<pen lineWidth="0.0" />
+						<topPen lineWidth="0.0" />
+						<leftPen lineWidth="0.0" />
+						<bottomPen lineWidth="0.0" />
+						<rightPen lineWidth="0.5" />
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7" isBold="true" />
+					</textElement>
+					<text>Aceite</text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-9" mode="Opaque" x="343" y="77" width="81" height="11" backcolor="#CCCCCC" />
+					<box leftPadding="2" rightPadding="2" />
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7" isBold="true" />
+					</textElement>
+					<text>Data Processamento</text>
+				</staticText>
+				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+					<reportElement key="textField-3" mode="Opaque" x="1" y="87" width="113" height="10" backcolor="#CCCCCC" />
+					<box>
+						<rightPen lineWidth="0.5" />
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font size="7" />
+					</textElement>
+					<textFieldExpression class="java.lang.String">$V{dataneg}</textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+					<reportElement key="textField-4" mode="Opaque" x="115" y="86" width="107" height="11" backcolor="#CCCCCC" />
+					<box>
+						<rightPen lineWidth="0.5" />
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="SansSerif" size="7" />
+					</textElement>
+					<textFieldExpression class="java.lang.String">$V{RETORNA_RENEG_OU_NOTA} + " - " + ($F{DESDOBRAMENTO} == null ? "1" : $F{DESDOBRAMENTO})</textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement key="staticText-10" x="168" y="64" width="54" height="11" />
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7" isBold="false" pdfFontName="Helvetica" />
+					</textElement>
+					<text>DM</text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-11" x="307" y="88" width="35" height="10" />
+					<box>
+						<pen lineWidth="0.0" />
+						<topPen lineWidth="0.0" />
+						<leftPen lineWidth="0.0" />
+						<bottomPen lineWidth="0.0" />
+						<rightPen lineWidth="0.5" />
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7" isBold="false" pdfFontName="Helvetica" />
+					</textElement>
+					<text>Não</text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-15" x="222" y="77" width="85" height="11" />
+					<box>
+						<rightPen lineWidth="0.5" />
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7" isBold="true" />
+					</textElement>
+					<text>Espécie Documento</text>
+				</staticText>
+				<rectangle>
+					<reportElement key="rectangle-13" x="222" y="52" width="120" height="24" />
+					<graphicElement>
+						<pen lineWidth="0.5" />
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement key="staticText-16" x="222" y="53" width="97" height="11" />
+					<textElement verticalAlignment="Middle">
+						<font size="7" isBold="true" />
+					</textElement>
+					<text> Quantidade</text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-17" x="342" y="53" width="84" height="11" />
+					<box leftPadding="2" rightPadding="2" />
+					<textElement verticalAlignment="Middle">
+						<font size="7" isBold="true" />
+					</textElement>
+					<text> Valor</text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-18" mode="Opaque" x="426" y="77" width="109" height="11" backcolor="#CCCCCC" />
+					<box leftPadding="2" rightPadding="2">
+						<bottomPen lineWidth="0.0" />
+						<rightPen lineWidth="0.5" />
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font size="7" />
+					</textElement>
+					<text> (=) Valor do Documento</text>
+				</staticText>
+				<image scaleImage="RetainShape" hAlign="Center" vAlign="Middle" onErrorType="Blank">
+					<reportElement key="image-safra-1" x="6" y="2" width="24" height="26" />
+					<imageExpression class="java.io.InputStream">new java.io.ByteArrayInputStream(java.util.Base64.getDecoder().decode("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"))</imageExpression>
+				</image>
+				<staticText>
+					<reportElement key="staticText-24" x="36" y="10" width="102" height="16" />
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="10" isBold="true" pdfFontName="Helvetica-Bold" />
+					</textElement>
+					<text>BANCO SAFRA S/A</text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-25" x="140" y="10" width="6" height="16" />
+					<textElement textAlignment="Right" verticalAlignment="Middle" />
+					<text>|</text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-26" x="148" y="10" width="32" height="16" />
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="10" isBold="true" pdfFontName="Helvetica-Bold" />
+					</textElement>
+					<text>422-7</text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-27" x="182" y="10" width="6" height="16" />
+					<textElement verticalAlignment="Middle" />
+					<text>|</text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-28" x="420" y="10" width="115" height="16" />
+					<box rightPadding="2" />
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold" />
+					</textElement>
+					<text>RECIBO DO PAGADOR</text>
+				</staticText>
+				<rectangle>
+					<reportElement key="rectangle-23" x="0" y="503" width="425" height="24" />
+					<graphicElement>
+						<pen lineWidth="0.5" />
+					</graphicElement>
+				</rectangle>
+				<rectangle>
+					<reportElement key="rectangle-24" x="425" y="503" width="110" height="24" />
+					<graphicElement>
+						<pen lineWidth="0.5" />
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement key="staticText-29" x="7" y="504" width="417" height="23" />
+					<box leftPadding="2" rightPadding="2" />
+					<textElement>
+						<font size="8" />
+					</textElement>
+					<text>Pagável em qualquer Banco do Sistema de Compensação</text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-30" x="427" y="504" width="98" height="11" />
+					<textElement verticalAlignment="Middle">
+						<font size="7" />
+					</textElement>
+					<text>Vencimento:</text>
+				</staticText>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+					<reportElement key="textField-7" x="427" y="515" width="98" height="11" />
+					<box leftPadding="2" rightPadding="2">
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000" />
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000" />
+						<bottomPen lineWidth="0.0" lineColor="#000000" />
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000" />
+					</box>
+					<textElement textAlignment="Right">
+						<font fontName="Times-Roman" size="8" />
+					</textElement>
+					<textFieldExpression class="java.lang.String">$V{dat2vct01}</textFieldExpression>
+				</textField>
+				<rectangle>
+					<reportElement key="rectangle-25" x="425" y="527" width="110" height="24" />
+					<graphicElement>
+						<pen lineWidth="0.5" />
+					</graphicElement>
+				</rectangle>
+				<rectangle>
+					<reportElement key="rectangle-26" x="0" y="527" width="425" height="24" />
+					<graphicElement>
+						<pen lineWidth="0.5" />
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement key="staticText-31" x="7" y="527" width="60" height="11" />
+					<box leftPadding="2" rightPadding="2" />
+					<textElement>
+						<font size="8" isBold="true" />
+					</textElement>
+					<text>Beneficiário:</text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement key="textField-8" x="67" y="527" width="224" height="11" />
+					<box leftPadding="2" rightPadding="2" />
+					<textElement>
+						<font size="8" />
+					</textElement>
+					<textFieldExpression class="java.lang.String">$V{razsoc}.trim() + " - " + $V{cgcemp}</textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement key="staticText-32" x="427" y="528" width="107" height="12" />
+					<box leftPadding="2" rightPadding="2" />
+					<textElement verticalAlignment="Middle">
+						<font size="7" />
+					</textElement>
+					<text>Agência/Código Beneficiário</text>
+				</staticText>
+				<rectangle>
+					<reportElement key="rectangle-27" x="0" y="551" width="114" height="24" />
+					<graphicElement>
+						<pen lineWidth="0.5" />
+					</graphicElement>
+				</rectangle>
+				<rectangle>
+					<reportElement key="rectangle-28" x="114" y="551" width="108" height="24" />
+					<graphicElement>
+						<pen lineWidth="0.5" />
+					</graphicElement>
+				</rectangle>
+				<rectangle>
+					<reportElement key="rectangle-29" x="324" y="551" width="101" height="24" />
+					<graphicElement>
+						<pen lineWidth="0.5" />
+					</graphicElement>
+				</rectangle>
+				<rectangle>
+					<reportElement key="rectangle-30" x="292" y="551" width="32" height="24" />
+					<graphicElement>
+						<pen lineWidth="0.5" />
+					</graphicElement>
+				</rectangle>
+				<rectangle>
+					<reportElement key="rectangle-31" x="425" y="551" width="110" height="24" />
+					<graphicElement>
+						<pen lineWidth="0.5" />
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement key="staticText-33" x="7" y="551" width="107" height="11" />
+					<textElement>
+						<font size="8" isBold="true" />
+					</textElement>
+					<text>Data do Documento</text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-34" x="116" y="551" width="106" height="11" />
+					<textElement>
+						<font size="8" isBold="true" />
+					</textElement>
+					<text>Número do Documento</text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-35" x="222" y="551" width="70" height="11" />
+					<textElement textAlignment="Center">
+						<font size="8" isBold="true" />
+					</textElement>
+					<text>Esp.Doc.</text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-36" x="292" y="552" width="32" height="11" />
+					<textElement textAlignment="Center">
+						<font size="8" isBold="true" />
+					</textElement>
+					<text>Aceite</text>
+				</staticText>
+				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+					<reportElement key="textField-9" x="7" y="562" width="107" height="11" />
+					<textElement>
+						<font size="8" />
+					</textElement>
+					<textFieldExpression class="java.lang.String">$V{dataneg}</textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+					<reportElement key="textField-10" x="116" y="562" width="106" height="11" />
+					<box leftPadding="2" rightPadding="2">
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000" />
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000" />
+						<bottomPen lineWidth="0.0" lineColor="#000000" />
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000" />
+					</box>
+					<textElement>
+						<font fontName="Times-Roman" size="8" />
+					</textElement>
+					<textFieldExpression class="java.lang.String">$V{RETORNA_RENEG_OU_NOTA} + " - " + ($F{DESDOBRAMENTO} == null ? "1" : $F{DESDOBRAMENTO})</textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement key="staticText-38" x="222" y="562" width="69" height="11" />
+					<textElement textAlignment="Center">
+						<font size="8" isBold="false" pdfFontName="Helvetica" />
+					</textElement>
+					<text>DM</text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-39" x="292" y="562" width="32" height="11" />
+					<textElement textAlignment="Center">
+						<font size="8" isBold="false" pdfFontName="Helvetica" />
+					</textElement>
+					<text>Não</text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-40" x="427" y="552" width="98" height="11" />
+					<box leftPadding="2" rightPadding="2" />
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font size="7" />
+					</textElement>
+					<text>Nosso Número</text>
+				</staticText>
+				<rectangle>
+					<reportElement key="rectangle-32" x="0" y="575" width="114" height="24" />
+					<graphicElement>
+						<pen lineWidth="0.5" />
+					</graphicElement>
+				</rectangle>
+				<rectangle>
+					<reportElement key="rectangle-33" x="114" y="575" width="54" height="24" />
+					<graphicElement>
+						<pen lineWidth="0.5" />
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement key="staticText-42" x="114" y="575" width="54" height="11" />
+					<textElement textAlignment="Center">
+						<font size="8" isBold="true" />
+					</textElement>
+					<text>Carteira</text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-43" x="168" y="575" width="54" height="11" />
+					<textElement textAlignment="Center">
+						<font size="8" isBold="true" />
+					</textElement>
+					<text>Espécie</text>
+				</staticText>
+				<rectangle>
+					<reportElement key="rectangle-35" x="222" y="575" width="102" height="24" />
+					<graphicElement>
+						<pen lineWidth="0.5" />
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement key="staticText-44" x="222" y="575" width="102" height="11" />
+					<box leftPadding="2" />
+					<textElement textAlignment="Left">
+						<font size="8" isBold="true" />
+					</textElement>
+					<text>Quantidade</text>
+				</staticText>
+				<rectangle>
+					<reportElement key="rectangle-36" x="324" y="575" width="101" height="24" />
+					<graphicElement>
+						<pen lineWidth="0.5" />
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement key="staticText-45" x="326" y="575" width="87" height="11" />
+					<box leftPadding="2" rightPadding="2" />
+					<textElement textAlignment="Left">
+						<font size="8" isBold="true" />
+					</textElement>
+					<text>Valor</text>
+				</staticText>
+				<rectangle>
+					<reportElement key="rectangle-37" x="425" y="575" width="110" height="24" />
+					<graphicElement>
+						<pen lineWidth="0.5" />
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement key="staticText-46" x="427" y="575" width="98" height="11" />
+					<box leftPadding="2" rightPadding="2" />
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="7" />
+					</textElement>
+					<text>(=) Valor do Documento</text>
+				</staticText>
+				<rectangle>
+					<reportElement key="rectangle-38" x="425" y="599" width="110" height="24" />
+					<graphicElement>
+						<pen lineWidth="0.5" />
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement key="staticText-47" x="427" y="599" width="98" height="11" />
+					<box leftPadding="2" rightPadding="2" />
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font size="7" />
+					</textElement>
+					<text>(-) Desconto/Abatimento</text>
+				</staticText>
+				<rectangle>
+					<reportElement key="rectangle-39" x="425" y="623" width="110" height="24" />
+					<graphicElement>
+						<pen lineWidth="0.5" />
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement key="staticText-48" x="427" y="623" width="98" height="11" />
+					<box leftPadding="2" rightPadding="2" />
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font size="7" />
+					</textElement>
+					<text>(+) Mora/Multa</text>
+				</staticText>
+				<rectangle>
+					<reportElement key="rectangle-40" x="425" y="647" width="110" height="24" />
+					<graphicElement>
+						<pen lineWidth="0.5" />
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement key="staticText-49" x="427" y="647" width="98" height="11" />
+					<box leftPadding="2" rightPadding="2" />
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font size="7" />
+					</textElement>
+					<text>(+) Outros Acréscimos</text>
+				</staticText>
+				<rectangle>
+					<reportElement key="rectangle-41" x="425" y="671" width="110" height="24" />
+					<graphicElement>
+						<pen lineWidth="0.5" />
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement key="staticText-50" x="427" y="671" width="98" height="11" />
+					<box leftPadding="2" rightPadding="2" />
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font size="7" />
+					</textElement>
+					<text>(=) Valor Cobrado</text>
+				</staticText>
+				<rectangle>
+					<reportElement key="rectangle-42" x="0" y="599" width="425" height="96" />
+					<graphicElement>
+						<pen lineWidth="0.5" />
+					</graphicElement>
+				</rectangle>
+				<textField isBlankWhenNull="false">
+					<reportElement key="textField-11" x="0" y="600" width="413" height="12" />
+					<box leftPadding="2" />
+					<textElement textAlignment="Left" verticalAlignment="Top">
+						<font size="8" />
+					</textElement>
+					<textFieldExpression class="java.lang.String">"Instruções (Todas as informações deste bloqueto são de exclusiva responsabilidade do Beneficiário)"</textFieldExpression>
+				</textField>
+				<rectangle>
+					<reportElement key="rectangle-43" x="0" y="735" width="535" height="12" />
+					<graphicElement>
+						<pen lineWidth="0.5" />
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement key="staticText-51" x="344" y="736" width="191" height="11" />
+					<box leftPadding="2" rightPadding="2" />
+					<textElement textAlignment="Right">
+						<font size="8" isBold="true" />
+					</textElement>
+					<text>Ficha de Compensação/Autenticação Mecânica</text>
+				</staticText>
+				<rectangle>
+					<reportElement key="rectangle-44" x="0" y="695" width="535" height="40" />
+					<graphicElement>
+						<pen lineWidth="0.5" />
+					</graphicElement>
+				</rectangle>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false">
+					<reportElement key="textField-12" x="2" y="696" width="523" height="38" />
+					<textElement>
+						<font size="6" />
+					</textElement>
+					<textFieldExpression class="java.lang.String">"Pagador: " + $V{razcli}.trim() + " - " + StringUtils.formataCgcCpf($F{CGC_CPF}) + "\n" +
+($V{endcli}.trim().equals("") ? $V{endrec} : $V{endcli}) + "\n" +
+($V{endcli}.trim().equals("") ? $V{ceprec} : $V{cepcli}) + "-"  +
+($V{endcli}.trim().equals("") ? $V{cidrec} : $V{cidcli}) + "-"  +
+($V{endcli}.trim().equals("") ? $V{estrec} : $V{estcli}) + "\n"</textFieldExpression>
+				</textField>
+				<image scaleImage="RetainShape" hAlign="Center" vAlign="Middle" onErrorType="Blank">
+					<reportElement key="image-safra-2" x="6" y="474" width="24" height="26" />
+					<imageExpression class="java.io.InputStream">new java.io.ByteArrayInputStream(java.util.Base64.getDecoder().decode("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"))</imageExpression>
+				</image>
+				<staticText>
+					<reportElement key="staticText-55" x="36" y="482" width="102" height="16" />
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="10" isBold="true" pdfFontName="Helvetica-Bold" />
+					</textElement>
+					<text>BANCO SAFRA S/A</text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-52" x="140" y="482" width="6" height="16" />
+					<textElement textAlignment="Right" verticalAlignment="Middle" />
+					<text>|</text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-53" x="148" y="482" width="32" height="16" />
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="10" isBold="true" pdfFontName="Helvetica-Bold" />
+					</textElement>
+					<text>422-7</text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-54" x="182" y="482" width="6" height="16" />
+					<textElement verticalAlignment="Middle" />
+					<text>|</text>
+				</staticText>
+				<line>
+					<reportElement key="line-1" x="0" y="468" width="535" height="1" />
+					<graphicElement>
+						<pen lineWidth="0.5" lineStyle="Dashed" />
+					</graphicElement>
+				</line>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true">
+					<reportElement key="textField-13" x="190" y="482" width="345" height="18" />
+					<box leftPadding="2" rightPadding="2">
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000" />
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000" />
+						<bottomPen lineWidth="0.0" lineColor="#000000" />
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000" />
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Times-Roman" size="10" isBold="true" />
+					</textElement>
+					<textFieldExpression class="java.lang.String">$V{lindig}</textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+					<reportElement key="textField-14" x="427" y="563" width="98" height="11" />
+					<box leftPadding="2" rightPadding="2">
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000" />
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000" />
+						<bottomPen lineWidth="0.0" lineColor="#000000" />
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000" />
+					</box>
+					<textElement textAlignment="Right">
+						<font fontName="Times-Roman" size="8" />
+					</textElement>
+					<textFieldExpression class="java.lang.String">$V{nosnum}</textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+					<reportElement key="textField-16" mode="Opaque" x="426" y="87" width="109" height="11" printWhenGroupChanges="AGRUPAMENTO_BOLETA" backcolor="#CCCCCC" />
+					<box leftPadding="2" rightPadding="2">
+						<bottomPen lineWidth="0.5" />
+						<rightPen lineWidth="0.5" />
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="7" />
+					</textElement>
+					<textFieldExpression class="java.lang.String">new java.text.DecimalFormat("#,##0.00;(#,##0.00)").format($V{Vars.TotDupl}.doubleValue())</textFieldExpression>
+				</textField>
+
+				<textField isBlankWhenNull="true">
+					<reportElement key="textField-18" mode="Opaque" x="343" y="86" width="81" height="12" backcolor="#CCCCCC" />
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7" />
+					</textElement>
+					<textFieldExpression class="java.lang.String">$V{datsis}</textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="###0,00;-###0,00" isBlankWhenNull="true">
+					<reportElement key="textField-23" x="427" y="586" width="98" height="11" />
+					<box leftPadding="2" rightPadding="2">
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000" />
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000" />
+						<bottomPen lineWidth="0.0" lineColor="#000000" />
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000" />
+					</box>
+					<textElement textAlignment="Right">
+						<font fontName="Times-Roman" size="8" />
+					</textElement>
+					<textFieldExpression class="java.lang.String">new java.text.DecimalFormat("#,##0.00;(#,##0.00)").format($V{Vars.TotDupl}.doubleValue())</textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement key="staticText-14" x="114" y="53" width="54" height="11" />
+					<box>
+						<rightPen lineWidth="0.5" />
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font size="7" isBold="true" />
+					</textElement>
+					<text> Carteira</text>
+				</staticText>
+				<textField>
+					<reportElement x="115" y="64" width="53" height="11" />
+					<box>
+						<rightPen lineWidth="0.5" />
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7" />
+					</textElement>
+					<textFieldExpression class="java.lang.String">"01"</textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="116" y="586" width="52" height="11" />
+					<textElement textAlignment="Center">
+						<font size="8" />
+					</textElement>
+					<textFieldExpression class="java.lang.String">"01"</textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="427" y="540" width="96" height="11" />
+					<textElement textAlignment="Right">
+						<font size="8" />
+					</textElement>
+					<textFieldExpression class="java.lang.String">"00700 / " + $V{CONTA9DIG}</textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="425" y="64" width="109" height="11" />
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7" />
+					</textElement>
+					<textFieldExpression class="java.lang.String">"00700 / " + $V{CONTA9DIG}</textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement key="staticText-15" x="222" y="87" width="85" height="11" />
+					<box>
+						<rightPen lineWidth="0.5" />
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7" />
+					</textElement>
+					<text>R$</text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-15" x="168" y="586" width="54" height="11" />
+					<textElement textAlignment="Center">
+						<font size="8" />
+					</textElement>
+					<text>R$</text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+					<reportElement key="textField-5" x="5" y="612" width="408" height="83" />
+					<box leftPadding="2" />
+					<textElement textAlignment="Left" verticalAlignment="Top">
+						<font size="7" />
+					</textElement>
+					<textFieldExpression class="java.lang.String">"Após o Vencimento, cobrar Multa de 2,00%(R$ " + new java.text.DecimalFormat("#,##0.00").format($V{Vars.TotDupl}.doubleValue() * 0.02) + ")\n" +
+"Após o vencimento, cobrar juros de R$ " + new java.text.DecimalFormat("#,##0.00").format($V{Vars.TotDupl}.doubleValue() * 0.00033) + " ao dia\n" +
+"Protestar após 5 dias vencidos"</textFieldExpression>
+				</textField>
+				<componentElement>
+					<reportElement x="0" y="751" width="523" height="36">
+						<printWhenExpression>!$V{codbarnro}.equals("00")</printWhenExpression>
+					</reportElement>
+					<ns2:barbecue xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Int2of5" drawText="false" checksumRequired="false" barWidth="0" barHeight="40">
+						<ns2:codeExpression>$V{codbarnro}</ns2:codeExpression>
+					</ns2:barbecue>
+				</componentElement>
+				<textField>
+					<reportElement x="57" y="40" width="227" height="11" />
+					<textElement verticalAlignment="Middle">
+						<font size="7" />
+					</textElement>
+					<textFieldExpression class="java.lang.String">$V{endemp}</textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="68" y="538" width="224" height="11" />
+					<textElement>
+						<font size="8" />
+					</textElement>
+					<textFieldExpression class="java.lang.String">$V{endemp}</textFieldExpression>
+				</textField>
+				<subreport>
+					<reportElement key="Boleto_Itau_notas" positionType="Float" x="0" y="187" width="535" height="61" />
+					<subreportParameter name="NURENEG">
+						<subreportParameterExpression>$F{NURENEG}</subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression>$P{REPORT_CONNECTION}</connectionExpression>
+					<subreportExpression class="java.lang.String">$P{SUBREPORT_DIR} + "Boleto_Itau_notas.jasper"</subreportExpression>
+				</subreport>
+				<staticText>
+					<reportElement key="staticText-14" x="0" y="53" width="113" height="11" />
+					<textElement verticalAlignment="Middle">
+						<font size="7" isBold="true" />
+					</textElement>
+					<text> CPI</text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-40" mode="Opaque" x="342" y="28" width="83" height="12" backcolor="#CCCCCC" />
+					<box leftPadding="2" rightPadding="2">
+						<pen lineWidth="0.5" />
+						<topPen lineWidth="0.5" />
+						<leftPen lineWidth="0.5" />
+						<bottomPen lineWidth="0.5" />
+						<rightPen lineWidth="0.5" />
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font size="7" isBold="true" />
+					</textElement>
+					<text>Nosso Número</text>
+				</staticText>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+					<reportElement key="textField-14" mode="Opaque" x="342" y="40" width="83" height="12" backcolor="#CCCCCC" />
+					<box leftPadding="2" rightPadding="2">
+						<pen lineWidth="0.5" />
+						<topPen lineWidth="0.5" />
+						<leftPen lineWidth="0.5" />
+						<bottomPen lineWidth="0.5" />
+						<rightPen lineWidth="0.5" />
+					</box>
+					<textElement textAlignment="Center">
+						<font fontName="Times-Roman" size="8" />
+					</textElement>
+					<textFieldExpression class="java.lang.String">$V{nosnum}</textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+					<reportElement key="textField-12" x="1" y="113" width="523" height="15" />
+					<textElement>
+						<font size="7" />
+					</textElement>
+					<textFieldExpression class="java.lang.String">$V{razcli}.trim() + " - " + StringUtils.formataCgcCpf($F{CGC_CPF})</textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement key="staticText-3" x="1" y="98" width="50" height="11" />
+					<box leftPadding="2" rightPadding="2" />
+					<textElement verticalAlignment="Middle">
+						<font size="7" isBold="true" />
+					</textElement>
+					<text>Pagador:</text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-37" x="7" y="575" width="92" height="11" />
+					<box leftPadding="2" rightPadding="2" />
+					<textElement textAlignment="Left">
+						<font size="8" isBold="true" />
+					</textElement>
+					<text>Data da Operação</text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement key="textField-19" x="7" y="586" width="92" height="11" />
+					<textElement textAlignment="Center">
+						<font size="8" />
+					</textElement>
+					<textFieldExpression class="java.lang.String">$V{datsis}</textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement key="staticText-37" x="326" y="551" width="87" height="11" />
+					<box leftPadding="2" rightPadding="2" />
+					<textElement textAlignment="Left">
+						<font size="8" isBold="true" />
+					</textElement>
+					<text>Data Processamento</text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement key="textField-19" x="326" y="562" width="87" height="11" />
+					<textElement textAlignment="Center">
+						<font size="8" />
+					</textElement>
+					<textFieldExpression class="java.lang.String">$V{datsis}</textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="false">
+					<reportElement key="textField-11" x="1" y="130" width="430" height="12" />
+					<box leftPadding="2" />
+					<textElement textAlignment="Left" verticalAlignment="Top">
+						<font size="8" />
+					</textElement>
+					<textFieldExpression class="java.lang.String">"Instruções (Todas as informações deste bloqueto são de exclusiva responsabilidade do Beneficiário)"</textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+					<reportElement key="textField-5" x="1" y="142" width="523" height="45" />
+					<box leftPadding="2" />
+					<textElement textAlignment="Left" verticalAlignment="Top">
+						<font size="7" />
+					</textElement>
+					<textFieldExpression class="java.lang.String">"Após o Vencimento, cobrar Multa de 2,00%(R$ " + new java.text.DecimalFormat("#,##0.00").format($V{Vars.TotDupl}.doubleValue() * 0.02) + ")\n" +
+"Após o vencimento, cobrar juros de R$ " + new java.text.DecimalFormat("#,##0.00").format($V{Vars.TotDupl}.doubleValue() * 0.00033) + " ao dia\n" +
+"Protestar após 5 dias vencidos"</textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch" />
+	</background>
+	<title>
+		<band splitType="Stretch" />
+	</title>
+	<pageHeader>
+		<band splitType="Stretch" />
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch" />
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch" />
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch" />
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch" />
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch" />
+	</summary>
+</jasperReport>

@@ -1,0 +1,29 @@
+# Atividade já finalizada apontamento não poderá ser excluído
+
+> **Módulo:** Solucao de Problemas | **Subseção:** Produção  
+> **Fonte Oficial:** [https://ajuda.sankhya.com.br/hc/pt-br/articles/25027185238039-Atividade-j%C3%A1-finalizada-apontamento-n%C3%A3o-poder%C3%A1-ser-exclu%C3%ADdo](https://ajuda.sankhya.com.br/hc/pt-br/articles/25027185238039-Atividade-j%C3%A1-finalizada-apontamento-n%C3%A3o-poder%C3%A1-ser-exclu%C3%ADdo)  
+> **ID:** `25027185238039` | **Última Atualização:** 2026-07-22T14:46:16Z
+
+---
+
+![Mensagem FINAL.png](https://ajuda.sankhya.com.br/hc/article_attachments/25027185222423)
+
+ **MENSAGEM:**
+
+[PROD_E00380] Atividade já finalizada apontamento não poderá ser excluído
+
+ 
+
+![Solução FINAL.png](https://ajuda.sankhya.com.br/hc/article_attachments/25027224178711)
+
+ **SOLUÇÃO:**
+
+Não e possível efetuar a exclusão do apontamento de uma produção já finalizada. Neste caso, deve-se fazer o desmonte da produção para baixar o PA e dar entrada das MPs.
+
+ 
+
+![Causa FINAL.png](https://ajuda.sankhya.com.br/hc/article_attachments/25027185229975)
+
+ **CAUSA:**
+
+O erro é apresentado ao tentar realizar a exclusão do apontamento de uma produção já finalizada.

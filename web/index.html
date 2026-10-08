@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agente Sankhya AI — Saavedra Representações</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo">
+          <div class="logo-orb">
+            <span class="orb-core"></span>
+          </div>
+          <div class="brand-text">
+            <h2>Sankhya AI</h2>
+            <span class="badge-sub">Saavedra Representações</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ERP Live Status -->
+      <div class="status-card" id="erpStatusCard">
+        <div class="status-indicator">
+          <span class="status-dot ping-active"></span>
+          <span class="status-label" id="statusLabel">ERP Conectado</span>
+        </div>
+        <div class="status-details">
+          <span class="env-badge" id="envBadge">SANDBOX</span>
+          <span class="status-time" id="statusPing">Online</span>
+        </div>
+      </div>
+
+      <!-- Navigation & Filters -->
+      <div class="nav-section">
+        <div class="section-title">Central de Conhecimento</div>
+        <div class="kb-stats-pill">
+          <span class="kb-count" id="kbCount">4.959</span> artigos indexados
+        </div>
+        
+        <nav class="sidebar-nav">
+          <button class="nav-item active" id="btnNavChat" data-view="chat">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <span>Chat com o Agente</span>
+          </button>
+          <button class="nav-item" id="btnNavDashboard" data-view="dashboard">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+            <span>Painel & Gráficos</span>
+            <span class="badge-accent" style="background:var(--accent-cyan); color:#000;">NOVO</span>
+          </button>
+          <button class="nav-item" id="btnNavSaavedra" data-view="saavedra">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7h-7L10 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/></svg>
+            <span>Regras Saavedra</span>
+            <span class="badge-accent">OPME</span>
+          </button>
+          <button class="nav-item" id="btnNavKb" data-view="kb">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <span>Explorador de Manuais</span>
+          </button>
+          <button class="nav-item" id="btnNavErp" data-view="erp">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+            <span>Terminal SQL / ERP</span>
+          </button>
+          <button class="nav-item" id="btnNavAddKb" data-view="addkb">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+            <span>+ Adicionar Regra</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- Quick Topics -->
+      <div class="sidebar-topics">
+        <div class="section-title">Tópicos Frequentes</div>
+        <button class="topic-chip" data-prompt="Gere um gráfico comparativo dos saldos bancários e aplicações da Saavedra.">
+          📊 Gráfico de Saldos Bancários
+        </button>
+        <button class="topic-chip" data-prompt="Gere uma tabela comparativa com gráfico da evolução mensal de vendas de 2026.">
+          📈 Gráfico de Vendas 2026
+        </button>
+        <button class="topic-chip" data-prompt="Faça uma tabela comparativa das TOPs da Saavedra (1000, 1005, 1100, 1106, 1107, 1209).">
+          📋 Comparativo de TOPs
+        </button>
+        <button class="topic-chip" data-prompt="Quais são as regras para emissão de pedidos no cliente 258 (Unimed)?">
+          🏥 Unimed / Parceiro 258
+        </button>
+        <button class="topic-chip" data-prompt="Como resolver o erro CORE_E05181 no modelo 14 de pedido de venda?">
+          🚨 Erro CORE_E05181 (Jasper)
+        </button>
+        <button class="topic-chip" data-prompt="Quais campos adicionais (AD_) existem na TGFCAB para cirurgia e hospital?">
+          💉 Campos de Cirurgia (AD_)
+        </button>
+        <button class="topic-chip" data-prompt="As notas estão saindo com IBS e CBS? Quais alíquotas configuradas?">
+          ⚖️ Reforma Tributária (IBS/CBS)
+        </button>
+      </div>
+
+      <!-- Sidebar Footer -->
+      <div class="sidebar-footer">
+        <button class="btn-settings" id="btnOpenSettings">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <span>Configurar Gemini API</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Top Bar -->
+      <header class="top-bar">
+        <div class="top-title-area">
+          <h1 id="viewTitle">Assistente Sankhya & Saavedra</h1>
+          <p id="viewSubtitle">Base de conhecimento inteligente com acesso ao ERP ao vivo</p>
+        </div>
+        <div class="top-actions">
+          <button class="btn-secondary" id="btnClearChat" title="Limpar conversa">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            <span>Limpar Chat</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- View: Chat (Default) -->
+      <section class="view-panel active" id="viewChat">
+        <div class="chat-container">
+          <div class="chat-messages" id="chatMessages">
+            <!-- Welcome Message -->
+            <div class="message assistant-message">
+              <div class="avatar assistant-avatar">
+                <span>🤖</span>
+              </div>
+              <div class="message-bubble">
+                <div class="message-header">
+                  <strong>Agente Sankhya AI</strong>
+                  <span class="badge-role">Especialista Saavedra</span>
+                </div>
+                <div class="message-body">
+                  <p>Olá! Sou o seu <strong>Agente Especialista no Sankhya Om</strong> configurado especificamente para o ambiente da <strong>Saavedra Representações</strong>.</p>
+                  <p>Tenho acesso total a:</p>
+                  <ul>
+                    <li>📚 <strong>4.959 Manuais Oficiais</strong> da Sankhya (Fiscal, Comercial, Financeiro, Pessoas+, e mais de 2.900 soluções de problemas).</li>
+                    <li>🏥 <strong>Regras Específicas da Saavedra</strong> (Processos cirúrgicos OPME, Unimed 258, TOPs de Consignação 1005/1107, Campos <code>AD_</code> e relatórios Jasper).</li>
+                    <li>⚡ <strong>Conexão em Tempo Real</strong> com o banco de dados do Sankhya para consultas de notas, parceiros, impostos e saldos.</li>
+                  </ul>
+                  <p>Como posso te ajudar hoje?</p>
+                </div>
+                <div class="quick-suggestions">
+                  <span class="sugg-tag" data-prompt="Quais são os erros conhecidos no relatório de pedido de venda da Unimed?">Problemas Unimed</span>
+                  <span class="sugg-tag" data-prompt="Quantas notas fiscais foram emitidas este ano no Sankhya?">Estatísticas 2026</span>
+                  <span class="sugg-tag" data-prompt="Como resolver o erro Unable to get next record no Jasper?">Erro Jasper CORE_E05181</span>
+                  <span class="sugg-tag" data-prompt="Explique como configurar as alíquotas de IBS e CBS no Sankhya.">Configurar IBS/CBS</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chat Input Bar -->
+          <div class="chat-input-wrapper">
+            <form id="chatForm" class="chat-input-form">
+              <!-- Image preview bar if screenshot attached -->
+              <div class="image-preview-bar" id="imagePreviewBar" style="display:none;">
+                <div class="image-thumb-card">
+                  <img id="imageThumb" src="" alt="print tela">
+                  <button type="button" id="btnRemoveImage" class="btn-remove-thumb" title="Remover imagem">&times;</button>
+                  <span class="image-label">📸 Print do Sankhya anexado</span>
+                </div>
+              </div>
+
+              <div class="input-glow-box">
+                <input type="file" id="imageFileInput" accept="image/*" style="display:none;">
+                <button type="button" id="btnAttachImage" class="btn-attach" title="Anexar print ou foto de tela do Sankhya (ou use Ctrl+V)">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                </button>
+                <textarea 
+                  id="chatInput" 
+                  placeholder="Pergunte sobre um erro, cole um print com Ctrl+V ou pergunte sobre regras do ERP..." 
+                  rows="1"
+                  autocomplete="off"
+                ></textarea>
+                <button type="submit" id="btnSend" class="btn-send" title="Enviar mensagem">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                </button>
+              </div>
+              <div class="input-hints">
+                <span>Dica: Cole prints da tela do Sankhya com <code>Ctrl + V</code> ou clique no ícone de imagem para suporte visual de erros!</span>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- View: Regras Saavedra -->
+      <section class="view-panel" id="viewSaavedra">
+        <div class="doc-viewer-container">
+          <div class="doc-nav">
+            <button class="doc-tab active" data-doc="01_perfil_e_regras_de_negocio.md">1. Perfil & Regras de Negócio</button>
+            <button class="doc-tab" data-doc="02_campos_customizados_ad.md">2. Campos Customizados (AD_)</button>
+            <button class="doc-tab" data-doc="03_relatorios_jasper_modelo14_relatorio67.md">3. Relatórios Jasper (Modelo 14)</button>
+            <button class="doc-tab" data-doc="04_troubleshooting_erros_conhecidos.md">4. Troubleshooting & Erros</button>
+          </div>
+          <div class="doc-content-box" id="docContentBox">
+            <div class="loading-spinner">Carregando documentação...</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- View: Explorador de Manuais -->
+      <section class="view-panel" id="viewKb">
+        <div class="kb-explorer-container">
+          <div class="kb-search-bar">
+            <input type="text" id="kbSearchInput" placeholder="Buscar em quase 5.000 artigos (ex: rejeição 204, top 1100, banco, ibs, cbs)...">
+            <button class="btn-primary" id="btnKbSearch">Pesquisar</button>
+          </div>
+          <div class="kb-results-area" id="kbResultsArea">
+            <div class="kb-empty-state">
+              <span class="icon">🔍</span>
+              <h3>Pesquise qualquer dúvida técnica do Sankhya</h3>
+              <p>Digite termos como código de erro, nome da tela ou operação para buscar na base local completa.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- View: Terminal ERP -->
+      <section class="view-panel" id="viewErp">
+        <div class="erp-console-container">
+          <div class="sql-box">
+            <div class="sql-header">
+              <span>Consulta SQL Direta (Gateway Sankhya - DbExplorerSP)</span>
+              <button class="btn-primary btn-sm" id="btnExecuteSql">Executar Query</button>
+            </div>
+            <textarea id="sqlInput" rows="4">SELECT TOP 5 NUNOTA, NUMNOTA, CONVERT(VARCHAR(10), DTNEG, 103) AS DATA, CODPARC, VLRNOTA FROM TGFCAB ORDER BY NUNOTA DESC</textarea>
+          </div>
+          <div class="sql-result-box" id="sqlResultBox">
+            <div class="result-placeholder">Clique em "Executar Query" para consultar o banco de dados do Sankhya Om em tempo real.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- View: Painel Gráfico & Comparativos -->
+      <section class="view-panel" id="viewDashboard">
+        <div class="dashboard-container">
+          <!-- Top KPI Ribbon -->
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-icon-badge" style="background:rgba(99, 102, 241, 0.15); color:var(--accent-primary);">💰</div>
+              <div class="kpi-info">
+                <div class="kpi-label">Faturamento 2026 (Bruto)</div>
+                <div class="kpi-value" id="kpiFaturamento">R$ 52.758.546,77</div>
+                <div class="kpi-sub">Total acumulado de notas na TGFCAB</div>
+              </div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-icon-badge" style="background:rgba(6, 182, 212, 0.15); color:var(--accent-cyan);">📑</div>
+              <div class="kpi-info">
+                <div class="kpi-label">Notas e Pedidos 2026</div>
+                <div class="kpi-value" id="kpiNotas">12.654</div>
+                <div class="kpi-sub">Movimentações comerciais registradas</div>
+              </div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-icon-badge" style="background:rgba(16, 185, 129, 0.15); color:var(--accent-emerald);">🏦</div>
+              <div class="kpi-info">
+                <div class="kpi-label">Saldo em Bancos / Aplicações</div>
+                <div class="kpi-value" id="kpiBancos">R$ 11.644.244,71</div>
+                <div class="kpi-sub">9 contas ativas no TSICTA</div>
+              </div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-icon-badge" style="background:rgba(245, 158, 11, 0.15); color:var(--accent-amber);">🏥</div>
+              <div class="kpi-info">
+                <div class="kpi-label">Principal Hospital Atendido</div>
+                <div class="kpi-value" id="kpiHospital">HOSP. CLÍNICAS</div>
+                <div class="kpi-sub">4.848 cirurgias / faturamentos</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Charts Row 1 -->
+          <div class="charts-row">
+            <div class="chart-card">
+              <div class="chart-header">
+                <div>
+                  <h3>📈 Evolução Mensal do Faturamento 2026</h3>
+                  <p class="chart-sub">Faturamento bruto mês a mês consultado ao vivo na TGFCAB</p>
+                </div>
+                <span class="badge-role">Linha / Área</span>
+              </div>
+              <div class="chart-canvas-container">
+                <canvas id="chartVendasMes"></canvas>
+              </div>
+            </div>
+            <div class="chart-card">
+              <div class="chart-header">
+                <div>
+                  <h3>🍩 Distribuição por Tipo de Movimentação</h3>
+                  <p class="chart-sub">Proporção por TIPMOV (Vendas, Compras, Devoluções, Remessas)</p>
+                </div>
+                <span class="badge-role">Doughnut</span>
+              </div>
+              <div class="chart-canvas-container">
+                <canvas id="chartTipMov"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Charts Row 2 -->
+          <div class="charts-row">
+            <div class="chart-card">
+              <div class="chart-header">
+                <div>
+                  <h3>🏦 Comparativo de Saldos por Conta e Aplicação</h3>
+                  <p class="chart-sub">Saldos atuais no Itaú, Banco do Brasil e Fundos de Investimento (TSICTA)</p>
+                </div>
+                <span class="badge-role">Barras</span>
+              </div>
+              <div class="chart-canvas-container">
+                <canvas id="chartBancos"></canvas>
+              </div>
+            </div>
+            <div class="chart-card">
+              <div class="chart-header">
+                <div>
+                  <h3>🏥 Top Parceiros e Hospitais Faturados</h3>
+                  <p class="chart-sub">Ranking por valor total faturado no ERP (TGFPAR)</p>
+                </div>
+                <span class="badge-role">Ranking</span>
+              </div>
+              <div class="chart-canvas-container">
+                <canvas id="chartTopParceiros"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Comparative Table Section -->
+          <div class="table-card">
+            <div class="table-card-header">
+              <div>
+                <h3>📋 Comparativo Informativo de Rotinas e TOPs — Saavedra OPME</h3>
+                <p>Mapeamento completo do fluxo cirúrgico: consignação, devolução e faturamento pós-cirúrgico</p>
+              </div>
+              <span class="badge-accent" style="padding:6px 12px; font-size:0.75rem;">Oficial Saavedra</span>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>TOP</th>
+                    <th>Descrição da Operação</th>
+                    <th>CFOP</th>
+                    <th>Estoque</th>
+                    <th>Financeiro</th>
+                    <th>IBS / CBS</th>
+                    <th>Regra Específica Saavedra</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong class="tag-top">1000</strong></td>
+                    <td>Venda Direta / Faturamento Cirúrgico</td>
+                    <td>5102 / 6102</td>
+                    <td><span class="pill-green">Baixa Estoque</span></td>
+                    <td><span class="pill-blue">Gera Duplicata</span></td>
+                    <td>CST 000 (0,9% + 0,1%)</td>
+                    <td>Obrigatório informar Médico, CRM, Paciente e Convênio</td>
+                  </tr>
+                  <tr>
+                    <td><strong class="tag-top">1005</strong></td>
+                    <td>Remessa em Consignação Hospitalar</td>
+                    <td>5917 / 6917</td>
+                    <td><span class="pill-amber">Transfere Consignado</span></td>
+                    <td><span class="pill-gray">Não gera</span></td>
+                    <td>Suspensão Fiscal</td>
+                    <td>Envio prévio de kit OPME para a instituição cirúrgica</td>
+                  </tr>
+                  <tr>
+                    <td><strong class="tag-top">1100</strong></td>
+                    <td>Venda de Mercadoria Especial OPME</td>
+                    <td>5102 / 6102</td>
+                    <td><span class="pill-green">Baixa Estoque</span></td>
+                    <td><span class="pill-blue">Boleto / Carteira</span></td>
+                    <td>CST 000 (Calculado)</td>
+                    <td>Venda faturada com prazos especiais de recebimento hospitalar</td>
+                  </tr>
+                  <tr>
+                    <td><strong class="tag-top">1106</strong></td>
+                    <td>Remessa Consignada — UNIMED (258)</td>
+                    <td>5917</td>
+                    <td><span class="pill-amber">Conta Hospital</span></td>
+                    <td><span class="pill-gray">Não gera</span></td>
+                    <td>Não incide</td>
+                    <td>Operação exclusiva Unimed Vale do Sinos com número AFP</td>
+                  </tr>
+                  <tr>
+                    <td><strong class="tag-top">1107</strong></td>
+                    <td>Venda Consignada — UNIMED (258)</td>
+                    <td>5114 / 6114</td>
+                    <td><span class="pill-green">Efetivação Venda</span></td>
+                    <td><span class="pill-blue">Fatura Convênio</span></td>
+                    <td>CST 000 (Calculado)</td>
+                    <td>Faturamento pós-cirúrgico referenciando a remessa 1106</td>
+                  </tr>
+                  <tr>
+                    <td><strong class="tag-top">1209</strong></td>
+                    <td>Devolução de Remessa Consignada</td>
+                    <td>1918 / 2918</td>
+                    <td><span class="pill-cyan">Retorno ao Estoque</span></td>
+                    <td><span class="pill-gray">Não gera</span></td>
+                    <td>Não incide</td>
+                    <td>Retorno de itens e caixas cirúrgicas não implantadas</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- View: Adicionar Conhecimento -->
+      <section class="view-panel" id="viewAddkb">
+        <div class="addkb-container">
+          <div class="addkb-card">
+            <div class="addkb-header">
+              <h2>➕ Adicionar Nova Regra ou Informação à Base</h2>
+              <p>Qualquer regra, procedimento, manual ou observação adicionada aqui é instantaneamente gravada no servidor e aprendida pelo Agente e nas buscas.</p>
+            </div>
+            <form id="addKbForm" class="addkb-form">
+              <div class="form-group">
+                <label for="newKbTitle">Título da Regra ou Conhecimento *</label>
+                <input type="text" id="newKbTitle" placeholder="Ex: Regra de Faturamento Hospital Ernesto Dornelles" required>
+              </div>
+              <div class="form-row">
+                <div class="form-group" style="flex:1;">
+                  <label for="newKbModule">Módulo / Categoria</label>
+                  <select id="newKbModule">
+                    <option value="ambiente_saavedra">Ambiente Saavedra (Regras Internas)</option>
+                    <option value="comercial">Comercial e Vendas</option>
+                    <option value="fiscal">Fiscal e Tributário</option>
+                    <option value="financeiro">Financeiro e Bancário</option>
+                    <option value="suprimentos">Suprimentos e Estoque</option>
+                  </select>
+                </div>
+                <div class="form-group" style="flex:1;">
+                  <label for="newKbTags">Tags ou Palavras-Chave</label>
+                  <input type="text" id="newKbTags" placeholder="Ex: hospital, opme, top1005, consignacao">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="newKbContent">Conteúdo Completo (Aceita formatação Markdown) *</label>
+                <textarea id="newKbContent" rows="10" placeholder="Escreva ou cole aqui as instruções, regras, códigos, observações de erros ou procedimentos..." required></textarea>
+              </div>
+              <div class="addkb-footer">
+                <span id="addKbStatus" class="status-msg"></span>
+                <button type="submit" class="btn-primary" id="btnSaveKb">
+                  <span>💾 Salvar e Indexar Conhecimento</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Settings Modal (Gemini API Key) -->
+  <div class="modal-overlay" id="settingsModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Configuração de Inteligência (Gemini AI)</h3>
+        <button class="btn-close-modal" id="btnCloseSettings">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>O agente já funciona nativamente com <strong>pesquisa inteligente na base e consultas ao ERP</strong>. Se desejar habilitar a síntese conversacional avançada via API do Gemini:</p>
+        <div class="form-group">
+          <label for="geminiApiKey">Google Gemini API Key (Opcional):</label>
+          <input type="password" id="geminiApiKey" placeholder="Cole sua chave AIzaSy... (Google AI Studio)">
+          <small>Obtenha gratuitamente em <a href="https://aistudio.google.com/app/apikey" target="_blank">Google AI Studio</a>. Ficará salva no seu navegador.</small>
+        </div>
+        <div class="form-group">
+          <label>Modelo Gemini:</label>
+          <select id="geminiModel">
+            <option value="gemini-1.5-flash">Gemini 1.5 Flash (Super Rápido & Gratuito)</option>
+            <option value="gemini-2.0-flash">Gemini 2.0 Flash (Mais Recente)</option>
+            <option value="gemini-1.5-pro">Gemini 1.5 Pro (Raciocínio Profundo)</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" id="btnCancelSettings">Cancelar</button>
+        <button class="btn-primary" id="btnSaveSettings">Salvar Configuração</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="chart.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

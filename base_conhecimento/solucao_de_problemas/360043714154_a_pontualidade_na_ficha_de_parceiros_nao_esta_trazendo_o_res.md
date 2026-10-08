@@ -1,0 +1,46 @@
+# A pontualidade na Ficha de Parceiros, não está trazendo o resultado
+
+> **Módulo:** Solucao de Problemas | **Subseção:** Configurações  
+> **Fonte Oficial:** [https://ajuda.sankhya.com.br/hc/pt-br/articles/360043714154-A-pontualidade-na-Ficha-de-Parceiros-n%C3%A3o-est%C3%A1-trazendo-o-resultado](https://ajuda.sankhya.com.br/hc/pt-br/articles/360043714154-A-pontualidade-na-Ficha-de-Parceiros-n%C3%A3o-est%C3%A1-trazendo-o-resultado)  
+> **ID:** `360043714154` | **Última Atualização:** 2026-07-22T16:00:34Z
+
+---
+
+**
+
+![1__1_.png](https://ajuda.sankhya.com.br/hc/article_attachments/15070036810135)
+
+  SITUAÇÃO:**
+
+A pontualidade na Ficha de Parceiros, não esta trazendo o resultado correto. 
+
+**
+
+![2__1_.png](https://ajuda.sankhya.com.br/hc/article_attachments/15070040844183)
+
+CAUSA:**
+
+Ocorre quando um determinado titulo que está sendo analisado está fora do período estipulado pela configuração de Pontualidade.
+
+Exemplo: Um titulo do mês 02/2018, caso a configuração de Pontualidade estiver configurada para considerar apenas 6 últimos meses, este titulo não entrara para o indicador, distorcendo o % de pontualidade do Parceiro.
+
+**
+
+![3__1_.png](https://ajuda.sankhya.com.br/hc/article_attachments/15070014211351)
+
+SOLUÇÃO:**
+
+![1.png](https://ajuda.sankhya.com.br/hc/article_attachments/15070039437719)
+
+ Acessar Configurações » Consulta » Ficha de Parceiros
+
+Painéis: Indicadores.
+Clique no botão 'Configurações' no canto superior direito.
+Duplo-clique, sobre o Indicador 'Pontualidade'.
+Aba: Detalhes
+
+Marque uma das opções
+[  ]Considerar apenas os: {      } últimos títulos.
+[  ]Considerar as notas nos últimos: {      } meses.
+
+![pontualidade.gif](https://ajuda.sankhya.com.br/hc/article_attachments/360059753053/pontualidade.gif)

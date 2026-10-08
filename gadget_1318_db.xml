@@ -1,0 +1,486 @@
+<gadget >
+  <prompt-parameters>
+    <parameter  id="P_MARCAINI" description="MARCA INICIO" metadata="entity:MarcaProduto@CODIGO" required="false" keep-last="true" keep-date="false" show-inactives="false" label="P_MARCAINI : Entidade/Tabela" order="0"/>
+    <parameter  id="P_MARCAFIN" description="MARCA FIM" metadata="entity:MarcaProduto@CODIGO" required="false" keep-last="true" keep-date="false" show-inactives="false" label="P_MARCAFIN : Entidade/Tabela" order="1"/>
+    <parameter  id="P_LOCALINI" description="Local Inicial" metadata="entity:LocalFinanceiro@CODLOCAL" required="false" keep-last="true" keep-date="false" order="2" label="P_LOCALINI : Entidade/Tabela"/>
+    <parameter  id="P_LOCALFIN" description="Local Final" metadata="entity:LocalFinanceiro@CODLOCAL" required="false" keep-last="true" keep-date="false" order="3" label="P_LOCALFIN : Entidade/Tabela"/>
+    <parameter  id="P_MES" description="Meses de Venda" metadata="integer" required="true" keep-last="true" keep-date="false" show-inactives="false" default="4" range-end="12" range-ini="1" label="P_MES : Número Inteiro" order="4"/>
+    <parameter  id="P_EST" description="Meses Estoque" metadata="integer" required="true" keep-last="true" keep-date="false" show-inactives="false" default="3" range-end="6" range-ini="1" label="P_EST : Número Inteiro" order="5"/>
+    <parameter  id="P_DIA" description="Dias p receber o produto" metadata="integer" required="true" keep-last="true" keep-date="false" show-inactives="false" default="7" range-end="999" range-ini="1" label="P_DIA : Número Inteiro" order="6"/>
+    <parameter  id="P_PERFIL" description="Perfil do Cliente (Compõe QTDE_VENDIDA)?" metadata="multiList:Text" listType="sql" required="true" keep-last="false" keep-date="false" show-inactives="false" label="P_PERFIL : multiList:Text" order="7">
+      <expression type="SQL">
+        <![CDATA[
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        SELECT  TGFPAR.CODTIPPARC AS VALUE , TGFTPP.DESCRTIPPARC AS LABEL
+  FROM TGFPAR, TGFTPP
+ WHERE TGFPAR.CLIENTE = 'S' AND TGFPAR.CODTIPPARC < 20000 AND TGFPAR.CODTIPPARC = TGFTPP.CODTIPPARC
+GROUP BY TGFPAR.CODTIPPARC,TGFTPP.DESCRTIPPARC
+ORDER BY 1 ASC
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      ]]>
+      </expression>
+    </parameter>
+  </prompt-parameters>
+  <level id="lvl_aot0h1u" description="PorMarca">
+    <container orientacao="H" tamanhoRelativo="100">
+      <container orientacao="H" tamanhoRelativo="50">
+        <grid id="grd_029" entityName="AD_ANACOM" multiplaSelecao="N" useNewGrid="S">
+          <title>
+            <![CDATA[ANALISE DE COMPRAS]]>
+          </title>
+          <expression type="sql" data-source="MGEDS">
+            <![CDATA[SELECT
+        PRO.CODMARCA  AS CODMARCA,
+        PRO.MARCA AS MARCA, 
+        PRO.REFFORN   AS CATALAGO, 
+        PRO.CODPROD   AS CODPROD, 
+        PRO.DESCRPROD AS DESCRICAO, 
+        PRO.CODVOL    AS PRI_UNID, 
+        VOA.CODVOL    AS SEG_UNID,
+        AVG(VOA.QUANTIDADE) AS QTD_SEG_UN,
+        dateadd(mm,-CAST(:P_MES AS INT),dateadd(dd,-day(getdate())+1,getdate())) DT_INI_VDA,		
+  	    dateadd(dd,-day(getdate()),getdate()) DT_FIM_VDA,
+        MAX(CAST(:P_MES AS INT)) AS MESES_VENDA,
+        MAX(CAST(:P_EST AS INT)) AS MESES_ESTOQUE,
+        ROUND(MAX(SANKHYA.OBTEMCUSTO(PRO.CODPROD,'N',EST.CODEMP, 'N',0,'N',' ',GETDATE(), 5)),2) AS CUSTOMEDIO,
+		ROUND(MAX(SANKHYA.OBTEMCUSTO(PRO.CODPROD,'N',EST.CODEMP, 'N',0,'N',' ',GETDATE(), 6)),2) AS PRECO_COMPRA,
+        ISNULL(SUM(EST.ESTOQUE), 0) AS ESTOQUE, 
+        ISNULL(SUM(EST.RESERVADO ), 0) AS RESERVADO,
+        ISNULL((SELECT SUM(TGFEST.ESTOQUE) FROM TGFEST WHERE TGFEST.ESTOQUE > 0 AND TGFEST.DTVAL < GETDATE() AND TGFEST.CODPROD = PRO.CODPROD AND (CODPARC = 0 OR CODPARC IS NULL) AND (TGFEST.CODLOCAL BETWEEN :P_LOCALINI AND :P_LOCALFIN) GROUP BY TGFEST.CODPROD ),0) AS VENCIDO,
+        (ISNULL(SUM(EST.ESTOQUE), 0)-ISNULL(SUM(EST.RESERVADO ), 0)) AS DISPONIVEL,
+		CASE WHEN ROUND((( (SELECT ISNULL(SUM(TGFITE.QTDNEG),0) FROM TGFITE, TGFCAB, TGFPAR WHERE TGFITE.NUNOTA = TGFCAB.NUNOTA AND TGFCAB.CODPARC = TGFPAR.CODPARC AND TGFPAR.CODTIPPARC IN (10000,10200,10400,10600,10700,10800,10900) AND TGFITE.NUNOTA = TGFCAB.NUNOTA AND TGFCAB.DTNEG BETWEEN dateadd(mm,-CAST(:P_MES AS INT),dateadd(dd,-day(getdate())+1,getdate())) AND dateadd(dd,-day(getdate()),getdate()) AND TGFITE.QTDNEG > 0 AND TGFITE.CODPROD = PRO.CODPROD AND TGFITE.CODCFO IN (5102,6102,6910,5405,6108) ) / MAX(CAST( :P_MES AS INT)) )/30),2) > 0
+		     THEN ROUND(ISNULL(SUM(EST.ESTOQUE), 0) / ROUND((( (SELECT ISNULL(SUM(TGFITE.QTDNEG),0) FROM TGFITE, TGFCAB, TGFPAR WHERE TGFITE.NUNOTA = TGFCAB.NUNOTA AND TGFCAB.CODPARC = TGFPAR.CODPARC AND TGFPAR.CODTIPPARC IN (10000,10200,10400,10600,10700,10800,10900)  AND TGFITE.NUNOTA = TGFCAB.NUNOTA AND TGFCAB.DTNEG BETWEEN dateadd(mm,-CAST(:P_MES AS INT),dateadd(dd,-day(getdate())+1,getdate())) AND dateadd(dd,-day(getdate()),getdate()) AND TGFITE.QTDNEG > 0 AND TGFITE.CODPROD = PRO.CODPROD AND TGFITE.CODCFO IN (5102,6102,6910,5405,6108) ) / MAX(CAST( :P_MES AS INT)) )/30),2),0) 
+			 ELSE  MAX(CAST(:P_EST AS INT)*30) END AS DIAS_COBERTURA, 
+( SELECT ISNULL(SUM((ITE.QTDNEG-ITE.QTDENTREGUE)),0) FROM SANKHYA.TGFITE ITE, SANKHYA.TGFCAB CAB, SANKHYA.TGFPAR PAR where ITE.NUNOTA = CAB.NUNOTA AND CAB.CODTIPOPER NOT IN (900) AND CAB.CODPARC = PAR.CODPARC AND PAR.CODTIPPARC IN :P_PERFIL AND (ITE.PENDENTE = 'S') AND (CAB.PENDENTE = 'S')  AND (CAB.TIPMOV = 'P') AND (CAB.STATUSNOTA = 'L') AND ITE.CODPROD = PRO.CODPROD AND CAB.DTNEG BETWEEN dateadd(mm,-CAST(:P_MES AS INT),dateadd(dd,-day(getdate())+1,getdate())) AND dateadd(dd,+day(getdate()),getdate()) ) AS PED_VENDA,
+( SELECT ISNULL(SUM((ITE.QTDNEG-ITE.QTDENTREGUE)),0) FROM SANKHYA.TGFITE ITE, SANKHYA.TGFCAB CAB where ITE.NUNOTA = CAB.NUNOTA AND (ITE.PENDENTE = 'S') AND (CAB.PENDENTE = 'S')  AND (CAB.TIPMOV = 'O') AND (CAB.STATUSNOTA = 'L') AND ITE.CODPROD = PRO.CODPROD AND CAB.DTNEG BETWEEN dateadd(mm,-CAST(:P_MES AS INT),dateadd(dd,-day(getdate())+1,getdate())) AND dateadd(dd,+day(getdate()),getdate()) ) AS PED_COMPRA,
+                (SELECT ISNULL(SUM(TGFITE.QTDNEG),0) FROM TGFITE, TGFCAB, TGFPAR WHERE TGFITE.NUNOTA = TGFCAB.NUNOTA AND TGFCAB.CODPARC = TGFPAR.CODPARC AND TGFPAR.CODTIPPARC IN :P_PERFIL AND TGFCAB.DTNEG BETWEEN dateadd(mm,-CAST(:P_MES AS INT),dateadd(dd,-day(getdate())+1,getdate())) AND dateadd(dd,-day(getdate()),getdate()) AND TGFITE.QTDNEG > 0 AND TGFITE.CODPROD = PRO.CODPROD AND TGFITE.CODCFO IN (5102,6102,6910,5405,6108) ) AS QTDE_VENDIDA,
+        ROUND(( (SELECT ISNULL(SUM(TGFITE.QTDNEG),0) FROM TGFITE, TGFCAB, TGFPAR WHERE TGFITE.NUNOTA = TGFCAB.NUNOTA AND TGFCAB.CODPARC = TGFPAR.CODPARC AND TGFPAR.CODTIPPARC IN :P_PERFIL AND TGFCAB.DTNEG BETWEEN dateadd(mm,-CAST(:P_MES AS INT),dateadd(dd,-day(getdate())+1,getdate())) AND dateadd(dd,-day(getdate()),getdate()) AND TGFITE.QTDNEG > 0 AND TGFITE.CODPROD = PRO.CODPROD AND TGFITE.CODCFO IN (5102,6102,6910,5405,6108) ) / MAX(CAST(:P_MES AS INT)) ),0) AS MEDIA_MES,
+        ROUND((((SELECT ISNULL(SUM(TGFITE.QTDNEG),0) FROM TGFITE, TGFCAB, TGFPAR WHERE TGFITE.NUNOTA = TGFCAB.NUNOTA AND TGFCAB.CODPARC = TGFPAR.CODPARC AND TGFPAR.CODTIPPARC IN :P_PERFIL AND TGFCAB.DTNEG BETWEEN dateadd(mm,-CAST(:P_MES AS INT),dateadd(dd,-day(getdate())+1,getdate())) AND dateadd(dd,-day(getdate()),getdate()) AND TGFITE.QTDNEG > 0 AND TGFITE.CODPROD = PRO.CODPROD AND TGFITE.CODCFO IN (5102,6102,6910,5405,6108) ) / MAX(CAST(:P_MES AS INT)) )/30),2) AS MEDIA_DIA,
+		ROUND((((SELECT ISNULL(SUM(TGFITE.QTDNEG),0) FROM TGFITE, TGFCAB, TGFPAR WHERE TGFITE.NUNOTA = TGFCAB.NUNOTA AND TGFCAB.CODPARC = TGFPAR.CODPARC AND TGFPAR.CODTIPPARC IN :P_PERFIL AND TGFCAB.DTNEG BETWEEN dateadd(mm,-CAST(:P_MES AS INT),dateadd(dd,-day(getdate())+1,getdate())) AND dateadd(dd,-day(getdate()),getdate()) AND TGFITE.QTDNEG > 0 AND TGFITE.CODPROD = PRO.CODPROD AND TGFITE.CODCFO IN (5102,6102,6910,5405,6108) ) / MAX(CAST(:P_MES AS INT)) ) * MAX(CAST(:P_EST AS INT)) ),0) AS ESTOQUE_SUGERIDO,        
+        CASE 
+        WHEN  ROUND((  (ISNULL(SUM(EST.ESTOQUE), 0)-(( SELECT ISNULL(SUM((ITE.QTDNEG-ITE.QTDENTREGUE)),0) FROM SANKHYA.TGFITE ITE, SANKHYA.TGFCAB CAB, SANKHYA.TGFPAR PAR where ITE.NUNOTA = CAB.NUNOTA AND CAB.CODTIPOPER NOT IN (900) AND CAB.CODPARC = PAR.CODPARC  AND (ITE.PENDENTE = 'S') AND (CAB.PENDENTE = 'S')  AND (CAB.TIPMOV = 'P') AND (CAB.STATUSNOTA = 'L') AND ITE.CODPROD = PRO.CODPROD AND CAB.DTNEG BETWEEN dateadd(mm,-CAST(:P_MES AS INT),dateadd(dd,-day(getdate())+1,getdate())) AND dateadd(dd,+day(getdate()),getdate()) ))+((SELECT ISNULL(SUM((ITE.QTDNEG-ITE.QTDENTREGUE)),0) FROM SANKHYA.TGFITE ITE, SANKHYA.TGFCAB CAB where ITE.NUNOTA = CAB.NUNOTA AND (ITE.PENDENTE = 'S') AND (CAB.PENDENTE = 'S')  AND (CAB.TIPMOV = 'O') AND (CAB.STATUSNOTA = 'L') AND ITE.CODPROD = PRO.CODPROD AND CAB.DTNEG BETWEEN dateadd(mm,-CAST(:P_MES AS INT),dateadd(dd,-day(getdate())+1,getdate())) AND dateadd(dd,+day(getdate()),getdate()) )) ) - (((SELECT ISNULL(SUM(TGFITE.QTDNEG),0) FROM TGFITE, TGFCAB, TGFPAR WHERE TGFITE.NUNOTA = TGFCAB.NUNOTA AND TGFCAB.CODPARC = TGFPAR.CODPARC AND TGFPAR.CODTIPPARC IN :P_PERFIL AND TGFCAB.DTNEG BETWEEN dateadd(mm,-CAST(:P_MES AS INT),dateadd(dd,-day(getdate())+1,getdate())) AND dateadd(dd,-day(getdate()),getdate()) AND TGFITE.QTDNEG > 0 AND TGFITE.CODPROD = PRO.CODPROD AND TGFITE.CODCFO IN (5102,6102,5405,6108) ) / MAX(CAST(:P_MES  AS INT)) ) * MAX(CAST(:P_EST AS INT)))),0) < 0
+		THEN ( ROUND(( (ISNULL(SUM(EST.ESTOQUE), 0)-(( SELECT ISNULL(SUM((ITE.QTDNEG-ITE.QTDENTREGUE)),0) FROM SANKHYA.TGFITE ITE, SANKHYA.TGFCAB CAB, SANKHYA.TGFPAR PAR where ITE.NUNOTA = CAB.NUNOTA AND CAB.CODTIPOPER NOT IN (900) AND CAB.CODPARC = PAR.CODPARC  AND (ITE.PENDENTE = 'S') AND (CAB.PENDENTE = 'S')  AND (CAB.TIPMOV = 'P') AND (CAB.STATUSNOTA = 'L') AND ITE.CODPROD = PRO.CODPROD AND CAB.DTNEG BETWEEN dateadd(mm,-CAST(:P_MES AS INT),dateadd(dd,-day(getdate())+1,getdate())) AND dateadd(dd,+day(getdate()),getdate()) ))+((SELECT ISNULL(SUM((ITE.QTDNEG-ITE.QTDENTREGUE)),0) FROM SANKHYA.TGFITE ITE, SANKHYA.TGFCAB CAB where ITE.NUNOTA = CAB.NUNOTA AND (ITE.PENDENTE = 'S') AND (CAB.PENDENTE = 'S')  AND (CAB.TIPMOV = 'O') AND (CAB.STATUSNOTA = 'L') AND ITE.CODPROD = PRO.CODPROD AND CAB.DTNEG BETWEEN dateadd(mm,-CAST(:P_MES AS INT),dateadd(dd,-day(getdate())+1,getdate())) AND dateadd(dd,+day(getdate()),getdate()) )))  - (((SELECT ISNULL(SUM(TGFITE.QTDNEG),0) FROM TGFITE, TGFCAB, TGFPAR WHERE TGFITE.NUNOTA = TGFCAB.NUNOTA AND TGFCAB.CODPARC = TGFPAR.CODPARC AND TGFPAR.CODTIPPARC IN :P_PERFIL AND TGFCAB.DTNEG BETWEEN dateadd(mm,-CAST(:P_MES AS INT),dateadd(dd,-day(getdate())+1,getdate())) AND dateadd(dd,-day(getdate()),getdate()) AND TGFITE.QTDNEG > 0 AND TGFITE.CODPROD = PRO.CODPROD AND TGFITE.CODCFO IN (5102,6102,5405,6108) ) / MAX(CAST(:P_MES  AS INT)) ) * MAX(CAST(:P_EST AS INT)))),0) *-1) +
+		ROUND((ROUND((( (SELECT ISNULL(SUM(TGFITE.QTDNEG),0) FROM TGFITE, TGFCAB, TGFPAR WHERE TGFITE.NUNOTA = TGFCAB.NUNOTA AND TGFCAB.CODPARC = TGFPAR.CODPARC AND TGFPAR.CODTIPPARC IN :P_PERFIL AND TGFCAB.DTNEG BETWEEN dateadd(mm,-CAST(:P_MES AS INT),dateadd(dd,-day(getdate())+1,getdate())) AND dateadd(dd,-day(getdate()),getdate()) AND TGFITE.QTDNEG > 0 AND TGFITE.CODPROD = PRO.CODPROD AND TGFITE.CODCFO IN (5102,6102,6910,5405,6108) ) / MAX(CAST(:P_MES AS INT)) )/30),2) * CAST(:P_DIA AS INT)),0)
+        ELSE 0 END AS SUGESTAO_COMPRAS,
+        CASE 
+        WHEN ROUND(( (ISNULL(SUM(EST.ESTOQUE), 0)-(( SELECT ISNULL(SUM((ITE.QTDNEG-ITE.QTDENTREGUE)),0) FROM SANKHYA.TGFITE ITE, SANKHYA.TGFCAB CAB, SANKHYA.TGFPAR PAR where ITE.NUNOTA = CAB.NUNOTA AND CAB.CODTIPOPER NOT IN (900) AND CAB.CODPARC = PAR.CODPARC AND PAR.CODTIPPARC IN :P_PERFIL AND (ITE.PENDENTE = 'S') AND (CAB.PENDENTE = 'S')  AND (CAB.TIPMOV = 'P') AND (CAB.STATUSNOTA = 'L') AND ITE.CODPROD = PRO.CODPROD AND CAB.DTNEG BETWEEN dateadd(mm,-CAST(:P_MES AS INT),dateadd(dd,-day(getdate())+1,getdate())) AND dateadd(dd,+day(getdate()),getdate()) ))+(( SELECT ISNULL(SUM((ITE.QTDNEG-ITE.QTDENTREGUE)),0) FROM SANKHYA.TGFITE ITE, SANKHYA.TGFCAB CAB where ITE.NUNOTA = CAB.NUNOTA AND (ITE.PENDENTE = 'S') AND (CAB.PENDENTE = 'S')  AND (CAB.TIPMOV = 'O') AND (CAB.STATUSNOTA = 'L') AND ITE.CODPROD = PRO.CODPROD AND CAB.DTNEG BETWEEN dateadd(mm,-CAST(:P_MES AS INT),dateadd(dd,-day(getdate())+1,getdate())) AND dateadd(dd,+day(getdate()),getdate()) ))) - (((SELECT ISNULL(SUM(TGFITE.QTDNEG),0) FROM TGFITE, TGFCAB, TGFPAR WHERE TGFITE.NUNOTA = TGFCAB.NUNOTA AND TGFCAB.CODPARC = TGFPAR.CODPARC AND TGFCAB.DTNEG BETWEEN dateadd(mm,-CAST(:P_MES AS INT),dateadd(dd,-day(getdate())+1,getdate())) AND dateadd(dd,-day(getdate()),getdate()) AND TGFITE.QTDNEG > 0 AND TGFITE.CODPROD = PRO.CODPROD AND TGFITE.CODCFO IN (5102,6102,5405,6108) ) / MAX(CAST(:P_MES AS INT)) ) * MAX(CAST(:P_EST AS INT)))),0) < 0
+		THEN ROUND(((ROUND(( (ISNULL(SUM(EST.ESTOQUE), 0)-(( SELECT ISNULL(SUM((ITE.QTDNEG-ITE.QTDENTREGUE)),0) FROM SANKHYA.TGFITE ITE, SANKHYA.TGFCAB CAB, SANKHYA.TGFPAR PAR where ITE.NUNOTA = CAB.NUNOTA AND CAB.CODTIPOPER NOT IN (900) AND CAB.CODPARC = PAR.CODPARC AND PAR.CODTIPPARC IN :P_PERFIL AND (ITE.PENDENTE = 'S') AND (CAB.PENDENTE = 'S')  AND (CAB.TIPMOV = 'P') AND (CAB.STATUSNOTA = 'L') AND ITE.CODPROD = PRO.CODPROD AND CAB.DTNEG BETWEEN dateadd(mm,-CAST(:P_MES AS INT),dateadd(dd,-day(getdate())+1,getdate())) AND dateadd(dd,+day(getdate()),getdate()) ))+(( SELECT ISNULL(SUM((ITE.QTDNEG-ITE.QTDENTREGUE)),0) FROM SANKHYA.TGFITE ITE, SANKHYA.TGFCAB CAB where ITE.NUNOTA = CAB.NUNOTA AND (ITE.PENDENTE = 'S') AND (CAB.PENDENTE = 'S')  AND (CAB.TIPMOV = 'O') AND (CAB.STATUSNOTA = 'L') AND ITE.CODPROD = PRO.CODPROD AND CAB.DTNEG BETWEEN dateadd(mm,-CAST(:P_MES AS INT),dateadd(dd,-day(getdate())+1,getdate())) AND dateadd(dd,+day(getdate()),getdate()) ))) - (((SELECT ISNULL(SUM(TGFITE.QTDNEG),0) FROM TGFITE, TGFCAB, TGFPAR WHERE TGFITE.NUNOTA = TGFCAB.NUNOTA AND TGFCAB.CODPARC = TGFPAR.CODPARC AND TGFCAB.DTNEG BETWEEN dateadd(mm,-CAST(:P_MES AS INT),dateadd(dd,-day(getdate())+1,getdate())) AND dateadd(dd,-day(getdate()),getdate()) AND TGFITE.QTDNEG > 0 AND TGFITE.CODPROD = PRO.CODPROD AND TGFITE.CODCFO IN (5102,6102,5405,6108) ) / MAX(CAST(:P_MES AS INT)) ) * MAX(CAST(:P_EST AS INT)))),0) *-1) +
+		ROUND((ROUND((((SELECT ISNULL(SUM(TGFITE.QTDNEG),0) FROM TGFITE, TGFCAB, TGFPAR WHERE TGFITE.NUNOTA = TGFCAB.NUNOTA AND TGFCAB.CODPARC = TGFPAR.CODPARC AND TGFPAR.CODTIPPARC IN :P_PERFIL AND TGFCAB.DTNEG BETWEEN dateadd(mm,-CAST(:P_MES AS INT),dateadd(dd,-day(getdate())+1,getdate())) AND dateadd(dd,-day(getdate()),getdate()) AND TGFITE.QTDNEG > 0 AND TGFITE.CODPROD = PRO.CODPROD AND TGFITE.CODCFO IN (5102,6102,6910,5405,6108) ) / MAX(CAST(:P_MES AS INT)) )/30),2) * CAST(:P_DIA AS INT)),0)  )/AVG(VOA.QUANTIDADE),0)
+        ELSE 0 END AS QTDE_2A_UNID,
+        CASE 
+        WHEN  ROUND(( (ISNULL(SUM(EST.ESTOQUE), 0)-(( SELECT ISNULL(SUM((ITE.QTDNEG-ITE.QTDENTREGUE)),0) FROM SANKHYA.TGFITE ITE, SANKHYA.TGFCAB CAB, SANKHYA.TGFPAR PAR where ITE.NUNOTA = CAB.NUNOTA AND CAB.CODTIPOPER NOT IN (900) AND CAB.CODPARC = PAR.CODPARC AND PAR.CODTIPPARC IN :P_PERFIL AND (ITE.PENDENTE = 'S') AND (CAB.PENDENTE = 'S')  AND (CAB.TIPMOV = 'P') AND (CAB.STATUSNOTA = 'L') AND ITE.CODPROD = PRO.CODPROD AND CAB.DTNEG BETWEEN dateadd(mm,-CAST(:P_MES AS INT),dateadd(dd,-day(getdate())+1,getdate())) AND dateadd(dd,+day(getdate()),getdate()) ))+(( SELECT ISNULL(SUM((ITE.QTDNEG-ITE.QTDENTREGUE)),0) FROM SANKHYA.TGFITE ITE, SANKHYA.TGFCAB CAB where ITE.NUNOTA = CAB.NUNOTA AND (ITE.PENDENTE = 'S') AND (CAB.PENDENTE = 'S')  AND (CAB.TIPMOV = 'O') AND (CAB.STATUSNOTA = 'L') AND ITE.CODPROD = PRO.CODPROD AND CAB.DTNEG BETWEEN dateadd(mm,-CAST(:P_MES AS INT),dateadd(dd,-day(getdate())+1,getdate())) AND dateadd(dd,+day(getdate()),getdate()) ))) - (((SELECT ISNULL(SUM(TGFITE.QTDNEG),0) FROM TGFITE, TGFCAB, TGFPAR WHERE TGFITE.NUNOTA = TGFCAB.NUNOTA AND TGFCAB.CODPARC = TGFPAR.CODPARC AND TGFPAR.CODTIPPARC IN :P_PERFIL AND TGFCAB.DTNEG BETWEEN dateadd(mm,-CAST(:P_MES AS INT),dateadd(dd,-day(getdate())+1,getdate())) AND dateadd(dd,-day(getdate()),getdate()) AND TGFITE.QTDNEG > 0 AND TGFITE.CODPROD = PRO.CODPROD AND TGFITE.CODCFO IN (5102,6102,5405,6108) ) / MAX(CAST(:P_MES   AS INT)) ) * MAX(CAST(:P_EST AS INT)))),0) < 0
+		THEN (ROUND(( (ISNULL(SUM(EST.ESTOQUE), 0)-(( SELECT ISNULL(SUM((ITE.QTDNEG-ITE.QTDENTREGUE)),0) FROM SANKHYA.TGFITE ITE, SANKHYA.TGFCAB CAB, SANKHYA.TGFPAR PAR where ITE.NUNOTA = CAB.NUNOTA AND CAB.CODTIPOPER NOT IN (900) AND CAB.CODPARC = PAR.CODPARC AND PAR.CODTIPPARC IN :P_PERFIL AND (ITE.PENDENTE = 'S') AND (CAB.PENDENTE = 'S')  AND (CAB.TIPMOV = 'P') AND (CAB.STATUSNOTA = 'L') AND ITE.CODPROD = PRO.CODPROD AND CAB.DTNEG BETWEEN dateadd(mm,-CAST(:P_MES AS INT),dateadd(dd,-day(getdate())+1,getdate())) AND dateadd(dd,+day(getdate()),getdate()) ))+(( SELECT ISNULL(SUM((ITE.QTDNEG-ITE.QTDENTREGUE)),0) FROM SANKHYA.TGFITE ITE, SANKHYA.TGFCAB CAB where ITE.NUNOTA = CAB.NUNOTA AND (ITE.PENDENTE = 'S') AND (CAB.PENDENTE = 'S')  AND (CAB.TIPMOV = 'O') AND (CAB.STATUSNOTA = 'L') AND ITE.CODPROD = PRO.CODPROD AND CAB.DTNEG BETWEEN dateadd(mm,-CAST(:P_MES AS INT),dateadd(dd,-day(getdate())+1,getdate())) AND dateadd(dd,+day(getdate()),getdate()) ))) - (((SELECT ISNULL(SUM(TGFITE.QTDNEG),0) FROM TGFITE, TGFCAB, TGFPAR WHERE TGFITE.NUNOTA = TGFCAB.NUNOTA AND TGFCAB.CODPARC = TGFPAR.CODPARC AND TGFPAR.CODTIPPARC IN :P_PERFIL AND TGFCAB.DTNEG BETWEEN dateadd(mm,-CAST(:P_MES AS INT),dateadd(dd,-day(getdate())+1,getdate())) AND dateadd(dd,-day(getdate()),getdate()) AND TGFITE.QTDNEG > 0 AND TGFITE.CODPROD = PRO.CODPROD AND TGFITE.CODCFO IN (5102,6102,5405,6108) ) / MAX(CAST(:P_MES   AS INT)) ) * MAX(CAST(:P_EST  AS INT)))),0) *-1) +
+		ROUND((ROUND((( (SELECT ISNULL(SUM(TGFITE.QTDNEG),0) FROM TGFITE, TGFCAB, TGFPAR WHERE TGFITE.NUNOTA = TGFCAB.NUNOTA AND TGFCAB.CODPARC = TGFPAR.CODPARC AND TGFPAR.CODTIPPARC IN :P_PERFIL AND TGFCAB.DTNEG BETWEEN dateadd(mm,-CAST(:P_MES AS INT),dateadd(dd,-day(getdate())+1,getdate())) AND dateadd(dd,-day(getdate()),getdate()) AND TGFITE.QTDNEG > 0 AND TGFITE.CODPROD = PRO.CODPROD AND TGFITE.CODCFO IN (5102,6102,6910,5405,6108) ) / MAX(CAST(:P_MES AS INT)) )/30),2) * CAST(:P_DIA AS INT)),0)
+        ELSE 0 END	* ROUND(MAX(SANKHYA.OBTEMCUSTO(PRO.CODPROD,'N',EST.CODEMP, 'N',0,'N',' ',GETDATE(), 6)),2) AS TOTAL_SUGESTAO,
+        (SELECT TGFMET.PREVDESP FROM TGFMET WHERE TGFMET.CODMETA = 17 AND TGFMET.MARCA = PRO.CODMARCA AND MONTH(DTREF) = MONTH(GETDATE())) AS SELLIN_MES,
+       (SELECT ISNULL(SUM(I.VLRTOT),0)  FROM TGFITE AS I, TGFCAB AS C, TGFPRO AS P WHERE 
+        MONTH(C.DTNEG) = MONTH(GETDATE()) AND I.CODPROD = P.CODPROD AND I.CODCFO <> 0 AND P.CODMARCA = PRO.CODMARCA AND C.CODTIPOPER IN (100) AND I.NUNOTA = C.NUNOTA AND (C.TIPMOV = 'P') AND (C.STATUSNOTA = 'L') ) AS PED_COM_MES,
+       (SELECT ISNULL(SUM(TGFITE.VLRTOT),0) FROM TGFITE, TGFCAB, TGFPAR WHERE TGFITE.NUNOTA = TGFCAB.NUNOTA AND TGFCAB.CODPARC = TGFPAR.CODPARC AND TGFPAR.CODTIPPARC IN :P_PERFIL AND TGFCAB.DTNEG BETWEEN dateadd(mm,-CAST(1 AS INT),dateadd(dd,-day(getdate())+1,getdate())) AND dateadd(dd,-day(getdate()),getdate()) AND TGFITE.QTDNEG > 0 AND TGFITE.CODPROD = PRO.CODPROD AND TGFITE.CODCFO IN (5102,6102,5910,6910,5405,6405,5108,6108) ) AS V_MES_ANT_VLR, 
+       (SELECT ISNULL(SUM(TGFITE.QTDNEG),0) FROM TGFITE, TGFCAB, TGFPAR WHERE TGFITE.NUNOTA = TGFCAB.NUNOTA AND TGFCAB.CODPARC = TGFPAR.CODPARC AND TGFPAR.CODTIPPARC IN :P_PERFIL AND TGFCAB.DTNEG BETWEEN dateadd(mm,-CAST(1 AS INT),dateadd(dd,-day(getdate())+1,getdate())) AND dateadd(dd,-day(getdate()),getdate()) AND TGFITE.QTDNEG > 0 AND TGFITE.CODPROD = PRO.CODPROD AND TGFITE.CODCFO IN (5102,6102,5910,6910,5405,6405,5108,6108) ) AS V_MES_ANT_QTE
+
+FROM 
+
+        TGFEST EST
+        INNER JOIN TGFPRO PRO ON (EST.CODPROD = PRO.CODPROD AND PRO.REFFORN IS NOT NULL)
+         LEFT JOIN TGFCUS CUS ON (EST.CODPROD = CUS.CODPROD AND EST.CODLOCAL = CUS.CODLOCAL) 
+         LEFT JOIN TGFVOA VOA ON (EST.CODPROD = VOA.CODPROD ) 
+WHERE (CODPARC IS NULL OR CODPARC = 0) AND EST.TIPO = 'P'
+ AND EST.CONTROLE IS NOT NULL 
+ AND (PRO.CODMARCA = :P_MARCAINI OR :P_MARCAFIN IS NULL)
+ AND (EST.CODLOCAL BETWEEN :P_LOCALINI AND :P_LOCALFIN)
+
+
+GROUP BY 
+        PRO.CODMARCA,
+        PRO.MARCA, 
+        PRO.REFFORN, 
+        PRO.CODPROD, 
+        PRO.DESCRPROD,
+        PRO.CODVOL,
+        VOA.CODVOL
+
+ORDER BY 
+        PRO.MARCA, 
+        PRO.REFFORN, 
+        PRO.CODPROD, 
+        PRO.DESCRPROD]]>
+          </expression>
+          <metadata>
+            <field name="CODMARCA" label="CODMARCA" type="I" visible="true" useFooter="false">
+            </field>
+            <field name="MARCA" label="MARCA" type="S" visible="true" useFooter="false">
+            </field>
+            <field name="CATALAGO" label="CATALAGO" type="S" visible="true" useFooter="false">
+            </field>
+            <field name="CODPROD" label="CODPROD" type="I" visible="true" useFooter="false">
+            </field>
+            <field name="DESCRICAO" label="DESCRICAO" type="S" visible="true" useFooter="false">
+            </field>
+            <field name="PRI_UNID" label="PRI_UNID" type="S" visible="true" useFooter="SUM">
+            </field>
+            <field name="SEG_UNID" label="SEG_UNID" type="S" visible="true" useFooter="SUM">
+            </field>
+            <field name="QTD_SEG_UN" label="QTD_SEG_UN" type="I" visible="true" useFooter="SUM">
+            </field>
+            <field name="DT_INI_VDA" label="DT_INI_VDA" type="D" visible="true" useFooter="false">
+            </field>
+            <field name="DT_FIM_VDA" label="DT_FIM_VDA" type="D" visible="true" useFooter="false">
+            </field>
+            <field name="MESES_VENDA" label="MESES_VENDA" type="I" visible="true" useFooter="SUM">
+            </field>
+            <field name="MESES_ESTOQUE" label="MESES_ESTOQUE" type="I" visible="true" useFooter="SUM">
+            </field>
+            <field name="CUSTOMEDIO" label="CUSTOMEDIO" type="F" visible="true" useFooter="SUM" mask="R$ #.##0,00">
+            </field>
+            <field name="PRECO_COMPRA" label="PRECO_COMPRA" type="F" visible="true" useFooter="false" mask="R$ #.##0,00">
+            </field>
+            <field name="ESTOQUE" label="ESTOQUE" type="I" visible="true" useFooter="SUM">
+            </field>
+            <field name="RESERVADO" label="RESERVADO" type="I" visible="true" useFooter="false">
+            </field>
+            <field name="VENCIDO" label="VENCIDO" type="I" visible="true" useFooter="false">
+            </field>
+            <field name="DISPONIVEL" label="DISPONIVEL" type="I" visible="true" useFooter="SUM">
+            </field>
+            <field name="DIAS_COBERTURA" label="DIAS_COBERTURA" type="I" visible="true" useFooter="SUM">
+            </field>
+            <field name="PED_VENDA" label="PED_VENDA" type="I" visible="true" useFooter="SUM">
+            </field>
+            <field name="PED_COMPRA" label="PED_COMPRA" type="I" visible="true" useFooter="SUM">
+            </field>
+            <field name="QTDE_VENDIDA" label="QTDE_VENDIDA" type="I" visible="true" useFooter="SUM">
+            </field>
+            <field name="MEDIA_MES" label="MEDIA_MES" type="I" visible="true" useFooter="false">
+            </field>
+            <field name="MEDIA_DIA" label="MEDIA_DIA" type="I" visible="true" useFooter="SUM">
+            </field>
+            <field name="ESTOQUE_SUGERIDO" label="ESTOQUE_SUGERIDO" type="I" visible="true" useFooter="SUM">
+            </field>
+            <field name="SUGESTAO_COMPRAS" label="SUGESTAO_COMPRAS" type="I" visible="true" useFooter="SUM">
+            </field>
+            <field name="QTDE_2A_UNID" label="QTDE_2A_UNID" type="I" visible="true" useFooter="false">
+            </field>
+            <field name="TOTAL_SUGESTAO" label="TOTAL_SUGESTAO" type="F" visible="true" useFooter="SUM">
+            </field>
+            <field name="SELLIN_MES" label="SELLIN_MES" type="F" visible="true" useFooter="AVG">
+            </field>
+            <field name="PED_COM_MES" label="PED_COM_MES" type="I" visible="true" useFooter="SUM">
+            </field>
+            <field name="V_MES_ANT_VLR" label="V_MES_ANT_VLR" type="F" visible="true" useFooter="SUM">
+            </field>
+            <field name="V_MES_ANT_QTE" label="V_MES_ANT_QTE" type="F" visible="true" useFooter="SUM">
+            </field>
+          </metadata>
+          <on-click  navigate-to="02B">
+            <param id="A_CODPROD">$CODPROD</param>
+            <param id="A_DTFINAL">$DT_FIM_VDA</param>
+            <param id="A_DTINICIAL">$DT_INI_VDA</param>
+          </on-click>
+        </grid>
+      </container>
+    </container>
+  </level>
+  <level id="02B" description="VdaProduto">
+    <args >
+      <arg id="A_CODPROD" type="integer" label="A_CODPROD : Número Inteiro"/>
+      <arg id="A_DTFINAL" type="date" label="A_DTFINAL : Data"/>
+      <arg id="A_DTINICIAL" type="date" label="A_DTINICIAL : Data"/>
+    </args>
+    <container orientacao="V" tamanhoRelativo="100">
+      <container orientacao="V" tamanhoRelativo="50">
+        <grid id="grd_02D" useNewGrid="N">
+          <title>
+            <![CDATA[VENDAS POR PRODUTO CLIENTE PERIODO ANALISADO]]>
+          </title>
+          <expression type="sql" data-source="MGEDS">
+            <![CDATA[SELECT TGFCAB.DTNEG , TGFCAB.NUNOTA NR_UNICO, TGFCAB.NUMNOTA , TGFCAB.CODPARC ,TGFPAR.NOMEPARC , TGFITE.QTDNEG QTD_VENDIDA, TGFITE.VLRUNIT VLR_UNIT, TGFITE.VLRTOT VLR_TOTAL, 
+       TGFPRO.CODPROD, TGFPRO.REFFORN CATALAGO, TGFPRO.DESCRPROD, TGFPRO.MARCA , TSICID.NOMECID CIDADE, TSIUFS.UF
+  FROM TGFITE, TGFCAB, TGFPAR, TGFPRO, TSICID, TSIUFS
+  WHERE TGFITE.NUNOTA = TGFCAB.NUNOTA
+    AND TGFITE.CODPROD = TGFPRO.CODPROD
+    AND TGFCAB.CODPARC = TGFPAR.CODPARC 
+    AND TGFPAR.CODCID  = TSICID.CODCID
+    AND TSICID.UF      = TSIUFS.CODUF
+    AND TGFPAR.CODTIPPARC IN :P_PERFIL
+    AND TGFITE.QTDNEG > 0 
+    AND TGFITE.CODCFO IN (5102,6102,6910,5405,6108) 
+    AND TGFCAB.DTNEG BETWEEN dateadd(mm,-CAST(:P_MES AS INT),dateadd(dd,-day(getdate())+1,getdate())) AND dateadd(dd,-day(getdate()),getdate())
+    AND TGFITE.CODPROD = :A_CODPROD
+    
+ORDER BY TGFCAB.DTNEG , TGFCAB.NUNOTA]]>
+          </expression>
+          <metadata>
+            <field name="DTNEG" label="DTNEG" type="D" visible="true" useFooter="false">
+            </field>
+            <field name="NR_UNICO" label="NR_UNICO" type="I" visible="true" useFooter="false">
+            </field>
+            <field name="NUMNOTA" label="NUMNOTA" type="I" visible="true" useFooter="false">
+            </field>
+            <field name="CODPARC" label="CODPARC" type="I" visible="true" useFooter="false">
+            </field>
+            <field name="NOMEPARC" label="NOMEPARC" type="S" visible="true" useFooter="false">
+            </field>
+            <field name="QTD_VENDIDA" label="QTD_VENDIDA" type="I" visible="true" useFooter="SUM" mask="#.##0">
+            </field>
+            <field name="VLR_UNIT" label="VLR_UNIT" type="I" visible="true" useFooter="AVG" mask="R$ #.##0,00">
+            </field>
+            <field name="VLR_TOTAL" label="VLR_TOTAL" type="I" visible="true" useFooter="SUM" mask="R$ #.##0,00">
+            </field>
+            <field name="CODPROD" label="CODPROD" type="I" visible="true" useFooter="false">
+            </field>
+            <field name="CATALAGO" label="CATALAGO" type="S" visible="true" useFooter="false">
+            </field>
+            <field name="DESCRPROD" label="DESCRPROD" type="S" visible="true" useFooter="false">
+            </field>
+            <field name="MARCA" label="MARCA" type="S" visible="true" useFooter="false">
+            </field>
+            <field name="CIDADE" label="CIDADE" type="S" visible="true" useFooter="false">
+            </field>
+            <field name="UF" label="UF" type="S" visible="true" useFooter="false">
+            </field>
+          </metadata>
+          <on-click-launcher  resource-id="br.com.sankhya.com.mov.CentralNotas">
+            <NUNOTA>$NR_UNICO</NUNOTA>
+          </on-click-launcher>
+        </grid>
+      </container>
+      <container orientacao="V" tamanhoRelativo="50">
+        <grid id="grd_01W" useNewGrid="S">
+          <title>
+            <![CDATA[FORECAST DE COMPRAS DO PRODUTO]]>
+          </title>
+          <expression type="sql" data-source="MGEDS">
+            <![CDATA[SELECT '0-FORECAST' AS TIPO, CODPROD, PRODUTO, CATALAGO,
+       COALESCE([10],0) AS Outubro,
+       COALESCE([11],0) AS Novembro,
+       COALESCE([12],0) AS Dezembro,
+	   COALESCE([1],0)  AS Janeiro,
+       COALESCE([2],0)  AS Fevereiro,
+       COALESCE([3],0)  AS Marco,
+       COALESCE([4],0)  AS Abril,
+       COALESCE([5],0)  AS Maio,
+       COALESCE([6],0)  AS Junho,
+       COALESCE([7],0)  AS Julho,
+       COALESCE([8],0)  AS Agosto, 
+   	   COALESCE([9],0)  AS Setembro,
+	   COALESCE([1],0)+COALESCE([2],0)+COALESCE([3],0)+COALESCE([4],0)+COALESCE([5],0)+COALESCE([6],0)+COALESCE([7],0)+COALESCE([8],0)+COALESCE([9],0)+COALESCE([10],0)+COALESCE([11],0)+COALESCE([12],0) AS TOT_QTDE
+	 
+FROM ( SELECT  PRO.CODPROD , PRO.DESCRPROD AS PRODUTO, PRO.REFFORN AS CATALAGO, 0 AS FORECAST,
+	   MONTH(MET.DTREF) AS MES, 
+	   SUM(MET.QTDPREV) AS QTDETOTAL
+FROM SANKHYA.TGFPRO AS PRO
+ INNER JOIN SANKHYA.TGFMET AS MET  ON MET.CODPROD  = PRO.CODPROD AND MET.CODMETA = 11
+        AND MET.DTREF >= CONVERT(DATETIME, '01/01/2024') AND MET.DTREF <= CONVERT(DATETIME, '31/12/2024')
+
+WHERE PRO.CODPROD = :A_CODPROD
+
+GROUP BY PRO.CODPROD , PRO.DESCRPROD , PRO.REFFORN, MET.DTREF
+	   ) sq
+
+PIVOT ( SUM(QTDETOTAL) FOR MES IN ([1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12]) ) AS pt
+
+UNION ALL
+
+SELECT '1-PED_COMPRA' AS TIPO, CODPROD, PRODUTO, CATALAGO,
+       COALESCE([10],0) AS Outubro,
+       COALESCE([11],0) AS Novembro,
+       COALESCE([12],0) AS Dezembro,
+	   COALESCE([1],0)  AS Janeiro,
+       COALESCE([2],0)  AS Fevereiro,
+       COALESCE([3],0)  AS Marco,
+       COALESCE([4],0)  AS Abril,
+       COALESCE([5],0)  AS Maio,
+       COALESCE([6],0)  AS Junho,
+       COALESCE([7],0)  AS Julho,
+       COALESCE([8],0)  AS Agosto, 
+   	   COALESCE([9],0)  AS Setembro,
+	   COALESCE([1],0)+COALESCE([2],0)+COALESCE([3],0)+COALESCE([4],0)+COALESCE([5],0)+COALESCE([6],0)+COALESCE([7],0)+COALESCE([8],0)+COALESCE([9],0)+COALESCE([10],0)+COALESCE([11],0)+COALESCE([12],0) AS TOT_QTDE
+	 
+FROM ( SELECT  PRO.CODPROD , PRO.DESCRPROD AS PRODUTO, PRO.REFFORN AS CATALAGO, 0 AS FORECAST,
+	   MONTH(CAB.DTNEG) AS MES, 
+	   SUM(ITE.QTDNEG) AS QTDETOTAL
+FROM SANKHYA.TGFPRO AS PRO
+ INNER JOIN SANKHYA.TGFITE AS ITE  ON ITE.CODPROD  = PRO.CODPROD
+ INNER JOIN SANKHYA.TGFCAB AS CAB  ON CAB.NUNOTA  = ITE.NUNOTA AND CAB.TIPMOV = 'O' AND CAB.STATUSNOTA = 'L'  AND CAB.CODTIPOPER = 100
+        AND CAB.DTNEG >= CONVERT(DATETIME, '01/10/2023') AND CAB.DTNEG <= CONVERT(DATETIME, '30/09/2024')
+
+WHERE PRO.CODPROD = :A_CODPROD
+
+GROUP BY PRO.CODPROD , PRO.DESCRPROD , PRO.REFFORN, CAB.DTNEG
+	   ) sq
+
+PIVOT ( SUM(QTDETOTAL) FOR MES IN ([1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12]) ) AS pt
+
+UNION ALL 
+
+SELECT '3-NFS_VENDA' AS TIPO, CODPROD, PRODUTO, CATALAGO,
+       COALESCE([10],0) AS Outubro,
+       COALESCE([11],0) AS Novembro,
+       COALESCE([12],0) AS Dezembro,
+	   COALESCE([1],0)  AS Janeiro,
+       COALESCE([2],0)  AS Fevereiro,
+       COALESCE([3],0)  AS Marco,
+       COALESCE([4],0)  AS Abril,
+       COALESCE([5],0)  AS Maio,
+       COALESCE([6],0)  AS Junho,
+       COALESCE([7],0)  AS Julho,
+       COALESCE([8],0)  AS Agosto, 
+   	   COALESCE([9],0)  AS Setembro,
+	   COALESCE([1],0)+COALESCE([2],0)+COALESCE([3],0)+COALESCE([4],0)+COALESCE([5],0)+COALESCE([6],0)+COALESCE([7],0)+COALESCE([8],0)+COALESCE([9],0)+COALESCE([10],0)+COALESCE([11],0)+COALESCE([12],0) AS TOT_QTDE
+	 
+FROM ( SELECT  PRO.CODPROD , PRO.DESCRPROD AS PRODUTO, PRO.REFFORN AS CATALAGO, 0 AS FORECAST,
+	   MONTH(CAB.DTNEG) AS MES, 
+	   SUM(ITE.QTDNEG) AS QTDETOTAL
+FROM SANKHYA.TGFPRO AS PRO
+ INNER JOIN SANKHYA.TGFITE AS ITE  ON ITE.CODPROD  = PRO.CODPROD
+ INNER JOIN SANKHYA.TGFCAB AS CAB  ON CAB.NUNOTA  = ITE.NUNOTA AND CAB.TIPMOV = 'V' AND CAB.STATUSNOTA = 'L'  AND CAB.CODTIPOPER IN (1100,1102,1107)
+        AND CAB.DTNEG >= CONVERT(DATETIME, '01/10/2023') AND CAB.DTNEG <= CONVERT(DATETIME, '30/09/2024')
+
+WHERE PRO.CODPROD = :A_CODPROD
+
+GROUP BY PRO.CODPROD , PRO.DESCRPROD , PRO.REFFORN, CAB.DTNEG
+	   ) sq
+
+PIVOT ( SUM(QTDETOTAL) FOR MES IN ([1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12]) ) AS pt
+
+ORDER BY 4,1 ASC]]>
+          </expression>
+          <metadata>
+            <field name="TIPO" label="TIPO" type="S" visible="true" useFooter="false">
+            </field>
+            <field name="CODPROD" label="CODPROD" type="I" visible="true" useFooter="false">
+            </field>
+            <field name="PRODUTO" label="PRODUTO" type="S" visible="true" useFooter="false">
+            </field>
+            <field name="CATALAGO" label="CATALAGO" type="S" visible="true" useFooter="false">
+            </field>
+            <field name="Outubro" label="Outubro" type="I" visible="true" useFooter="SUM">
+            </field>
+            <field name="Novembro" label="Novembro" type="I" visible="true" useFooter="SUM">
+            </field>
+            <field name="Dezembro" label="Dezembro" type="I" visible="true" useFooter="SUM">
+            </field>
+            <field name="Janeiro" label="Janeiro" type="I" visible="true" useFooter="SUM">
+            </field>
+            <field name="Fevereiro" label="Fevereiro" type="I" visible="true" useFooter="SUM">
+            </field>
+            <field name="Marco" label="Marco" type="I" visible="true" useFooter="SUM">
+            </field>
+            <field name="Abril" label="Abril" type="I" visible="true" useFooter="SUM">
+            </field>
+            <field name="Maio" label="Maio" type="I" visible="true" useFooter="SUM">
+            </field>
+            <field name="Junho" label="Junho" type="I" visible="true" useFooter="SUM">
+            </field>
+            <field name="Julho" label="Julho" type="I" visible="true" useFooter="SUM">
+            </field>
+            <field name="Agosto" label="Agosto" type="I" visible="true" useFooter="SUM">
+            </field>
+            <field name="Setembro" label="Setembro" type="I" visible="true" useFooter="SUM">
+            </field>
+            <field name="TOT_QTDE" label="TOT_QTDE" type="I" visible="true" useFooter="SUM">
+            </field>
+          </metadata>
+        </grid>
+      </container>
+    </container>
+  </level>
+</gadget>

@@ -1,0 +1,110 @@
+# IE do destinatário não cadastrada(2013/005)
+
+> **Módulo:** Solucao de Problemas | **Subseção:** Mensagens de validação da SEFAZ  
+> **Fonte Oficial:** [https://ajuda.sankhya.com.br/hc/pt-br/articles/360042576094-IE-do-destinat%C3%A1rio-n%C3%A3o-cadastrada-2013-005](https://ajuda.sankhya.com.br/hc/pt-br/articles/360042576094-IE-do-destinat%C3%A1rio-n%C3%A3o-cadastrada-2013-005)  
+> **ID:** `360042576094` | **Última Atualização:** 2026-07-22T16:09:20Z
+
+---
+
+**
+
+![Mensagem FINAL.png](https://ajuda.sankhya.com.br/hc/article_attachments/16474436254871)
+
+ MENSAGEM:**
+
+[233 - Rejeição]: IE do destinatário não cadastrada.
+
+ 
+
+**
+
+![Solução FINAL.png](https://ajuda.sankhya.com.br/hc/article_attachments/16474482601111)
+
+ SOLUÇÃO:**
+
+Para correção, siga os passos abaixo:
+
+ 
+
+![1 FINAL.png](https://ajuda.sankhya.com.br/hc/article_attachments/16474482602391)
+
+ Consulte o CNPJ do destinatário no SINTEGRA para verificar qual Inscrição Estadual está vinculada ao seu CNPJ.
+
+[http://www.sintegra.gov.br/](http://www.sintegra.gov.br/)
+
+Através do link acima, selecione o Estado do respectivo parceiro destinatário e realize a consulta de seu CNPJ. Veja o exemplo abaixo para um parceiro de Minas Gerais:
+
+ 
+
+![Sintegra.gif](https://ajuda.sankhya.com.br/hc/article_attachments/360088807753)
+
+ 
+
+![2 FINAL.png](https://ajuda.sankhya.com.br/hc/article_attachments/16474436260759)
+
+ Confira se a IE informada corresponde a Inscrição inserida no cadastro do parceiro:
+
+- Tela "**[Parceiros](https://ajuda.sankhya.com.br/hc/pt-br/articles/360044594494)"** (Caminho de acesso:* Configurações » Cadastros*)* » *Aba "**Identificação"**:
+
+ 
+
+![IE_do_destinat_rio_n_o_cadastrada.png](https://ajuda.sankhya.com.br/hc/article_attachments/14500103249687)
+
+ 
+
+![3 FINAL.png](https://ajuda.sankhya.com.br/hc/article_attachments/16474436262551)
+
+ Caso a Inscrição esteja correta, na consulta ao site do Sintegra verifique se o campo '"**Situação Cadastral"** encontra-se com a situação '**Habilitado - ATIVO**'. Caso esteja inativo, sintonize junto ao parceiro, se necessário retire essa informação e ajuste a 'Classificação de ICMS' vinculada em seu cadastro:
+
+- Tela 'Parceiros' (Caminho de acesso:* Configurações » Cadastros*)* » *Aba "**Fiscal**" » Campo** "Classificação de ICMS"**
+
+![5 FINAL.png](https://ajuda.sankhya.com.br/hc/article_attachments/16474436264983)
+
+ Realizado os ajustes acima, redigite o cabeçalho da nota e gere um novo lote.
+
+ 
+
+**
+
+![Atenção FINAL.png](https://ajuda.sankhya.com.br/hc/article_attachments/16474482606487)
+
+ IMPORTANTE: **
+
+Para destinatários do '**Distrito Federal**', ao realizar a consulta no Sintegra, verifique se existem informações para o campo '**CF/DF' (Cadastro Fiscal do Distrito Federal). **Caso exista, preencha essa informação no campo 'Inscrição Estadual'.
+
+ 
+
+**
+
+![Causa FINAL.png](https://ajuda.sankhya.com.br/hc/article_attachments/16474436267287)
+
+ CAUSA:**
+
+A rejeição será retornada quando uma NF-e  (modelo 55) for transmitida e a I.E. cadastrada no sistema for inválida, ou então, não estiver devidamente cadastrada na SEFAZ Estadual.
+
+Geralmente o XML gerado, a tag (IndIEDest = 2) para Isento ou Não Contribuinte(IndIEDest = 9), porém a I.E está ativa no Estado UF do parceiro.
+
+ 
+
+**
+
+![Observação FINAL.png](https://ajuda.sankhya.com.br/hc/article_attachments/16474482612119)
+
+ OBSERVAÇÃO:**
+
+O sistema Sankhya possui a função de estruturar o XML conforme os dados cadastrados, para o envio a SEFAZ. Caberá a mesma a recepção desta nota e o retorno.
+
+ 
+
+**
+
+![Marcador 2 FINAL.png](https://ajuda.sankhya.com.br/hc/article_attachments/16474436272407)
+
+ **([NT](http://www.nfe.fazenda.gov.br/portal/exibirArquivo.aspx?conteudo=%20tq7zNwy6jo=)[2013/005](http://www.nfe.fazenda.gov.br/portal/exibirArquivo.aspx?conteudo=%20tq7zNwy6jo=)) - Nota Técnica.
+
+
+---
+
+### 🔗 Links e Referências Internas:
+
+- [Parceiros](https://ajuda.sankhya.com.br/hc/pt-br/articles/360044594494)

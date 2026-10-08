@@ -1,0 +1,60 @@
+# IE do Transportador inválida
+
+> **Módulo:** Solucao de Problemas | **Subseção:** Mensagens de validação da SEFAZ  
+> **Fonte Oficial:** [https://ajuda.sankhya.com.br/hc/pt-br/articles/360043121893-IE-do-Transportador-inv%C3%A1lida](https://ajuda.sankhya.com.br/hc/pt-br/articles/360043121893-IE-do-Transportador-inv%C3%A1lida)  
+> **ID:** `360043121893` | **Última Atualização:** 2026-07-22T16:07:17Z
+
+---
+
+![Mensagem FINAL.png](https://ajuda.sankhya.com.br/hc/article_attachments/16444103345815)
+
+ **MENSAGEM:**
+
+ [544-Rejeição]: IE do Transportador inválida. 
+
+ 
+
+**
+
+![Solução FINAL.png](https://ajuda.sankhya.com.br/hc/article_attachments/16444111377303)
+
+SOLUÇÃO:**
+
+![1 FINAL.png](https://ajuda.sankhya.com.br/hc/article_attachments/16444111379607)
+
+ Para correção, busque orientações com o Contador da empresa, para que seja apresentada a IE válida, seguindo as premissas estipuladas pela SEFAZ:
+
+- Inscrição Estadual do transportador contribuinte do ICMS, sem caracteres de formatação (ponto, barra, hífen, etc.);
+
+- Literal 'ISENTO' para transportador isento de inscrição no cadastro de contribuintes ICMS;
+
+- Não informe a tag para não contribuinte do ICMS, a UF deve ser descrita se informado uma IE.
+
+![2 FINAL.png](https://ajuda.sankhya.com.br/hc/article_attachments/16444111381015)
+
+ Acesse a tela: "**[Parceiros](https://ajuda.sankhya.com.br/hc/pt-br/articles/360044594494)" **(*Caminho de acesso: *Configurações » Cadastros » Parceiros)
+
+- Aba: "**Identificação"**
+
+- Campo: "**Insc. Estadual / Identidade"** [Informe a IE válida.]
+
+![3 FINAL.png](https://ajuda.sankhya.com.br/hc/article_attachments/16444111382167)
+
+ Após os ajustes, fature a nota novamente ou redigite o parceiro transportador na nota e posteriormente gere um novo lote.
+
+ 
+
+**
+
+![Causa FINAL.png](https://ajuda.sankhya.com.br/hc/article_attachments/16444103350167)
+
+CAUSA:**
+
+Ocorre quando foi informado o grupo do transportador, em que o contribuinte informou uma IE inválida, inexistente e diferente de Isento. Segundo o Manual de Orientação do contribuinte, a Sefaz realiza a validação da IE conforme a UF do transportador informada.
+
+
+---
+
+### 🔗 Links e Referências Internas:
+
+- [Parceiros](https://ajuda.sankhya.com.br/hc/pt-br/articles/360044594494)

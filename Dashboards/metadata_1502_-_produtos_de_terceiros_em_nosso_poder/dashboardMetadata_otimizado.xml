@@ -1,0 +1,170 @@
+<dashboard titulo="1502 - PRODUTOS DE TERCEIROS EM NOSSO PODER" descricao="Este dashboard realiza a auditoria do estoque em poder de terceiros, confrontando as quantidades enviadas e retornadas para apurar o saldo atual por lote e validade." grupo="1500 - CONSIGNADO"><layout>
+  <container orientacao="V" tamanhoRelativo="100">
+    <gadget id="17" />
+  </container>
+</layout><gadgetSS nugdg="17" titulo="1502 - PRODUTOS DE TERCEIROS EM NOSSO PODER" descricao="Este dashboard realiza a auditoria do estoque em poder de terceiros, confrontando as quantidades enviadas e retornadas para apurar o saldo atual por lote e validade." categoria="1500 - CONSIGNADO" urlcomponente=""><gadget>
+  <prompt-parameters>
+    <parameter id="p_dtnegini" description="Data Negociação" metadata="datePeriod" required="true" keep-last="false" keep-date="true" label="p_dtnegini : Período" order="0" />
+    <parameter id="p_parini" description="Parceiro Inicial" metadata="entity:Parceiro@CODPARC" required="true" keep-last="true" keep-date="false" label="p_parini : Entidade/Tabela" order="1" />
+    <parameter id="p_parfin" description="Parceiro Final" metadata="entity:Parceiro@CODPARC" required="true" keep-last="true" keep-date="false" label="p_parfin : Entidade/Tabela" order="2" />
+    <parameter id="p_prodini" description="Produto Inicial" metadata="entity:Produto@CODPROD" required="true" keep-last="true" keep-date="false" label="p_prodini : Entidade/Tabela" order="3" />
+    <parameter id="p_prodfin" description="Produto Final" metadata="entity:Produto@CODPROD" required="true" keep-last="true" keep-date="false" label="p_prodfin : Entidade/Tabela" order="4" />
+    <parameter id="P_DTVAL" description="Data Validade" metadata="datePeriod" required="false" keep-last="false" keep-date="true" show-inactives="false" label="P_DTVAL : Período" order="5" />
+  </prompt-parameters>
+  <level id="02I" description="Principal">
+    <container orientacao="V" tamanhoRelativo="100">
+      <grid id="grd_02K" useNewGrid="S">
+        <expression type="sql" data-source="MGEDS">
+          <![CDATA[SELECT
+  CABNFS.NUNOTA AS "NumeroUnico", 
+  CABNFS.NUMNOTA AS "NumeroNota", 
+  CABNFS.VLRNOTA AS "ValorNFe",
+  CABNFS.AD_DTCIRURG AS "DataCirurgia",
+  CABNFS.AD_PACIENTE AS "NomePaciente",
+  PAR.CODPARC AS "CodParceiro",
+  PAR.NOMEPARC AS "DescrParcEstoque",
+  ENDP.TIPO AS TPEND,
+  ENDP.NOMEEND AS ENDERECO,
+  PAR.NUMEND AS NUMEND,
+  BAIP.NOMEBAI AS BAIRRO,
+  CIDP.NOMECID AS CIDADE,
+  UFSP.UF AS UF,
+  PAR.CEP AS CEP,
+  PRO.CODPROD AS "CodProduto",
+  PRO.DESCRPROD AS "DescricaoProduto",
+  PRO.MARCA AS "Marca",
+  PRO.REFFORN AS "COdCatalogo",
+  ITENFS.CONTROLE AS "Lote",
+  EST.DTVAL AS "DataValidade",
+  CABNFS.DTNEG AS "DataNegociacao",
+  DATEDIFF(DAY, CABNFS.DTNEG, GETDATE()) AS "Tempo",
+  PRO.CODVOL AS "Unidade",
+  ISNULL(ITENFS.QTDNEG, 0) AS "QtdEnviada",
+  ISNULL(DEV.QTDRETORNADA, 0) AS "QtdRetornada",
+  (ISNULL(ITENFS.QTDNEG, 0) - ISNULL(DEV.QTDRETORNADA, 0)) AS "Saldo",
+  ISNULL(CONS.QTDE, 0) AS "QtdConsignadoFixo",
+  CASE 
+    WHEN (ISNULL(ITENFS.QTDNEG, 0) - ISNULL(DEV.QTDRETORNADA, 0)) < ISNULL(CONS.QTDE, 0) THEN '#FF0000'
+    ELSE '' 
+  END AS BKCOLOR,
+  CASE 
+    WHEN (ISNULL(ITENFS.QTDNEG, 0) - ISNULL(DEV.QTDRETORNADA, 0)) < ISNULL(CONS.QTDE, 0) THEN '#FFFFFF'
+    ELSE '' 
+  END AS FGCOLOR
+FROM TGFCAB CABNFS
+  INNER JOIN TGFITE ITENFS ON ITENFS.NUNOTA = CABNFS.NUNOTA
+  INNER JOIN TGFTOP TOP1   ON TOP1.CODTIPOPER = CABNFS.CODTIPOPER 
+                          AND TOP1.DHALTER = CABNFS.DHTIPOPER
+  INNER JOIN TGFPRO PRO    ON PRO.CODPROD = ITENFS.CODPROD
+  INNER JOIN TGFPAR PAR    ON PAR.CODPARC = CABNFS.CODPARC
+  LEFT  JOIN TSIEND ENDP   ON ENDP.CODEND = PAR.CODEND
+  LEFT  JOIN TSIBAI BAIP   ON BAIP.CODBAI = PAR.CODBAI
+  LEFT  JOIN TSICID CIDP   ON CIDP.CODCID = PAR.CODCID
+  LEFT  JOIN TSIUFS UFSP   ON UFSP.CODUF  = CIDP.UF
+  
+  -- TGFEST em LEFT JOIN evita exclusão de notas cujo estoque físico foi zerado
+  LEFT JOIN TGFEST EST ON EST.CODEMP     = ITENFS.CODEMP 
+                      AND EST.CODPROD    = ITENFS.CODPROD 
+                      AND EST.CODLOCAL   = ITENFS.CODLOCALORIG 
+                      AND EST.CONTROLE   = ITENFS.CONTROLE 
+                      AND EST.CODPARC    = CABNFS.CODPARC 
+                      AND EST.TIPO       = TOP1.ATUALESTTERC
+
+  -- Subquery agrupada de TGFVAR para evitar multiplicação de linhas e distorção de somatórios
+  LEFT JOIN (
+      SELECT 
+          VAR.NUNOTAORIG,
+          VAR.SEQUENCIAORIG,
+          SUM(ITED.QTDNEG) AS QTDRETORNADA
+      FROM TGFVAR VAR
+      INNER JOIN TGFCAB CABD ON CABD.NUNOTA = VAR.NUNOTA 
+                            AND CABD.TIPMOV IN ('C', 'E')
+      INNER JOIN TGFITE ITED ON ITED.NUNOTA = CABD.NUNOTA 
+                            AND ITED.SEQUENCIA = VAR.SEQUENCIA
+      INNER JOIN TGFTOP TOPD ON TOPD.CODTIPOPER = CABD.CODTIPOPER 
+                            AND TOPD.DHALTER = CABD.DHTIPOPER 
+                            AND TOPD.ATUALESTTERC = 'D'
+      GROUP BY VAR.NUNOTAORIG, VAR.SEQUENCIAORIG
+  ) DEV ON DEV.NUNOTAORIG = CABNFS.NUNOTA 
+       AND DEV.SEQUENCIAORIG = ITENFS.SEQUENCIA
+
+  LEFT JOIN AD_CONSFIXO CONS ON CONS.CODPARC = CABNFS.CODPARC 
+                            AND CONS.CODPROD = ITENFS.CODPROD
+
+WHERE CABNFS.TIPMOV = 'C'
+  AND TOP1.ATUALESTTERC = 'T'
+  AND CABNFS.DTNEG >= :p_dtnegini.INI
+  AND CABNFS.DTNEG <= :p_dtnegini.FIN
+  AND CABNFS.CODPARC BETWEEN :p_parini AND :p_parfin
+  AND ITENFS.CODPROD BETWEEN :p_prodini AND :p_prodfin
+  AND (ISNULL(ITENFS.QTDNEG, 0) - ISNULL(DEV.QTDRETORNADA, 0)) > 0
+  AND (:P_DTVAL.INI IS NULL OR EST.DTVAL >= :P_DTVAL.INI)
+  AND (:P_DTVAL.FIN IS NULL OR EST.DTVAL <= :P_DTVAL.FIN)]]>
+        </expression>
+        <metadata>
+          <field name="NumeroUnico" label="NumeroUnico" type="I" visible="true" useFooter="false">
+          </field>
+          <field name="NumeroNota" label="NumeroNota" type="I" visible="true" useFooter="false">
+          </field>
+          <field name="ValorNFe" label="ValorNFe" type="F" visible="true" useFooter="false" mask="###0,00">
+          </field>
+          <field name="DataCirurgia" label="DataCirurgia" type="D" mask="dd/MM/yyyy" visible="true" useFooter="false">
+          </field>
+          <field name="NomePaciente" label="NomePaciente" type="S" visible="true" useFooter="false">
+          </field>
+          <field name="CodParceiro" label="CodParceiro" type="I" visible="true" useFooter="false">
+          </field>
+          <field name="DescrParcEstoque" label="DescrParcEstoque" type="S" visible="true" useFooter="false">
+          </field>
+          <field name="TPEND" label="TPEND" type="S" visible="true" useFooter="false">
+          </field>
+          <field name="ENDERECO" label="ENDERECO" type="S" visible="true" useFooter="false">
+          </field>
+          <field name="NUMEND" label="NUMEND" type="S" visible="true" useFooter="false">
+          </field>
+          <field name="BAIRRO" label="BAIRRO" type="S" visible="true" useFooter="false">
+          </field>
+          <field name="CIDADE" label="CIDADE" type="S" visible="true" useFooter="false">
+          </field>
+          <field name="UF" label="UF" type="S" visible="true" useFooter="false">
+          </field>
+          <field name="CEP" label="CEP" type="S" visible="true" useFooter="false">
+          </field>
+          <field name="CodProduto" label="CodProduto" type="I" visible="true" useFooter="false">
+          </field>
+          <field name="DescricaoProduto" label="DescricaoProduto" type="S" visible="true" useFooter="false">
+          </field>
+          <field name="Marca" label="Marca" type="S" visible="true" useFooter="false">
+          </field>
+          <field name="COdCatalogo" label="COdCatalogo" type="S" visible="true" useFooter="false">
+          </field>
+          <field name="Lote" label="Lote" type="S" visible="true" useFooter="false">
+          </field>
+          <field name="DataValidade" label="DataValidade" type="D" mask="dd/MM/yyyy" visible="true" useFooter="false">
+          </field>
+          <field name="DataNegociacao" label="DataNegociacao" type="D" mask="dd/MM/yyyy" visible="true" useFooter="false">
+          </field>
+          <field name="Tempo" label="Tempo" type="I" visible="true" useFooter="false">
+          </field>
+          <field name="Unidade" label="Unidade" type="S" visible="true" useFooter="false">
+          </field>
+          <field name="QtdEnviada" label="QtdEnviada" type="I" visible="true" useFooter="SUM">
+          </field>
+          <field name="QtdRetornada" label="QtdRetornada" type="I" visible="true" useFooter="SUM">
+          </field>
+          <field name="Saldo" label="Saldo" type="I" visible="true" useFooter="SUM">
+          </field>
+          <field name="QtdConsignadoFixo" label="QtdConsignadoFixo" type="I" visible="true" useFooter="SUM">
+          </field>
+          <field name="BKCOLOR" label="BKCOLOR" type="S" visible="true" useFooter="false">
+          </field>
+          <field name="FGCOLOR" label="FGCOLOR" type="S" visible="true" useFooter="false">
+          </field>
+        </metadata>
+        <on-click-launcher resource-id="br.com.sankhya.com.mov.CentralNotas">
+          <NUNOTA>$NumeroUnico</NUNOTA>
+        </on-click-launcher>
+      </grid>
+    </container>
+  </level>
+</gadget></gadgetSS></dashboard>
